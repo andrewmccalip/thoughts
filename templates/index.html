@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andrew McCalip</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --bg-card: #111111;
+            --border: #222222;
+            --text: #e5e5e5;
+            --text-muted: #888888;
+            --accent: #3b82f6;
+            --accent-secondary: #f59e0b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 640px;
+            width: 100%;
+        }
+        
+        header {
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+        }
+        
+        .tagline {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-family: 'Newsreader', Georgia, serif;
+            font-style: italic;
+        }
+        
+        .essays-section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        
+        .essay-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .essay-card {
+            display: block;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+        
+        .essay-card:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+        
+        .essay-card.coming-soon {
+            opacity: 0.5;
+            cursor: default;
+        }
+        
+        .essay-card.coming-soon:hover {
+            border-color: var(--border);
+            transform: none;
+        }
+        
+        .essay-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .essay-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .essay-indicator.orbital {
+            background: var(--accent);
+        }
+        
+        .essay-indicator.manufacturing {
+            background: var(--accent-secondary);
+        }
+        
+        .essay-title {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 500;
+        }
+        
+        .essay-description {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            padding-left: 1.5rem;
+        }
+        
+        .essay-tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            background: var(--border);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            margin-left: auto;
+        }
+        
+        footer {
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .footer-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 0.75rem;
+        }
+        
+        .footer-links a {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Andrew McCalip</h1>
+            <p class="tagline">Essays on manufacturing, space, and first-principles engineering</p>
+        </header>
+        
+        <section class="essays-section">
+            <p class="section-label">Essays & Analyses</p>
+            
+            <div class="essay-list">
+                <a href="/space-datacenters" class="essay-card">
+                    <div class="essay-header">
+                        <div class="essay-indicator orbital"></div>
+                        <span class="essay-title">Space Datacenters</span>
+                        <span class="essay-tag">Interactive</span>
+                    </div>
+                    <p class="essay-description">
+                        A first-principles cost analysis comparing orbital solar power satellites 
+                        to terrestrial natural gas for 1 GW datacenter capacity.
+                    </p>
+                </a>
+                
+                <div class="essay-card coming-soon">
+                    <div class="essay-header">
+                        <div class="essay-indicator manufacturing"></div>
+                        <span class="essay-title">Manufacturing Manifesto</span>
+                        <span class="essay-tag">Coming Soon</span>
+                    </div>
+                    <p class="essay-description">
+                        On rebuilding American manufacturing capability through 
+                        vertical integration and first-principles thinking.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p class="footer-text">Building things that matter.</p>
+            <div class="footer-links">
+                <a href="https://twitter.com/andrewmccalip" target="_blank">Twitter</a>
+                <a href="https://github.com/andrewmccalip" target="_blank">GitHub</a>
+                <a href="mailto:andrew@mccalip.com">Contact</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbital Solar vs Terrestrial Gas: A First-Principles Cost Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <article class="paper">
+        <!-- Header -->
+        <header class="paper-header">
+            <a href="/" class="back-link">← Andrew McCalip</a>
+            <p class="paper-category">Technical Analysis</p>
+            <h1 class="paper-title">
+                Comparative Economics of Orbital Solar<br>
+                and Terrestrial Gas Power Generation
+            </h1>
+            <p class="paper-subtitle">
+                A first-principles cost model for 1 GW capacity over <span id="years-display">5</span> years
+            </p>
+        </header>
+
+        <!-- Introduction -->
+        <section class="paper-section intro-section">
+            <p class="drop-cap">
+                Before getting lost in hardware diagrams and thermal edge cases, the first step is to anchor everything 
+                to the governing economic question. If orbital compute is going to be more than an aesthetic idea, 
+                its unit economics must beat the cheapest terrestrial alternatives. That reduces the entire concept 
+                to one parameter: <strong>cost per watt</strong>.
+            </p>
+            <p>
+                The cleanest way to evaluate this is to pick the most mass-efficient power hardware flying today, 
+                scale it to a 1-GW system, and compute the full orbital bill. A Starlink V2 Mini class bus is the 
+                logical reference point. Its mass, solar area, and delivered electrical power give a real, 
+                flight-proven specific power.
+            </p>
+        </section>
+
+        <!-- Costs: Cost Comparison with References Sidebar -->
+        <section class="paper-section figure-section">
+            <div class="figure-with-refs">
+                <div class="figure-main">
+                    <div class="figure-label">Costs · Financial Analysis</div>
+                    
+                    <div class="comparison-grid">
+                <!-- Orbital Column -->
+                <div class="comparison-column orbital">
+                    <div class="column-header">
+                        <div class="column-indicator orbital-indicator"></div>
+                        <div class="column-title-group">
+                            <h3>Orbital Solar</h3>
+                            <p class="column-total" id="orbital-total">$31.2B</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bar-chart">
+                        <div class="bar-item">
+                            <div class="bar-label">Satellite</div>
+                            <div class="bar-container">
+                                <div class="bar orbital-bar" id="orbital-hardware-bar"></div>
+                            </div>
+                            <div class="bar-value" id="orbital-hardware-value">$9.0B</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Launch</div>
+                            <div class="bar-container">
+                                <div class="bar orbital-bar" id="orbital-launch-bar"></div>
+                            </div>
+                            <div class="bar-value" id="orbital-launch-value">$22.2B</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-table">
+                        <div class="stat-row">
+                            <span class="stat-label">Total Mass to LEO</span>
+                            <span class="stat-value" id="orbital-mass">22.2M kg</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Cost per Watt</span>
+                            <span class="stat-value" id="orbital-cpw">$31.20/W</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Energy Output</span>
+                            <span class="stat-value" id="orbital-energy">35.0 TWh</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Implied LCOE</span>
+                            <span class="stat-value" id="orbital-lcoe">$891/MWh</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Overhead</span>
+                            <span class="stat-value" id="orbital-overhead">$1.6B</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Maintenance</span>
+                            <span class="stat-value" id="orbital-maintenance">$936M</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Communications</span>
+                            <span class="stat-value" id="orbital-comms">$624M</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NatGas Column -->
+                <div class="comparison-column ngcc">
+                    <div class="column-header">
+                        <div class="column-indicator ngcc-indicator"></div>
+                        <div class="column-title-group">
+                            <h3>NatGas</h3>
+                            <p class="column-total" id="ngcc-total">$1.8B</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bar-chart">
+                        <div class="bar-item">
+                            <div class="bar-label">Capex</div>
+                            <div class="bar-container">
+                                <div class="bar ngcc-bar" id="ngcc-capex-bar"></div>
+                            </div>
+                            <div class="bar-value" id="ngcc-capex-value">$898M</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Fuel</div>
+                            <div class="bar-container">
+                                <div class="bar ngcc-bar" id="ngcc-fuel-bar"></div>
+                            </div>
+                            <div class="bar-value" id="ngcc-fuel-value">$712M</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">O&M</div>
+                            <div class="bar-container">
+                                <div class="bar ngcc-bar" id="ngcc-om-bar"></div>
+                            </div>
+                            <div class="bar-value" id="ngcc-om-value">$171M</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Land</div>
+                            <div class="bar-container">
+                                <div class="bar ngcc-bar" id="ngcc-land-bar"></div>
+                            </div>
+                            <div class="bar-value" id="ngcc-land-value">$1.5M</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-table">
+                        <div class="stat-row">
+                            <span class="stat-label">Hours of Operation</span>
+                            <span class="stat-value" id="ngcc-hours">43,800 hrs</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Cost per Watt</span>
+                            <span class="stat-value" id="ngcc-cpw">$1.83/W</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Energy Output</span>
+                            <span class="stat-value" id="ngcc-energy">43.8 TWh</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">LCOE</span>
+                            <span class="stat-value" id="ngcc-lcoe">$42/MWh</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Overhead</span>
+                            <span class="stat-value" id="ngcc-overhead">$71M</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Maintenance</span>
+                            <span class="stat-value" id="ngcc-maintenance">$53M</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Communications</span>
+                            <span class="stat-value" id="ngcc-comms">$18M</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                </div>
+
+                <!-- References Sidebar -->
+                <div class="references-sidebar">
+                    <h4 class="references-title">References</h4>
+                    <div id="references-list" class="references-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Engineering Parameters -->
+        <section class="paper-section parameters-section">
+            <div class="figure-label">Engineering · System Parameters</div>
+            
+            <!-- Analysis Period (Full Width) -->
+            <div class="param-group shared-params">
+                <div class="slider-container analysis-period-slider">
+                    <div class="slider-header">
+                        <span class="slider-label">Analysis Period</span>
+                        <span class="slider-value" id="years-value">5 years</span>
+                    </div>
+                    <div class="slider-track-container">
+                        <input type="range" id="years-slider" min="3" max="10" step="1" value="5">
+                        <div class="slider-track"></div>
+                        <div class="slider-fill" id="years-fill"></div>
+                    </div>
+                    <div class="slider-ticks">
+                        <span class="tick" data-value="3">3y</span>
+                        <span class="tick" data-value="5">5y</span>
+                        <span class="tick" data-value="7">7y</span>
+                        <span class="tick" data-value="10">10y</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="param-columns">
+                <!-- Orbital Parameters -->
+                <div class="param-column orbital-params">
+                    <div class="param-column-header">
+                        <div class="column-indicator orbital-indicator"></div>
+                        <h4>Orbital Solar</h4>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Launch Cost to LEO</span>
+                            <span class="slider-value" id="launch-cost-value">$1,000/kg</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="launch-cost-slider" min="100" max="2940" step="10" value="1000">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="launch-cost-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="100">Starship goal</span>
+                            <span class="tick" data-value="1000">Starship</span>
+                            <span class="tick" data-value="2940">Falcon 9</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Satellite Hardware Cost</span>
+                            <span class="slider-value" id="sat-cost-value">$9/W</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="sat-cost-slider" min="4" max="18" step="1" value="9">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="sat-cost-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="5">V3</span>
+                            <span class="tick" data-value="9">V2 Mini</span>
+                            <span class="tick" data-value="15">V1</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Specific Power</span>
+                            <span class="slider-value" id="specific-power-value">45 W/kg</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="specific-power-slider" min="3" max="100" step="1" value="45">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="specific-power-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="3">ISS</span>
+                            <span class="tick" data-value="25">V1</span>
+                            <span class="tick" data-value="45">V2 Mini</span>
+                            <span class="tick" data-value="70">V3</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Orbit Sunlight Fraction</span>
+                            <span class="slider-value" id="sun-fraction-value">80%</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="sun-fraction-slider" min="0.55" max="1.0" step="0.01" value="0.80">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="sun-fraction-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="0.60">LEO (~60%)</span>
+                            <span class="tick" data-value="0.80">SSO (~80%)</span>
+                            <span class="tick" data-value="0.98">Terminator (~98%)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NatGas Parameters -->
+                <div class="param-column ngcc-params">
+                    <div class="param-column-header">
+                        <div class="column-indicator ngcc-indicator"></div>
+                        <h4>NatGas</h4>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Capital Cost</span>
+                            <span class="slider-value" id="capex-value">$898/kW</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="capex-slider" min="400" max="2000" step="50" value="898">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill ngcc-fill" id="capex-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="898">EIA avg</span>
+                            <span class="tick" data-value="1200">High</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Fuel Cost</span>
+                            <span class="slider-value" id="fuel-cost-value">$25/MWh</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="fuel-cost-slider" min="10" max="100" step="5" value="25">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill ngcc-fill" id="fuel-cost-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="25">2024</span>
+                            <span class="tick" data-value="50">High</span>
+                            <span class="tick" data-value="75">Crisis</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">O&M Cost</span>
+                            <span class="slider-value" id="om-cost-value">$6/MWh</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="om-cost-slider" min="2" max="20" step="1" value="6">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill ngcc-fill" id="om-cost-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="6">Typical</span>
+                            <span class="tick" data-value="12">High</span>
+                        </div>
+                    </div>
+
+                        <div class="slider-container">
+                            <div class="slider-header">
+                                <span class="slider-label">Land Cost (30 acres)</span>
+                                <span class="slider-value" id="land-cost-value">$50k/acre</span>
+                            </div>
+                            <div class="slider-track-container">
+                                <input type="range" id="land-cost-slider" min="5" max="200" step="5" value="50">
+                                <div class="slider-track"></div>
+                                <div class="slider-fill ngcc-fill" id="land-cost-fill"></div>
+                            </div>
+                            <div class="slider-ticks">
+                                <span class="tick" data-value="10">Rural</span>
+                                <span class="tick" data-value="50">Industrial</span>
+                                <span class="tick" data-value="150">Premium</span>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Engineering Outputs -->
+        <section class="paper-section engineering-outputs-section">
+            <div class="engineering-outputs-header">
+                <div class="figure-label">Engineering · System Outputs</div>
+                <a href="/preferences" class="preferences-link">⚙️ Edit Constants</a>
+            </div>
+            
+            <div class="engineering-outputs-grid">
+                <!-- Orbital Engineering Outputs -->
+                <div class="engineering-output-column orbital">
+                    <div class="engineering-column-header">
+                        <div class="column-indicator orbital-indicator"></div>
+                        <h3>Orbital Solar</h3>
+                    </div>
+                    
+                    <div class="engineering-stats">
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Total Mass to LEO</span>
+                            <span class="eng-stat-value" id="eng-orbital-mass">22.2M kg</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Specific Power</span>
+                            <span class="eng-stat-value" id="eng-orbital-specific-power">45 W/kg</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Solar Array Area</span>
+                            <span class="eng-stat-value" id="eng-orbital-array-area">2.3 km²</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Satellite Count</span>
+                            <span class="eng-stat-value" id="eng-orbital-sat-count">~37,000</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Starship Launches</span>
+                            <span class="eng-stat-value" id="eng-orbital-launches">~222</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">LOX Required</span>
+                            <span class="eng-stat-value" id="eng-orbital-lox">175M gal</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Methane Required</span>
+                            <span class="eng-stat-value" id="eng-orbital-methane">168M gal</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Energy Output</span>
+                            <span class="eng-stat-value" id="eng-orbital-energy">35.0 TWh</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NatGas Engineering Outputs -->
+                <div class="engineering-output-column ngcc">
+                    <div class="engineering-column-header">
+                        <div class="column-indicator ngcc-indicator"></div>
+                        <h3>NatGas</h3>
+                    </div>
+                    
+                    <div class="engineering-stats">
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Plant Footprint</span>
+                            <span class="eng-stat-value" id="eng-ngcc-footprint">30 acres</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">GE 7HA.03 Turbines</span>
+                            <span class="eng-stat-value" id="eng-ngcc-turbines">2 units</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Heat Rate</span>
+                            <span class="eng-stat-value" id="eng-ngcc-heat-rate">6,370 BTU/kWh</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Gas Consumption</span>
+                            <span class="eng-stat-value" id="eng-ngcc-gas-consumption">279 BCF</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Energy Output</span>
+                            <span class="eng-stat-value" id="eng-ngcc-energy">43.8 TWh</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Model Assumptions (moved after Engineering Outputs) -->
+        <section class="paper-section assumptions-section">
+            <div class="assumptions-header">
+                <h2 class="section-heading">Model Assumptions</h2>
+            </div>
+            
+            <div class="assumptions-list">
+                <!-- Global -->
+                <div class="assumption-subsection">
+                    <div class="assumption-subsection-header">
+                        <div class="subsection-indicator global-indicator"></div>
+                        <h4>Global</h4>
+                    </div>
+                    <div class="assumption-content">
+                        <p>This model targets <strong>1 GW</strong> of nameplate electrical capacity—roughly the output of a single large power plant. The analysis period of <strong id="assumption-years">5 years</strong> captures both initial capital deployment and ongoing operational costs. All figures are expressed in 2024 USD with no discounting applied.</p>
+                    </div>
+                </div>
+                
+                <!-- Orbital Solar -->
+                <div class="assumption-subsection">
+                    <div class="assumption-subsection-header">
+                        <div class="subsection-indicator orbital-indicator"></div>
+                        <h4>Orbital Solar</h4>
+                    </div>
+                    <div class="assumption-content">
+                        <p>The orbital solar model uses Starlink-class satellites as the reference architecture. The Starlink V2 Mini bus provides a flight-proven baseline: approximately 105 m² of solar array area, 600 kg total mass, and 27-30 kW of electrical output. This yields a specific power of approximately <strong id="assumption-specific-power">45 W/kg</strong>—a key parameter that determines total mass to orbit.</p>
+                        <p>At 1 GW target capacity, the system requires <strong id="assumption-mass">22.2M kg</strong> of satellite mass delivered to LEO. The model assumes negligible fuel costs (solar is the primary energy source) and treats on-orbit O&M as a fraction of hardware costs rather than an energy-based charge.</p>
+                    </div>
+                </div>
+                
+                <!-- NatGas -->
+                <div class="assumption-subsection">
+                    <div class="assumption-subsection-header">
+                        <div class="subsection-indicator ngcc-indicator"></div>
+                        <h4>NatGas</h4>
+                    </div>
+                    <div class="assumption-content">
+                        <p>The natural gas combined-cycle (NGCC) model is based on U.S. Energy Information Administration standard values for utility-scale power plants. Capital costs reflect modern 2×1 combined-cycle configurations using GE 7HA.03-class turbines, which achieve heat rates around 6,370 BTU/kWh.</p>
+                        <p>The model assumes continuous operation over the analysis period at the specified capacity factor. Fuel costs are treated as a variable expense tied to energy output, while O&M costs include both scheduled maintenance and unplanned outages typical of baseload gas plants.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reading Panel with References -->
+        <section class="paper-section reading-section">
+            <div class="reading-layout">
+                <div class="reading-panel">
+                    <p class="first-para">
+                        This analysis compares the total system cost of deploying 1 GW of power generation 
+                        capacity via orbital solar power satellites versus a terrestrial natural gas (NatGas)
+                        plant over a <span id="reading-years">5</span>-year period.<sup data-ref="1">1</sup>
+                    </p>
+                    
+                    <h3>Orbital Solar Economics</h3>
+                    <p>
+                        The cost of orbital solar is dominated by two factors: satellite hardware costs and 
+                        launch costs. Using Starlink-class satellites as a proxy, we estimate specific power 
+                        of ~45 W/kg and hardware costs of ~$<span id="reading-sat-cost">9</span>/W.<sup data-ref="2">2</sup><sup data-ref="3">3</sup>
+                    </p>
+                    
+                    <p>
+                        At $<span id="reading-launch-cost">1,000</span>/kg to LEO, a 1 GW orbital system requires 
+                        <span id="reading-mass">22.2</span> million kg of mass, costing 
+                        <span id="reading-launch-total">$22.2B</span> to launch and 
+                        <span id="reading-hardware-total">$9.0B</span> in satellite hardware.
+                    </p>
+                    
+                    <h3>NatGas Economics</h3>
+                    <p>
+                        Natural gas plants have overnight capital costs of 
+                        ~$<span id="reading-capex">898</span>/kW.<sup data-ref="4">4</sup> Over 
+                        <span id="reading-years-2">5</span> years at current fuel prices 
+                        (~$<span id="reading-fuel">25</span>/MWh), fuel costs dominate the total cost 
+                        of ownership.<sup data-ref="5">5</sup>
+                    </p>
+                    
+                    <h3>Crossover Analysis</h3>
+                    <p>
+                        At $<span id="reading-launch-cost-2">1,000</span>/kg launch costs, orbital solar costs 
+                        <span class="orbital-color" id="reading-orbital-total">$66.2B</span> vs 
+                        <span class="ngcc-color" id="reading-ngcc-total">$37.3B</span> for NatGas. 
+                        The crossover point occurs around $50–100/kg launch costs, which Starship may 
+                        achieve at high flight rates.<sup data-ref="6">6</sup>
+                    </p>
+                    
+                    <p>
+                        The numbers say no. Not marginally no. <strong>Orders-of-magnitude no.</strong> Even under 
+                        optimistic Starship pricing, the launch bill alone overwhelms the entire multi-year cost 
+                        of a terrestrial NatGas plant.
+                    </p>
+
+                    <div class="breakeven-box">
+                        <h4>Breakeven Analysis</h4>
+                        <p>
+                            For orbital solar to match NatGas total cost (excluding identical GPU costs), 
+                            launch cost would need to reach approximately
+                            <strong id="breakeven-launch">−$303/kg</strong> — a physically impossible negative 
+                            number, indicating that even at $0/kg launch cost, satellite hardware alone exceeds 
+                            NatGas infrastructure costs.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="paper-footer">
+            <p>
+                Note: Orbital model assumes <span id="footer-sun">80%</span> sunlight fraction based on orbit selection. 
+                NatGas costs include fuel and O&M over the analysis period. 
+                All figures in 2024 USD.
+            </p>
+        </footer>
+    </article>
+
+    <script src="{{ url_for('static', filename='js/math.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
+
