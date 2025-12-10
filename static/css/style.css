@@ -1065,6 +1065,10 @@ input[type="range"]::-moz-range-thumb {
 
 /* Responsive */
 @media (max-width: 900px) {
+    body {
+        zoom: 0.7;
+    }
+    
     .paper {
         padding: 2rem 1.5rem;
     }
