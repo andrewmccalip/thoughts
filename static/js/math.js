@@ -43,7 +43,10 @@ const CostModel = (function() {
         // Cost fractions - NatGas
         NATGAS_OVERHEAD_FRAC: 0.04,
         NATGAS_MAINTENANCE_FRAC: 0.03,
-        NATGAS_COMMS_FRAC: 0.01
+        NATGAS_COMMS_FRAC: 0.01,
+
+        // Space environment
+        SOLAR_IRRADIANCE_W_M2: 1361 // LEO solar constant
     };
 
     // ==========================================
@@ -53,6 +56,11 @@ const CostModel = (function() {
     let state = {
         // Shared parameters
         years: 5,
+        // Thermal analysis parameters
+        emissivity: 0.85,           // Radiator emissivity (dimensionless)
+        albedoViewFactor: 0.2,      // Fraction of view to Earth albedo (reduces effective radiation)
+        maxDieTempC: 75,            // Max die temperature (°C)
+        tempDropC: 10,              // Temperature drop from die to radiator surface (°C)
         
         // Orbital parameters (V2 Mini defaults from Starlink analysis)
         launchCostPerKg: 1000,
@@ -164,8 +172,9 @@ const CostModel = (function() {
         }
         const avgCapacityFactor = capacitySum / state.years;
         
-        // To maintain TARGET_POWER average output, we need more initial capacity
-        const requiredInitialPowerW = derived.TARGET_POWER_W / avgCapacityFactor;
+        // Sunlight fraction reduces usable output; size up to hit target average
+        const sunlightAdjustedFactor = avgCapacityFactor * state.sunFraction;
+        const requiredInitialPowerW = derived.TARGET_POWER_W / sunlightAdjustedFactor;
         
         // ========================================
         // SATELLITE SIZING
@@ -197,27 +206,24 @@ const CostModel = (function() {
         // Base cost before overhead/maintenance/comms
         const baseCost = hardwareCost + launchCost;
         
-        // O&M cost (as fraction of hardware)
-        const omCost = hardwareCost * (constants.ORBITAL_OVERHEAD_FRAC + constants.ORBITAL_MAINTENANCE_FRAC + constants.ORBITAL_COMMS_FRAC);
+        // O&M cost (apply only to hardware to avoid charging launch mass)
+        const overheadCost = hardwareCost * constants.ORBITAL_OVERHEAD_FRAC;
+        const maintenanceCost = hardwareCost * constants.ORBITAL_MAINTENANCE_FRAC;
+        const commsCost = hardwareCost * constants.ORBITAL_COMMS_FRAC;
+        const omCost = overheadCost + maintenanceCost + commsCost;
         
         // NRE cost (non-recurring engineering)
         const nreCost = state.nreCost * 1e6;  // Convert from millions
         
-        // Overhead, maintenance, communications
-        const overheadCost = baseCost * constants.ORBITAL_OVERHEAD_FRAC;
-        const maintenanceCost = baseCost * constants.ORBITAL_MAINTENANCE_FRAC;
-        const commsCost = baseCost * constants.ORBITAL_COMMS_FRAC;
-        
         // Total system cost (including NRE)
-        const totalCost = baseCost + overheadCost + maintenanceCost + commsCost + nreCost;
+        const totalCost = baseCost + omCost + nreCost;
         
         // ========================================
         // ENERGY OUTPUT
         // ========================================
         
-        // Energy output: average power (1GW target) × hours × sun fraction
-        // Degradation is already accounted for by launching extra capacity
-        const energyMWh = constants.TARGET_POWER_MW * totalHours * state.sunFraction;
+        // Energy output: target average power × hours (sized to offset eclipse + degradation)
+        const energyMWh = constants.TARGET_POWER_MW * totalHours;
         
         // Cost per watt (of delivered average power, not initial capacity)
         const costPerW = totalCost / derived.TARGET_POWER_W;
@@ -396,12 +402,79 @@ const CostModel = (function() {
             capacitySum += Math.pow(annualRetention, year);
         }
         const avgCapacityFactor = capacitySum / state.years;
-        const requiredInitialPowerW = derived.TARGET_POWER_W / avgCapacityFactor;
+        const sunlightAdjustedFactor = avgCapacityFactor * state.sunFraction;
+        const requiredInitialPowerW = derived.TARGET_POWER_W / sunlightAdjustedFactor;
         
         const hardwareCost = state.satelliteCostPerW * requiredInitialPowerW;
         const mass = requiredInitialPowerW / state.specificPowerWPerKg;
         
         return (terrestrialCost - hardwareCost) / mass;
+    }
+
+    // ==========================================
+    // THERMAL ANALYSIS
+    // ==========================================
+
+    function calculateThermal() {
+        // Stefan-Boltzmann constant (W/m²/K⁴)
+        const SIGMA = 5.670374419e-8;
+
+        // Use orbital array area as available radiator area (backside)
+        const orbital = calculateOrbital();
+        const availableAreaM2 = orbital.arrayAreaKm2 * 1e6;
+
+        // Effective emissivity with albedo view factor knockdown
+        const effectiveEmissivity = Math.max(0, state.emissivity * (1 - state.albedoViewFactor));
+
+        // Radiator (hot side) temperature in Kelvin
+        const radiatorTempK = (state.maxDieTempC - state.tempDropC) + 273.15;
+        const spaceTempK = 3; // Radiating to ~3 K
+
+        // Solar irradiance absorbed by the panels (worst-case: all incident)
+        const incidentSolarW = constants.SOLAR_IRRADIANCE_W_M2 * availableAreaM2;
+
+        // Electrical output from arrays (initial capacity)
+        const electricalHeatW = orbital.actualInitialPowerW;
+
+        // Thermal waste heat from panel inefficiency (incident minus electrical output)
+        const wasteHeatW = Math.max(0, incidentSolarW - electricalHeatW);
+
+        // Total heat to reject: electrical output ultimately becomes heat in the payload
+        // plus direct panel waste heat. This avoids implicitly assuming we radiate
+        // the entire incident solar load twice.
+        const heatLoadW = wasteHeatW + electricalHeatW;
+
+        // Capacity with current area and temps
+        const capacityW = effectiveEmissivity * SIGMA * availableAreaM2 * (Math.pow(radiatorTempK, 4) - Math.pow(spaceTempK, 4));
+
+        // Temperature required (with current area) to reject full heatLoad
+        const requiredTempK = Math.pow((heatLoadW / (effectiveEmissivity * SIGMA * availableAreaM2)) + Math.pow(spaceTempK, 4), 0.25);
+        const requiredTempC = requiredTempK - 273.15;
+
+        // Area required if current radiator temp is fixed
+        const areaRequiredM2 = heatLoadW / (effectiveEmissivity * SIGMA * (Math.pow(radiatorTempK, 4) - Math.pow(spaceTempK, 4)));
+
+        const areaSufficient = capacityW >= heatLoadW;
+        const marginPct = (capacityW / heatLoadW - 1) * 100;
+
+        return {
+            availableAreaM2,
+            availableAreaKm2: availableAreaM2 / 1e6,
+            effectiveEmissivity,
+            radiatorTempK,
+            radiatorTempC: radiatorTempK - 273.15,
+            requiredTempK,
+            requiredTempC,
+            capacityW,
+            heatLoadW,
+            incidentSolarW,
+            wasteHeatW,
+            electricalHeatW,
+            areaRequiredM2,
+            areaRequiredKm2: areaRequiredM2 / 1e6,
+            areaSufficient,
+            marginPct
+        };
     }
     
     // Alias for backwards compatibility
@@ -471,6 +544,7 @@ const CostModel = (function() {
         calculateTerrestrial,
         calculateNatGas,  // Alias for backwards compatibility
         calculateBreakeven,
+        calculateThermal,
         
         // Formatters
         formatCost,

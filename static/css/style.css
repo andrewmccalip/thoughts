@@ -99,6 +99,10 @@ body {
     border-bottom: 1px solid var(--rule-light);
 }
 
+.paper-section.figure-section {
+    margin-bottom: 1.5rem;  /* tighter spacing below the comparison figure */
+}
+
 .paper-section:last-of-type {
     border-bottom: none;
 }
@@ -484,6 +488,16 @@ input[type="range"]::-moz-range-thumb {
     white-space: nowrap;
 }
 
+.status-pass {
+    color: #2f855a !important; /* green */
+    font-weight: 600;
+}
+
+.status-fail {
+    color: #c53030 !important; /* red */
+    font-weight: 600;
+}
+
 /* Analysis Section */
 .analysis-section p {
     font-size: 1.05rem;
@@ -742,6 +756,15 @@ input[type="range"]::-moz-range-thumb {
 .engineering-output-column.ngcc .eng-stat-value,
 .engineering-output-column.terrestrial .eng-stat-value {
     color: var(--ngcc);
+}
+
+/* Sliders inside engineering output cards (e.g., thermal inputs) */
+.engineering-output-column .slider-container {
+    margin-bottom: 1.5rem;
+}
+
+.engineering-output-column .slider-container:last-child {
+    margin-bottom: 0;
 }
 
 /* Reading Panel with References */
@@ -1041,12 +1064,26 @@ input[type="range"]::-moz-range-thumb {
 
 .essay-note {
     font-family: var(--font-sans);
-    font-size: 0.95rem;
+    font-size: 0.8rem;
+    font-style: italic;
     color: var(--ink-light);
     padding: 1rem 1.5rem;
     background: var(--paper-dark);
     border-radius: 4px;
     margin-top: 2rem;
+}
+
+.essay-note a {
+    color: var(--orbital);
+    text-decoration: none;
+    margin-left: 0.5rem;
+    font-style: normal;
+    transition: color 0.15s;
+}
+
+.essay-note a:hover {
+    color: var(--orbital-accent);
+    text-decoration: underline;
 }
 
 /* Footer */

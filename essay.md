@@ -163,3 +163,5 @@ Assumptions
 more to say here later
 * * * * *
 
+One subtle but brutal constraint is thermal: almost everyone fixates on the electrical load from the compute payload and forgets that the panel itself is ingesting the full solar flux. Whatever isn’t converted to electricity is immediately waste heat that has to go somewhere, and the electricity you do make also ends up as heat in the chips. That means the radiator has to reject both the panel’s optical losses and the payload’s electrical dissipation. If you size for only “payload watts,” you underbuild your radiator by a wide margin and your margin evaporates as soon as the arrays see real sunlight.
+

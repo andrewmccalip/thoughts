@@ -1,39 +1,16 @@
 [
     {
         "id": 1,
-        "title": "NASA SBSP Concept Study",
-        "url": "https://www.nasa.gov/",
+        "title": "Starlink BOM & Performance",
+        "url": "https://chatgpt.com/share/69391474-4b24-8005-bb93-ebd4340c65d8",
         "year": "2024"
     },
     {
         "id": 2,
-        "title": "SpaceX Starship Economics",
-        "url": "https://www.spacex.com/vehicles/starship/",
-        "year": "2024"
-    },
-    {
-        "id": 3,
-        "title": "Starlink Satellite Specifications",
-        "url": "https://www.starlink.com/",
-        "year": "2024"
-    },
-    {
-        "id": 4,
-        "title": "EIA NGCC Cost Report",
-        "url": "https://www.eia.gov/outlooks/aeo/assumptions/pdf/table_8.2.pdf",
-        "year": "2023"
-    },
-    {
-        "id": 5,
-        "title": "EIA Natural Gas Prices",
-        "url": "https://www.eia.gov/dnav/ng/ng_pri_sum_dcu_nus_m.htm",
-        "year": "2024"
-    },
-    {
-        "id": 6,
-        "title": "NREL Annual Technology Baseline",
-        "url": "https://atb.nrel.gov/",
+        "title": "Datacenter & Power Gen",
+        "url": "https://gemini.google.com/share/56191222774f",
         "year": "2024"
     }
 ]
+
 

@@ -136,6 +136,7 @@
         const orbital = CostModel.calculateOrbital();
         const terrestrial = CostModel.calculateTerrestrial();
         const breakeven = CostModel.calculateBreakeven();
+        const thermal = CostModel.calculateThermal();
         const state = CostModel.getState();
         const constants = CostModel.getConstants();
         
@@ -218,6 +219,42 @@
         updateText('eng-ngcc-gas-consumption', `${terrestrial.gasConsumptionBCF.toFixed(0)} BCF`);
         updateText('eng-ngcc-fuel-cost', `$${terrestrial.fuelCostPerMWh.toFixed(0)}/MWh`);
         updateText('eng-ngcc-energy', CostModel.formatEnergy(terrestrial.energyMWh));
+
+        // Thermal analysis outputs
+        updateText('thermal-available-area', `${thermal.availableAreaKm2.toFixed(2)} km²`);
+        updateText('thermal-effective-emissivity', `${thermal.effectiveEmissivity.toFixed(2)}`);
+        updateText('thermal-radiator-temp', `${thermal.radiatorTempC.toFixed(1)} °C`);
+        updateText('thermal-incident', `${(thermal.incidentSolarW / 1e6).toFixed(0)} MW`);
+        updateText('thermal-waste-heat', `${(thermal.wasteHeatW / 1e6).toFixed(0)} MW`);
+        updateText('thermal-electrical-heat', `${(thermal.electricalHeatW / 1e6).toFixed(0)} MW`);
+        updateText('thermal-heat-load', `${(thermal.heatLoadW / 1e6).toFixed(0)} MW`);
+        updateText('thermal-capacity', `${(thermal.capacityW / 1e6).toFixed(0)} MW`);
+        
+        // Margin - pass if positive (capacity > load)
+        const marginEl = document.getElementById('thermal-margin');
+        if (marginEl) {
+            marginEl.textContent = `${thermal.marginPct.toFixed(1)}%`;
+            marginEl.classList.toggle('status-pass', thermal.marginPct >= 0);
+            marginEl.classList.toggle('status-fail', thermal.marginPct < 0);
+        }
+        
+        // Required temp - fail if above max die temp (physically impossible)
+        const reqTempEl = document.getElementById('thermal-required-temp');
+        if (reqTempEl) {
+            reqTempEl.textContent = `${thermal.requiredTempC.toFixed(1)} °C`;
+            const tempOk = thermal.requiredTempC <= state.maxDieTempC;
+            reqTempEl.classList.toggle('status-pass', tempOk);
+            reqTempEl.classList.toggle('status-fail', !tempOk);
+        }
+        
+        // Required area - fail if significantly more than available
+        const reqAreaEl = document.getElementById('thermal-required-area');
+        if (reqAreaEl) {
+            reqAreaEl.textContent = `${thermal.areaRequiredKm2.toFixed(2)} km²`;
+            const areaOk = thermal.areaRequiredKm2 <= thermal.availableAreaKm2;
+            reqAreaEl.classList.toggle('status-pass', areaOk);
+            reqAreaEl.classList.toggle('status-fail', !areaOk);
+        }
     }
 
     // ==========================================
@@ -310,6 +347,12 @@
         
         // PUE slider
         setupSlider('pue-slider', 'pue-fill', 'pue-value', 1.05, 1.6, 'pue', v => v.toFixed(2));
+
+        // Thermal sliders
+        setupSlider('emissivity-slider', 'emissivity-fill', 'emissivity-value', 0.6, 0.98, 'emissivity', v => v.toFixed(2));
+        setupSlider('albedo-slider', 'albedo-fill', 'albedo-value', 0.0, 0.5, 'albedoViewFactor', v => v.toFixed(2));
+        setupSlider('die-temp-slider', 'die-temp-fill', 'die-temp-value', 60, 90, 'maxDieTempC', v => `${v.toFixed(0)} °C`);
+        setupSlider('temp-drop-slider', 'temp-drop-fill', 'temp-drop-value', 5, 25, 'tempDropC', v => `${v.toFixed(0)} °C`);
         
         // Facility capex slider (combined 4 buckets: electrical + mechanical + civil + network)
         // From report: ~$12.50/W total (excluding power gen)
