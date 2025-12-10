@@ -605,26 +605,38 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .assumption-content {
-    padding: 1.25rem 1.5rem;
+    padding: 1rem 1.5rem;
 }
 
-.assumption-content p {
-    font-family: var(--font-serif);
-    font-size: 0.95rem;
-    line-height: 1.7;
+.assumption-bullets {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.assumption-bullets li {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    line-height: 1.5;
     color: var(--ink-muted);
-    margin-bottom: 0.75rem;
+    padding: 0.35rem 0;
+    padding-left: 1rem;
+    position: relative;
 }
 
-.assumption-content p:last-child {
-    margin-bottom: 0;
+.assumption-bullets li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--ink-light);
+    font-weight: bold;
 }
 
-.assumption-content strong {
+.assumption-bullets strong {
     font-weight: 600;
     color: var(--ink);
     font-family: var(--font-mono);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 /* Engineering Outputs Section */

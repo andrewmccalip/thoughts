@@ -468,7 +468,11 @@
                         <h4>Global</h4>
                     </div>
                     <div class="assumption-content">
-                        <p>This model targets <strong>1 GW</strong> of nameplate electrical capacity—roughly the output of a single large power plant. The analysis period of <strong id="assumption-years">5 years</strong> captures both initial capital deployment and ongoing operational costs. All figures are expressed in 2024 USD with no discounting applied.</p>
+                        <ul class="assumption-bullets">
+                            <li>Target capacity: <strong>1 GW</strong> nameplate electrical</li>
+                            <li>Analysis period: <strong id="assumption-years">5 years</strong></li>
+                            <li>All figures in 2024 USD, no discounting</li>
+                        </ul>
                     </div>
                 </div>
                 
@@ -479,8 +483,12 @@
                         <h4>Orbital Solar</h4>
                     </div>
                     <div class="assumption-content">
-                        <p>The orbital solar model uses Starlink-class satellites as the reference architecture. The Starlink V2 Mini bus provides a flight-proven baseline: approximately 105 m² of solar array area, 600 kg total mass, and 27-30 kW of electrical output. This yields a specific power of approximately <strong id="assumption-specific-power">45 W/kg</strong>—a key parameter that determines total mass to orbit.</p>
-                        <p>At 1 GW target capacity, the system requires <strong id="assumption-mass">22.2M kg</strong> of satellite mass delivered to LEO. The model assumes negligible fuel costs (solar is the primary energy source) and treats on-orbit O&M as a fraction of hardware costs rather than an energy-based charge.</p>
+                        <ul class="assumption-bullets">
+                            <li>Reference: Starlink V2 Mini (~105 m², 600 kg, 27-30 kW)</li>
+                            <li>Specific power: <strong id="assumption-specific-power">45 W/kg</strong></li>
+                            <li>Total mass to LEO: <strong id="assumption-mass">22.2M kg</strong></li>
+                            <li>No fuel cost; O&M as % of hardware</li>
+                        </ul>
                     </div>
                 </div>
                 
@@ -491,8 +499,12 @@
                         <h4>NatGas</h4>
                     </div>
                     <div class="assumption-content">
-                        <p>The natural gas combined-cycle (NGCC) model is based on U.S. Energy Information Administration standard values for utility-scale power plants. Capital costs reflect modern 2×1 combined-cycle configurations using GE 7HA.03-class turbines, which achieve heat rates around 6,370 BTU/kWh.</p>
-                        <p>The model assumes continuous operation over the analysis period at the specified capacity factor. Fuel costs are treated as a variable expense tied to energy output, while O&M costs include both scheduled maintenance and unplanned outages typical of baseload gas plants.</p>
+                        <ul class="assumption-bullets">
+                            <li>Based on U.S. EIA standard values</li>
+                            <li>2×1 combined-cycle with GE 7HA.03 turbines</li>
+                            <li>Heat rate: 6,370 BTU/kWh</li>
+                            <li>Continuous operation at specified capacity factor</li>
+                        </ul>
                     </div>
                 </div>
             </div>
