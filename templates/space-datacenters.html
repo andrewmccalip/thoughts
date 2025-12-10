@@ -113,75 +113,70 @@
                     </div>
                 </div>
 
-                <!-- NatGas Column -->
-                <div class="comparison-column ngcc">
+                <!-- Terrestrial Column (On-Site CCGT - 5 Buckets) -->
+                <div class="comparison-column terrestrial">
                     <div class="column-header">
-                        <div class="column-indicator ngcc-indicator"></div>
+                        <div class="column-indicator terrestrial-indicator"></div>
                         <div class="column-title-group">
-                            <h3>NatGas</h3>
-                            <p class="column-total" id="ngcc-total">$1.8B</p>
+                            <h3>Terrestrial</h3>
+                            <p class="column-total" id="terrestrial-total">$14.8B</p>
                         </div>
                     </div>
                     
                     <div class="bar-chart">
                         <div class="bar-item">
-                            <div class="bar-label">Capex</div>
+                            <div class="bar-label">Power Gen</div>
                             <div class="bar-container">
-                                <div class="bar ngcc-bar" id="ngcc-capex-bar"></div>
+                                <div class="bar terrestrial-bar" id="terrestrial-powergen-bar"></div>
                             </div>
-                            <div class="bar-value" id="ngcc-capex-value">$898M</div>
+                            <div class="bar-value" id="terrestrial-powergen-value">$1.3B</div>
                         </div>
                         <div class="bar-item">
-                            <div class="bar-label">Fuel</div>
+                            <div class="bar-label">Electrical</div>
                             <div class="bar-container">
-                                <div class="bar ngcc-bar" id="ngcc-fuel-bar"></div>
+                                <div class="bar terrestrial-bar" id="terrestrial-electrical-bar"></div>
                             </div>
-                            <div class="bar-value" id="ngcc-fuel-value">$712M</div>
+                            <div class="bar-value" id="terrestrial-electrical-value">$5.3B</div>
                         </div>
                         <div class="bar-item">
-                            <div class="bar-label">O&M</div>
+                            <div class="bar-label">Mechanical</div>
                             <div class="bar-container">
-                                <div class="bar ngcc-bar" id="ngcc-om-bar"></div>
+                                <div class="bar terrestrial-bar" id="terrestrial-mechanical-bar"></div>
                             </div>
-                            <div class="bar-value" id="ngcc-om-value">$171M</div>
+                            <div class="bar-value" id="terrestrial-mechanical-value">$3.0B</div>
                         </div>
                         <div class="bar-item">
-                            <div class="bar-label">Land</div>
+                            <div class="bar-label">Civil/Shell</div>
                             <div class="bar-container">
-                                <div class="bar ngcc-bar" id="ngcc-land-bar"></div>
+                                <div class="bar terrestrial-bar" id="terrestrial-civil-bar"></div>
                             </div>
-                            <div class="bar-value" id="ngcc-land-value">$1.5M</div>
+                            <div class="bar-value" id="terrestrial-civil-value">$2.5B</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Fuel (5yr)</div>
+                            <div class="bar-container">
+                                <div class="bar terrestrial-bar" id="terrestrial-fuel-bar"></div>
+                            </div>
+                            <div class="bar-value" id="terrestrial-fuel-value">$1.0B</div>
                         </div>
                     </div>
                     
                     <div class="stats-table">
                         <div class="stat-row">
-                            <span class="stat-label">Hours of Operation</span>
-                            <span class="stat-value" id="ngcc-hours">43,800 hrs</span>
+                            <span class="stat-label">Capex $/W</span>
+                            <span class="stat-value" id="terrestrial-capex-cpw">$13.80/W</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">Cost per Watt</span>
-                            <span class="stat-value" id="ngcc-cpw">$1.83/W</span>
+                            <span class="stat-label">Total Cost per Watt</span>
+                            <span class="stat-value" id="terrestrial-cpw">$14.80/W</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">Energy Output</span>
-                            <span class="stat-value" id="ngcc-energy">43.8 TWh</span>
+                            <span class="stat-value" id="terrestrial-energy">37.2 TWh</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">LCOE</span>
-                            <span class="stat-value" id="ngcc-lcoe">$42/MWh</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Overhead</span>
-                            <span class="stat-value" id="ngcc-overhead">$71M</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Maintenance</span>
-                            <span class="stat-value" id="ngcc-maintenance">$53M</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Communications</span>
-                            <span class="stat-value" id="ngcc-comms">$18M</span>
+                            <span class="stat-value" id="terrestrial-lcoe">$398/MWh</span>
                         </div>
                     </div>
                 </div>
@@ -251,35 +246,35 @@
                     <div class="slider-container">
                         <div class="slider-header">
                             <span class="slider-label">Satellite Hardware Cost</span>
-                            <span class="slider-value" id="sat-cost-value">$9/W</span>
+                            <span class="slider-value" id="sat-cost-value">$22/W</span>
                         </div>
                         <div class="slider-track-container">
-                            <input type="range" id="sat-cost-slider" min="4" max="18" step="1" value="9">
+                            <input type="range" id="sat-cost-slider" min="15" max="40" step="1" value="22">
                             <div class="slider-track"></div>
                             <div class="slider-fill orbital-fill" id="sat-cost-fill"></div>
                         </div>
                         <div class="slider-ticks">
-                            <span class="tick" data-value="5">V3</span>
-                            <span class="tick" data-value="9">V2 Mini</span>
-                            <span class="tick" data-value="15">V1</span>
+                            <span class="tick" data-value="22">V2 Mini</span>
+                            <span class="tick" data-value="25">V3</span>
+                            <span class="tick" data-value="32">V1</span>
                         </div>
                     </div>
 
                     <div class="slider-container">
                         <div class="slider-header">
                             <span class="slider-label">Specific Power</span>
-                            <span class="slider-value" id="specific-power-value">45 W/kg</span>
+                            <span class="slider-value" id="specific-power-value">36.5 W/kg</span>
                         </div>
                         <div class="slider-track-container">
-                            <input type="range" id="specific-power-slider" min="3" max="100" step="1" value="45">
+                            <input type="range" id="specific-power-slider" min="3" max="50" step="0.5" value="36.5">
                             <div class="slider-track"></div>
                             <div class="slider-fill orbital-fill" id="specific-power-fill"></div>
                         </div>
                         <div class="slider-ticks">
                             <span class="tick" data-value="3">ISS</span>
-                            <span class="tick" data-value="25">V1</span>
-                            <span class="tick" data-value="45">V2 Mini</span>
-                            <span class="tick" data-value="70">V3</span>
+                            <span class="tick" data-value="24.7">V1</span>
+                            <span class="tick" data-value="36.5">V2 Mini</span>
+                            <span class="tick" data-value="31.6">V3</span>
                         </div>
                     </div>
 
@@ -289,14 +284,14 @@
                             <span class="slider-value" id="sat-size-value">27 kW</span>
                         </div>
                         <div class="slider-track-container">
-                            <input type="range" id="sat-size-slider" min="10" max="100" step="1" value="27">
+                            <input type="range" id="sat-size-slider" min="5" max="80" step="1" value="27">
                             <div class="slider-track"></div>
                             <div class="slider-fill orbital-fill" id="sat-size-fill"></div>
                         </div>
                         <div class="slider-ticks">
-                            <span class="tick" data-value="15">V1</span>
+                            <span class="tick" data-value="7">V1</span>
                             <span class="tick" data-value="27">V2 Mini</span>
-                            <span class="tick" data-value="50">V3</span>
+                            <span class="tick" data-value="60">V3</span>
                         </div>
                     </div>
 
@@ -352,78 +347,97 @@
                     </div>
                 </div>
 
-                <!-- NatGas Parameters -->
-                <div class="param-column ngcc-params">
+                <!-- Terrestrial Parameters - 5 Buckets from Report -->
+                <div class="param-column terrestrial-params">
                     <div class="param-column-header">
-                        <div class="column-indicator ngcc-indicator"></div>
-                        <h4>NatGas</h4>
+                        <div class="column-indicator terrestrial-indicator"></div>
+                        <h4>Terrestrial (On-Site CCGT)</h4>
                     </div>
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <span class="slider-label">Capital Cost</span>
-                            <span class="slider-value" id="capex-value">$898/kW</span>
+                            <span class="slider-label">CCGT Turbine</span>
+                            <span class="slider-value" id="gas-turbine-value">$1,100/kW</span>
                         </div>
                         <div class="slider-track-container">
-                            <input type="range" id="capex-slider" min="400" max="2000" step="50" value="898">
+                            <input type="range" id="gas-turbine-slider" min="900" max="1500" step="50" value="1100">
                             <div class="slider-track"></div>
-                            <div class="slider-fill ngcc-fill" id="capex-fill"></div>
+                            <div class="slider-fill terrestrial-fill" id="gas-turbine-fill"></div>
                         </div>
                         <div class="slider-ticks">
-                            <span class="tick" data-value="898">EIA avg</span>
-                            <span class="tick" data-value="1200">High</span>
-                        </div>
-                    </div>
-
-                    <div class="slider-container">
-                        <div class="slider-header">
-                            <span class="slider-label">Fuel Cost</span>
-                            <span class="slider-value" id="fuel-cost-value">$25/MWh</span>
-                        </div>
-                        <div class="slider-track-container">
-                            <input type="range" id="fuel-cost-slider" min="10" max="100" step="5" value="25">
-                            <div class="slider-track"></div>
-                            <div class="slider-fill ngcc-fill" id="fuel-cost-fill"></div>
-                        </div>
-                        <div class="slider-ticks">
-                            <span class="tick" data-value="25">2024</span>
-                            <span class="tick" data-value="50">High</span>
-                            <span class="tick" data-value="75">Crisis</span>
+                            <span class="tick" data-value="1000">EIA</span>
+                            <span class="tick" data-value="1100">Typical</span>
+                            <span class="tick" data-value="1400">High</span>
                         </div>
                     </div>
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <span class="slider-label">O&M Cost</span>
-                            <span class="slider-value" id="om-cost-value">$6/MWh</span>
+                            <span class="slider-label">Fuel Efficiency (BTU/kWh)</span>
+                            <span class="slider-value" id="heat-rate-value">6,200 BTU/kWh</span>
                         </div>
                         <div class="slider-track-container">
-                            <input type="range" id="om-cost-slider" min="2" max="20" step="1" value="6">
+                            <input type="range" id="heat-rate-slider" min="6000" max="9000" step="100" value="6200">
                             <div class="slider-track"></div>
-                            <div class="slider-fill ngcc-fill" id="om-cost-fill"></div>
+                            <div class="slider-fill terrestrial-fill" id="heat-rate-fill"></div>
                         </div>
                         <div class="slider-ticks">
-                            <span class="tick" data-value="6">Typical</span>
-                            <span class="tick" data-value="12">High</span>
+                            <span class="tick" data-value="6200">CCGT</span>
+                            <span class="tick" data-value="7500">Mid</span>
+                            <span class="tick" data-value="8500">SC</span>
                         </div>
                     </div>
 
-                        <div class="slider-container">
-                            <div class="slider-header">
-                                <span class="slider-label">Land Cost (30 acres)</span>
-                                <span class="slider-value" id="land-cost-value">$50k/acre</span>
-                            </div>
-                            <div class="slider-track-container">
-                                <input type="range" id="land-cost-slider" min="5" max="200" step="5" value="50">
-                                <div class="slider-track"></div>
-                                <div class="slider-fill ngcc-fill" id="land-cost-fill"></div>
-                            </div>
-                            <div class="slider-ticks">
-                                <span class="tick" data-value="10">Rural</span>
-                                <span class="tick" data-value="50">Industrial</span>
-                                <span class="tick" data-value="150">Premium</span>
-                            </div>
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Gas Price</span>
+                            <span class="slider-value" id="gas-price-value">$4.30/MMBtu</span>
                         </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="gas-price-slider" min="2" max="10" step="0.1" value="4.3">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill terrestrial-fill" id="gas-price-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="2.5">Low</span>
+                            <span class="tick" data-value="4.3">2025</span>
+                            <span class="tick" data-value="8">Crisis</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Facility Capex</span>
+                            <span class="slider-value" id="facility-value">$12.50/W</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="facility-slider" min="8" max="18" step="0.5" value="12.5">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill terrestrial-fill" id="facility-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="10">Low</span>
+                            <span class="tick" data-value="12.5">Report</span>
+                            <span class="tick" data-value="16">High</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Power Usage Effectiveness (PUE)</span>
+                            <span class="slider-value" id="pue-value">1.20</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="pue-slider" min="1.05" max="1.6" step="0.05" value="1.2">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill terrestrial-fill" id="pue-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="1.1">Google (~1.1)</span>
+                            <span class="tick" data-value="1.2">AWS (~1.2)</span>
+                            <span class="tick" data-value="1.5">Old Units (~1.5)</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -445,16 +459,20 @@
                     
                     <div class="engineering-stats">
                         <div class="eng-stat-row">
+                            <span class="eng-stat-label">Satellite Count</span>
+                            <span class="eng-stat-value" id="eng-orbital-sat-count">~37,000</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Degradation Margin</span>
+                            <span class="eng-stat-value" id="eng-orbital-degradation">+6.5%</span>
+                        </div>
+                        <div class="eng-stat-row">
                             <span class="eng-stat-label">Total Mass to LEO</span>
                             <span class="eng-stat-value" id="eng-orbital-mass">22.2M kg</span>
                         </div>
                         <div class="eng-stat-row">
                             <span class="eng-stat-label">Solar Array Area</span>
                             <span class="eng-stat-value" id="eng-orbital-array-area">2.3 km²</span>
-                        </div>
-                        <div class="eng-stat-row">
-                            <span class="eng-stat-label">Satellite Count</span>
-                            <span class="eng-stat-value" id="eng-orbital-sat-count">~37,000</span>
                         </div>
                         <div class="eng-stat-row">
                             <span class="eng-stat-label">Starship Launches</span>
@@ -475,29 +493,33 @@
                     </div>
                 </div>
 
-                <!-- NatGas Engineering Outputs -->
-                <div class="engineering-output-column ngcc">
+                <!-- Terrestrial Engineering Outputs (On-Site CCGT) -->
+                <div class="engineering-output-column terrestrial">
                     <div class="engineering-column-header">
-                        <div class="column-indicator ngcc-indicator"></div>
-                        <h3>NatGas</h3>
+                        <div class="column-indicator terrestrial-indicator"></div>
+                        <h3>Terrestrial</h3>
                     </div>
                     
                     <div class="engineering-stats">
                         <div class="eng-stat-row">
-                            <span class="eng-stat-label">Plant Footprint</span>
-                            <span class="eng-stat-value" id="eng-ngcc-footprint">30 acres</span>
+                            <span class="eng-stat-label">H-Class Turbines</span>
+                            <span class="eng-stat-value" id="eng-ngcc-turbines">3 units</span>
                         </div>
                         <div class="eng-stat-row">
-                            <span class="eng-stat-label">GE 7HA.03 Turbines</span>
-                            <span class="eng-stat-value" id="eng-ngcc-turbines">2 units</span>
+                            <span class="eng-stat-label">Generation (IT×PUE)</span>
+                            <span class="eng-stat-value" id="eng-ngcc-generation">1.2 GW</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Heat Rate</span>
+                            <span class="eng-stat-value" id="eng-ngcc-heat-rate">6,200 BTU/kWh</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Fuel Cost</span>
+                            <span class="eng-stat-value" id="eng-ngcc-fuel-cost">$27/MWh</span>
                         </div>
                         <div class="eng-stat-row">
                             <span class="eng-stat-label">Capacity Factor</span>
                             <span class="eng-stat-value" id="eng-ngcc-capacity-factor">85%</span>
-                        </div>
-                        <div class="eng-stat-row">
-                            <span class="eng-stat-label">Heat Rate</span>
-                            <span class="eng-stat-value" id="eng-ngcc-heat-rate">6,370 BTU/kWh</span>
                         </div>
                         <div class="eng-stat-row">
                             <span class="eng-stat-label">Gas Consumption</span>
@@ -505,7 +527,7 @@
                         </div>
                         <div class="eng-stat-row">
                             <span class="eng-stat-label">Energy Output</span>
-                            <span class="eng-stat-value" id="eng-ngcc-energy">43.8 TWh</span>
+                            <span class="eng-stat-value" id="eng-ngcc-energy">37.2 TWh</span>
                         </div>
                     </div>
                 </div>
@@ -538,104 +560,178 @@
                 <div class="assumption-subsection">
                     <div class="assumption-subsection-header">
                         <div class="subsection-indicator orbital-indicator"></div>
-                        <h4>Orbital Solar</h4>
+                        <h4>Orbital Solar (Starlink-class)</h4>
                     </div>
                     <div class="assumption-content">
                         <ul class="assumption-bullets">
-                            <li>Reference: Starlink V2 Mini (~105 m², 600 kg, 27-30 kW)</li>
-                            <li>Specific power: <strong id="assumption-specific-power">45 W/kg</strong></li>
-                            <li>Total mass to LEO: <strong id="assumption-mass">22.2M kg</strong></li>
-                            <li>No fuel cost; O&M as % of hardware</li>
+                            <li>V2 Mini: 740 kg, 116 m², 27 kW → <strong>36.5 W/kg</strong>, <strong>$22/W</strong></li>
+                            <li>V1: 283 kg, 30 m², 7 kW → 24.7 W/kg, $32/W</li>
+                            <li>V3 (spec): 1,900 kg, 250 m², 60 kW → 31.6 W/kg, $25/W</li>
+                            <li>BOM based on ~$800/kg manufacturing cost estimate</li>
                         </ul>
                     </div>
                 </div>
                 
-                <!-- NatGas -->
+                <!-- Terrestrial -->
                 <div class="assumption-subsection">
                     <div class="assumption-subsection-header">
-                        <div class="subsection-indicator ngcc-indicator"></div>
-                        <h4>NatGas</h4>
+                        <div class="subsection-indicator terrestrial-indicator"></div>
+                        <h4>Terrestrial (On-Site CCGT)</h4>
                     </div>
                     <div class="assumption-content">
                         <ul class="assumption-bullets">
-                            <li>Based on U.S. EIA standard values</li>
-                            <li>2×1 combined-cycle with GE 7HA.03 turbines</li>
-                            <li>Heat rate: 6,370 BTU/kWh</li>
-                            <li>Continuous operation at specified capacity factor</li>
+                            <li>On-site H-Class Combined Cycle Gas Turbine (~430 MW each)</li>
+                            <li>Total Capex: <strong>~$13.80/W</strong> (EIA/Sargent & Lundy data)</li>
+                            <li>5 buckets: Power Gen (9%), Electrical (38%), Mechanical (22%), Civil (18%), Network (13%)</li>
+                            <li>Heat rate: <strong>6,200 BTU/kWh</strong> (CCGT efficiency ~58%)</li>
+                            <li>Gas price: <strong>$4.30/MMBtu</strong> (EIA 2025 forecast) → ~$27/MWh fuel</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Reading Panel with References -->
-        <section class="paper-section reading-section">
-            <div class="reading-layout">
-                <div class="reading-panel">
-                    <p class="first-para">
-                        This analysis compares the total system cost of deploying 1 GW of power generation 
-                        capacity via orbital solar power satellites versus a terrestrial natural gas (NatGas)
-                        plant over a <span id="reading-years">5</span>-year period.<sup data-ref="1">1</sup>
-                    </p>
-                    
-                    <h3>Orbital Solar Economics</h3>
+        <!-- Full Essay -->
+        <section class="paper-section essay-section">
+            <h2 class="essay-title-main">Why Put Compute in Orbit?</h2>
+            
+            <div class="essay-content">
+                <p class="drop-cap">
+                    The purpose of this analysis is to strip the orbital compute debate down to its governing parameter: the cost of producing usable electrical power. All the arguments about solar flux, microgravity, radiation, or exotic orbital architectures reduce to a single number once you require a real economic comparison. If orbital power is going to support commodity compute, it must outperform the cheapest large-scale electricity available on Earth. This infographic builds that comparison from the ground up by pairing the most mass-efficient flight hardware flying today with a standard one gigawatt natural gas plant on a five-year horizon.
+                </p>
+                
+                <p>
+                    It's disappointing to see industry leaders blur this distinction and default to the big-numbers game. It isn't good enough to toss out a strawman like "we're going to run out of energy on Earth" and treat that as a business case.
+                </p>
+                
+                <blockquote class="essay-quote">
+                    <p>"How do we one day have data centers in space so that we can better harness the energy from the sun that is 100 trillion times more energy than what we produce on all of Earth today?"</p>
+                    <cite>— Sundar Pichai</cite>
+                </blockquote>
+                
+                <blockquote class="essay-quote">
+                    <p>"You cannot build power plants of that scale—say, with 1 terawatt of continuous output—it's simply impossible. It must be done in space."</p>
+                    <cite>— Elon Musk, U.S.-Saudi Investment Forum Interview</cite>
+                </blockquote>
+                
+                <p>
+                    These statements sound bold and visionary, but they skip the critical step. They assume the value rather than demonstrating it. They imply that because the sun is bright and space is big, the economics must work out in space's favor. That is not how engineering decisions are made. The only relevant question is whether a watt or a flop in orbit delivers more value per dollar than one on Earth. If the answer is no, the idea fails immediately, regardless of how inspiring the narrative sounds.
+                </p>
+                
+                <h3>Use Cases</h3>
+                
+                <p>To discuss compute in orbit, we should divide into two broad categories:</p>
+                
+                <ol class="essay-list">
+                    <li><strong>Space-critical compute</strong> — where latency or bandwidth make local processing essential.</li>
+                    <li><strong>Everything else</strong> — commodity workloads where you're competing with the AWS datacenters of the world.</li>
+                </ol>
+                
+                <h4>Space-Critical Compute</h4>
+                
+                <p>
+                    The first category is the <em>steelman</em> argument for putting GPUs or CPUs in orbit. There's really only one scenario where putting compute in orbit makes sense: you're producing data faster than you can get it to the ground. Everything else collapses under basic geometry and link physics.
+                </p>
+                
+                <p>
+                    Satellites have no trouble generating enormous amounts of raw data. A modern 48MP camera shooting raw easily pushes <strong>2–5 gigabits per second</strong> continuously, and SAR systems run even higher; commercial X-band radars regularly exceed <strong>5–8 Gbps</strong>, with government systems going above <strong>20 Gbps</strong> internally. That's why a single 10-minute overpass can leave you sitting on hundreds of gigabytes that you now have to get off the spacecraft.
+                </p>
+                
+                <p>
+                    The problem is the downlink. A typical LEO satellite only sees a ground station for <strong>8–12 minutes</strong> per pass, and even a high-end Ka-band link taps out around <strong>3–5 Gbps</strong> under perfect conditions. Many operators never see that number, because antennas are shared, weather intervenes, and scheduling windows are rationed across dozens of customers. Commercial networks like KSAT and SSC frequently run near saturation; access often needs to be booked <strong>days to weeks</strong> in advance. This is why onboard or near-board pre-processing sounds appealing: turn terabytes into megabytes and send down only what matters.
+                </p>
+                
+                <p>On paper, that's the steelman.</p>
+                
+                <p>
+                    Where it breaks is when you actually look at orbital distances. A satellite at 550 km altitude is five hundred fifty kilometers from the Earth's surface; that never changes. But in a dense constellation like Starlink, the nearest neighbor is usually <strong>1,200–1,500 km</strong> away once you account for plane spacing and relative phasing. That's not a hand-wave; Starlink Gen-2 shells have planes separated by <strong>5–7 degrees</strong>, and even within a plane, satellites sit roughly <strong>1–2 degrees</strong> apart, which works out to hundreds of kilometers of physical separation. The lowest slant-range ISL paths routinely exceed a thousand kilometers.
+                </p>
+                
+                <p>
+                    Now imagine trying to send that firehose of raw sensor data horizontally to an "orbital compute node" instead of vertically to Earth. If you posit four such nodes in LEO, spaced evenly around the planet, the average slant range from any imaging satellite to the nearest node is on the order of <strong>4,000–5,000 km</strong>. That's simply the chord length across a ring at 550 km altitude divided into quadrants. It's not a back-of-the-envelope trick—it's basic spherical geometry.
+                </p>
+                
+                <p>
+                    A link that long is dramatically harder to close. Beam divergence grows with distance; pointing stability demands increase; received power drops by nearly <strong>20 dB</strong> between a 1,000 km link and a 5,000 km one. Even laser ISLs, which Starlink uses at roughly <strong>40–100 Gbps</strong> over ~1,000–2,000 km paths, start falling apart fast when you extend to intercontinental-scale orbital distances. And unlike a ground station, which can house multi-meter-class dishes and powerful tracking systems, any orbital node is mass-constrained and thermally limited.
+                </p>
+                
+                <div class="essay-callout">
                     <p>
-                        The cost of orbital solar is dominated by two factors: satellite hardware costs and 
-                        launch costs. Using Starlink-class satellites as a proxy, we estimate specific power 
-                        of ~45 W/kg and hardware costs of ~$<span id="reading-sat-cost">9</span>/W.<sup data-ref="2">2</sup><sup data-ref="3">3</sup>
+                        This leads to the uncomfortable conclusion: the closest, cheapest, highest-throughput place to send your data is still Earth. A 550 km downlink path into a hardened, fiber-backed ground station beats a 1,500–5,000 km sideways link into a spacecraft with tighter mass, power, and aperture constraints. And once you reach Earth, you're effectively already inside a hyperscale data center backbone.
                     </p>
-                    
-                    <p>
-                        At $<span id="reading-launch-cost">1,000</span>/kg to LEO, a 1 GW orbital system requires 
-                        <span id="reading-mass">22.2</span> million kg of mass, costing 
-                        <span id="reading-launch-total">$22.2B</span> to launch and 
-                        <span id="reading-hardware-total">$9.0B</span> in satellite hardware.
-                    </p>
-                    
-                    <h3>NatGas Economics</h3>
-                    <p>
-                        Natural gas plants have overnight capital costs of 
-                        ~$<span id="reading-capex">898</span>/kW.<sup data-ref="4">4</sup> Over 
-                        <span id="reading-years-2">5</span> years at current fuel prices 
-                        (~$<span id="reading-fuel">25</span>/MWh), fuel costs dominate the total cost 
-                        of ownership.<sup data-ref="5">5</sup>
-                    </p>
-                    
-                    <h3>Crossover Analysis</h3>
-                    <p>
-                        At $<span id="reading-launch-cost-2">1,000</span>/kg launch costs, orbital solar costs 
-                        <span class="orbital-color" id="reading-orbital-total">$66.2B</span> vs 
-                        <span class="ngcc-color" id="reading-ngcc-total">$37.3B</span> for NatGas. 
-                        The crossover point occurs around $50–100/kg launch costs, which Starship may 
-                        achieve at high flight rates.<sup data-ref="6">6</sup>
-                    </p>
-                    
-                    <p>
-                        The numbers say no. Not marginally no. <strong>Orders-of-magnitude no.</strong> Even under 
-                        optimistic Starship pricing, the launch bill alone overwhelms the entire multi-year cost 
-                        of a terrestrial NatGas plant.
-                    </p>
-
-                    <div class="breakeven-box">
-                        <h4>Breakeven Analysis</h4>
-                        <p>
-                            For orbital solar to match NatGas total cost (excluding identical GPU costs), 
-                            launch cost would need to reach approximately
-                            <strong id="breakeven-launch">−$303/kg</strong> — a physically impossible negative 
-                            number, indicating that even at $0/kg launch cost, satellite hardware alone exceeds 
-                            NatGas infrastructure costs.
-                        </p>
-                    </div>
                 </div>
-
+                
+                <p>
+                    So even this "best case" argument—the one that's supposed to justify orbital GPUs—fails once you run real numbers. The physics favors the planet. The infrastructure is already there. And the geometry ensures the sideways hop is always worse than the straight-down one.
+                </p>
+                
+                <h3>Generic Compute</h3>
+                
+                <p>
+                    Once you separate out the narrow class of missions that genuinely require local processing in space, you're left with everything else—the overwhelming majority of computing done on Earth. This is <strong>generic, location-agnostic compute</strong>. Model training, inference, indexing, recommender systems, search, storage, analytics, batch jobs. Ninety-nine point many nines percent of global compute demand lives here.
+                </p>
+                
+                <p>
+                    And this entire category shares one defining trait: <strong>it does not care where it runs</strong>. Its inputs and outputs are bits moving across fiber. It doesn't ask for altitude, vacuum, microgravity, or a laser link. It asks for <strong>the cheapest and most reliable flops available</strong>.
+                </p>
+                
+                <p>
+                    That's why hyperscale operators build wherever unit economics are optimized. AWS builds in Oregon, Iowa, Northern Virginia, and Sweden because that's where you get the right mix of cheap electricity, cheap land, cool climates, and dense fiber backbones. Crusoe, whose entire business model is squeezing flops out of stranded natural gas and surplus renewable power, pushes this to the logical extreme. Their message is the same: compute is a commodity pipeline, and the winner is the operator who delivers the lowest cost per flop.
+                </p>
+                
+                <p>
+                    So when someone proposes running generic compute in orbit, they are making an extraordinary claim: that <strong>the full datacenter stack</strong>—power generation, cooling, networking, hardware, structures, and operations—can be done <em>more cheaply in orbit</em> than inside a tilt-wall datacenter tied into a 200- to 500-MW substation.
+                </p>
+                
+                <div class="essay-callout emphasis">
+                    <p>
+                        A flop in orbit is not a special flop. A watt in orbit is not a special watt. They do not acquire new economic properties at 550 kilometers altitude. They cost what they cost.
+                    </p>
+                </div>
+                
+                <p>
+                    This is why the economics are decisive. Commodity compute is not a physics problem. It is a cost competition with AWS, with Crusoe, with every hyperscale operator that already sits directly on top of cheap electricity and mature supply chains. If orbit wants to win, it must beat them on price. Not elegance. Not novelty. <strong>Price.</strong>
+                </p>
+                
+                <h3>The Economics</h3>
+                
+                <p>
+                    Before getting lost in hardware diagrams and thermal edge cases, the first step is to anchor everything to the governing economic question. If orbital compute is going to be more than an aesthetic idea, its unit economics must beat the cheapest terrestrial alternatives. That reduces the entire concept to one parameter: <strong>cost per watt</strong>. Everything else—solar arrays, radiators, thermal loops, GPUs, vacuum, microgravity—sits downstream of that number.
+                </p>
+                
+                <p>
+                    The cleanest way to evaluate this is to pick the most mass-efficient power hardware flying today, scale it to a 1-GW system, and compute the full orbital bill. A Starlink V2 Mini class bus is the logical reference point. Its mass, solar area, and delivered electrical power give a real, flight-proven specific power. Once those numbers are fixed, the required constellation mass and total hardware cost fall straight out of the math.
+                </p>
+                
+                <p>
+                    Launch cost is the next step. Pick a few reasonable scenarios—Falcon 9, early-Starship, mature-Starship—apply them to the total delivered mass, and you get the full orbital system cost.
+                </p>
+                
+                <p>
+                    Then compare that directly to a 1-GW natural-gas combined-cycle plant over the same five-year window, including capital cost, fuel burn, and O&M. This produces a clean, constrained, physics-bounded economic comparison with no hand-waving. The question it answers is simple:
+                </p>
+                
+                <div class="essay-callout question">
+                    <p><strong>Is one watt generated and consumed in orbit cheaper than one watt generated and consumed on Earth?</strong></p>
+                </div>
+                
+                <p>
+                    The numbers say no. Not marginally no. <strong>Orders-of-magnitude no.</strong> Even under optimistic Starship pricing, the launch bill alone overwhelms the entire five-year cost of a terrestrial NGCC plant. And that's before accounting for the additional mass and complexity required to run high-density compute hardware in vacuum.
+                </p>
+                
+                <h3>Technical Engineering Challenges</h3>
+                
+                <p class="essay-note">
+                    <em>More analysis to come on thermal management, radiation hardening, and orbital mechanics constraints...</em>
+                </p>
             </div>
         </section>
 
         <!-- Footer -->
         <footer class="paper-footer">
             <p>
-                Note: Orbital model assumes <span id="footer-sun">80%</span> sunlight fraction based on orbit selection. 
-                NatGas costs include fuel and O&M over the analysis period. 
+                Note: Orbital model assumes <span id="footer-sun">98%</span> sunlight fraction (Terminator orbit). 
+                Terrestrial costs bundle power delivery, building, network, fuel, and O&M. 
                 All figures in 2024 USD.
             </p>
         </footer>

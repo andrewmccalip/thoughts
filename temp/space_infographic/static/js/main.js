@@ -134,7 +134,7 @@
     
     function updateUI() {
         const orbital = CostModel.calculateOrbital();
-        const terrestrial = CostModel.calculateTerrestrial();
+        const natgas = CostModel.calculateNatGas();
         const breakeven = CostModel.calculateBreakeven();
         const state = CostModel.getState();
         const constants = CostModel.getConstants();
@@ -143,12 +143,10 @@
         const maxCost = Math.max(
             orbital.hardwareCost,
             orbital.launchCost,
-            orbital.omCost,
-            terrestrial.powerGenCost,
-            terrestrial.electricalCost,
-            terrestrial.mechanicalCost,
-            terrestrial.civilCost,
-            terrestrial.fuelCostTotal
+            natgas.capexTotal,
+            natgas.fuelCostTotal,
+            natgas.omCostTotal,
+            natgas.landCostTotal
         );
         
         // Update orbital display
@@ -166,27 +164,26 @@
         // Update orbital bars
         document.getElementById('orbital-hardware-bar').style.width = `${(orbital.hardwareCost / maxCost) * 100}%`;
         document.getElementById('orbital-launch-bar').style.width = `${(orbital.launchCost / maxCost) * 100}%`;
-        document.getElementById('orbital-om-bar').style.width = `${(orbital.omCost / maxCost) * 100}%`;
-        updateText('orbital-om-value', CostModel.formatCost(orbital.omCost));
         
-        // Update Terrestrial display (5 buckets from report)
-        updateText('terrestrial-total', CostModel.formatCost(terrestrial.totalCost));
-        updateText('terrestrial-powergen-value', CostModel.formatCost(terrestrial.powerGenCost));
-        updateText('terrestrial-electrical-value', CostModel.formatCost(terrestrial.electricalCost));
-        updateText('terrestrial-mechanical-value', CostModel.formatCost(terrestrial.mechanicalCost));
-        updateText('terrestrial-civil-value', CostModel.formatCost(terrestrial.civilCost));
-        updateText('terrestrial-fuel-value', CostModel.formatCost(terrestrial.fuelCostTotal));
-        updateText('terrestrial-capex-cpw', `$${terrestrial.facilityCapexPerW.toFixed(2)}/W`);
-        updateText('terrestrial-cpw', `$${terrestrial.costPerW.toFixed(2)}/W`);
-        updateText('terrestrial-energy', CostModel.formatEnergy(terrestrial.energyMWh));
-        updateText('terrestrial-lcoe', CostModel.formatLCOE(terrestrial.lcoe));
+        // Update NatGas display
+        updateText('ngcc-total', CostModel.formatCost(natgas.totalCost));
+        updateText('ngcc-capex-value', CostModel.formatCost(natgas.capexTotal));
+        updateText('ngcc-fuel-value', CostModel.formatCost(natgas.fuelCostTotal));
+        updateText('ngcc-om-value', CostModel.formatCost(natgas.omCostTotal));
+        updateText('ngcc-land-value', CostModel.formatCost(natgas.landCostTotal));
+        updateText('ngcc-hours', CostModel.formatHours(natgas.totalHours));
+        updateText('ngcc-cpw', `$${natgas.costPerW.toFixed(2)}/W`);
+        updateText('ngcc-energy', CostModel.formatEnergy(natgas.energyMWh));
+        updateText('ngcc-lcoe', CostModel.formatLCOE(natgas.lcoe));
+        updateText('ngcc-overhead', CostModel.formatCost(natgas.overheadCost));
+        updateText('ngcc-maintenance', CostModel.formatCost(natgas.maintenanceCost));
+        updateText('ngcc-comms', CostModel.formatCost(natgas.commsCost));
         
-        // Update Terrestrial bars (5 buckets)
-        document.getElementById('terrestrial-powergen-bar').style.width = `${(terrestrial.powerGenCost / maxCost) * 100}%`;
-        document.getElementById('terrestrial-electrical-bar').style.width = `${(terrestrial.electricalCost / maxCost) * 100}%`;
-        document.getElementById('terrestrial-mechanical-bar').style.width = `${(terrestrial.mechanicalCost / maxCost) * 100}%`;
-        document.getElementById('terrestrial-civil-bar').style.width = `${(terrestrial.civilCost / maxCost) * 100}%`;
-        document.getElementById('terrestrial-fuel-bar').style.width = `${(terrestrial.fuelCostTotal / maxCost) * 100}%`;
+        // Update NatGas bars
+        document.getElementById('ngcc-capex-bar').style.width = `${(natgas.capexTotal / maxCost) * 100}%`;
+        document.getElementById('ngcc-fuel-bar').style.width = `${(natgas.fuelCostTotal / maxCost) * 100}%`;
+        document.getElementById('ngcc-om-bar').style.width = `${(natgas.omCostTotal / maxCost) * 100}%`;
+        document.getElementById('ngcc-land-bar').style.width = `${(natgas.landCostTotal / maxCost) * 100}%`;
         
         // Update breakeven
         updateText('breakeven-launch', CostModel.formatCostPerKg(breakeven));
@@ -200,24 +197,36 @@
         updateText('assumption-mass', CostModel.formatMass(orbital.totalMassKg));
         updateText('assumption-specific-power', `${state.specificPowerWPerKg} W/kg`);
         
+        // Update reading panel values
+        updateText('reading-years', state.years);
+        updateText('reading-years-2', state.years);
+        updateText('reading-sat-cost', state.satelliteCostPerW);
+        updateText('reading-launch-cost', state.launchCostPerKg.toLocaleString());
+        updateText('reading-launch-cost-2', state.launchCostPerKg.toLocaleString());
+        updateText('reading-mass', (orbital.totalMassKg / 1e6).toFixed(1));
+        updateText('reading-launch-total', CostModel.formatCost(orbital.launchCost));
+        updateText('reading-hardware-total', CostModel.formatCost(orbital.hardwareCost));
+        updateText('reading-capex', state.capexPerKW);
+        updateText('reading-fuel', state.fuelCostPerMWh);
+        updateText('reading-orbital-total', CostModel.formatCost(orbital.totalCost));
+        updateText('reading-ngcc-total', CostModel.formatCost(natgas.totalCost));
+        
         // Update engineering outputs - Orbital
         updateText('eng-orbital-mass', CostModel.formatMass(orbital.totalMassKg));
+        updateText('eng-orbital-specific-power', `${state.specificPowerWPerKg} W/kg`);
         updateText('eng-orbital-array-area', `${orbital.arrayAreaKm2.toFixed(1)} km²`);
         updateText('eng-orbital-sat-count', `~${orbital.satelliteCount.toLocaleString()}`);
         updateText('eng-orbital-launches', `~${orbital.starshipLaunches.toLocaleString()}`);
         updateText('eng-orbital-lox', `${(orbital.loxGallons / 1e6).toFixed(0)}M gal`);
         updateText('eng-orbital-methane', `${(orbital.methaneGallons / 1e6).toFixed(0)}M gal`);
-        updateText('eng-orbital-degradation', `+${orbital.degradationMargin.toFixed(1)}%`);
         updateText('eng-orbital-energy', CostModel.formatEnergy(orbital.energyMWh));
         
-        // Update engineering outputs - Terrestrial (CCGT)
-        updateText('eng-ngcc-turbines', `${terrestrial.turbineCount} units`);
-        updateText('eng-ngcc-generation', `${terrestrial.totalGenerationMW.toLocaleString()} MW`);
-        updateText('eng-ngcc-capacity-factor', `${Math.round(terrestrial.capacityFactor * 100)}%`);
-        updateText('eng-ngcc-heat-rate', `${state.heatRateBtuKwh.toLocaleString()} BTU/kWh`);
-        updateText('eng-ngcc-gas-consumption', `${terrestrial.gasConsumptionBCF.toFixed(0)} BCF`);
-        updateText('eng-ngcc-fuel-cost', `$${terrestrial.fuelCostPerMWh.toFixed(0)}/MWh`);
-        updateText('eng-ngcc-energy', CostModel.formatEnergy(terrestrial.energyMWh));
+        // Update engineering outputs - NatGas
+        updateText('eng-ngcc-footprint', `${constants.NGCC_ACRES} acres`);
+        updateText('eng-ngcc-turbines', `${natgas.turbineCount} units`);
+        updateText('eng-ngcc-heat-rate', `${constants.NGCC_HEAT_RATE_BTU_KWH.toLocaleString()} BTU/kWh`);
+        updateText('eng-ngcc-gas-consumption', `${natgas.gasConsumptionBCF.toFixed(0)} BCF`);
+        updateText('eng-ngcc-energy', CostModel.formatEnergy(natgas.energyMWh));
     }
 
     // ==========================================
@@ -246,32 +255,6 @@
         
         updateSlider();
     }
-
-    function positionSliderTicks() {
-        document.querySelectorAll('.slider-container').forEach(container => {
-            const slider = container.querySelector('input[type="range"]');
-            const ticksContainer = container.querySelector('.slider-ticks');
-            if (!slider || !ticksContainer) return;
-            
-            const min = parseFloat(slider.min);
-            const max = parseFloat(slider.max);
-            const range = max - min;
-            
-            ticksContainer.querySelectorAll('.tick').forEach(tick => {
-                const value = parseFloat(tick.dataset.value);
-                const percentage = ((value - min) / range) * 100;
-                tick.style.left = percentage + '%';
-                tick.style.position = 'absolute';
-                tick.style.transform = 'translateX(-50%)';
-            });
-            
-            // Ensure ticks container is positioned relatively
-            ticksContainer.style.position = 'relative';
-            ticksContainer.style.display = 'flex';
-            ticksContainer.style.justifyContent = 'flex-start';
-            ticksContainer.style.width = '100%';
-        });
-    }
     
     function init() {
         // Years slider
@@ -280,74 +263,32 @@
         // Launch cost slider
         setupSlider('launch-cost-slider', 'launch-cost-fill', 'launch-cost-value', 100, 2940, 'launchCostPerKg', v => `$${v.toLocaleString()}/kg`);
         
-        // Satellite cost slider (from Starlink BOM analysis)
-        setupSlider('sat-cost-slider', 'sat-cost-fill', 'sat-cost-value', 15, 40, 'satelliteCostPerW', v => `$${v}/W`);
+        // Satellite cost slider
+        setupSlider('sat-cost-slider', 'sat-cost-fill', 'sat-cost-value', 4, 18, 'satelliteCostPerW', v => `$${v}/W`);
         
-        // Specific power slider (W/kg from Starlink analysis)
-        setupSlider('specific-power-slider', 'specific-power-fill', 'specific-power-value', 3, 50, 'specificPowerWPerKg', v => `${v.toFixed(1)} W/kg`);
-        
-        // Satellite size slider (kW nameplate)
-        setupSlider('sat-size-slider', 'sat-size-fill', 'sat-size-value', 5, 80, 'satellitePowerKW', v => `${v} kW`);
+        // Specific power slider
+        setupSlider('specific-power-slider', 'specific-power-fill', 'specific-power-value', 3, 100, 'specificPowerWPerKg', v => `${v} W/kg`);
         
         // Sun fraction slider
         setupSlider('sun-fraction-slider', 'sun-fraction-fill', 'sun-fraction-value', 0.55, 1.0, 'sunFraction', v => `${Math.round(v * 100)}%`);
         
-        // Cell degradation slider
-        setupSlider('degradation-slider', 'degradation-fill', 'degradation-value', 0, 5, 'cellDegradation', v => `${v.toFixed(1)}%/yr`);
+        // NatGas Capex slider
+        setupSlider('capex-slider', 'capex-fill', 'capex-value', 400, 2000, 'capexPerKW', v => `$${v.toLocaleString()}/kW`);
         
-        // NRE cost slider
-        setupSlider('nre-slider', 'nre-fill', 'nre-value', 0, 2000, 'nreCost', v => v >= 1000 ? `$${(v/1000).toFixed(1)}B` : `$${v}M`);
+        // Fuel cost slider
+        setupSlider('fuel-cost-slider', 'fuel-cost-fill', 'fuel-cost-value', 10, 100, 'fuelCostPerMWh', v => `$${v}/MWh`);
         
-        // Terrestrial sliders (5 buckets from report)
-        // CCGT turbine capex slider
-        setupSlider('gas-turbine-slider', 'gas-turbine-fill', 'gas-turbine-value', 900, 1500, 'gasTurbineCapexPerKW', v => `$${v.toLocaleString()}/kW`);
+        // O&M cost slider
+        setupSlider('om-cost-slider', 'om-cost-fill', 'om-cost-value', 2, 20, 'omCostPerMWh', v => `$${v}/MWh`);
         
-        // Heat rate slider
-        setupSlider('heat-rate-slider', 'heat-rate-fill', 'heat-rate-value', 6000, 9000, 'heatRateBtuKwh', v => `${v.toLocaleString()} BTU/kWh`);
-        
-        // Gas price slider
-        setupSlider('gas-price-slider', 'gas-price-fill', 'gas-price-value', 2, 10, 'gasPricePerMMBtu', v => `$${v.toFixed(2)}/MMBtu`);
-        
-        // PUE slider
-        setupSlider('pue-slider', 'pue-fill', 'pue-value', 1.05, 1.6, 'pue', v => v.toFixed(2));
-        
-        // Facility capex slider (combined 4 buckets: electrical + mechanical + civil + network)
-        // From report: ~$12.50/W total (excluding power gen)
-        const facilitySlider = document.getElementById('facility-slider');
-        const facilityFill = document.getElementById('facility-fill');
-        const facilityValue = document.getElementById('facility-value');
-        if (facilitySlider && facilityFill && facilityValue) {
-            function updateFacilitySlider() {
-                const state = CostModel.getState();
-                const total = state.electricalCostPerW + state.mechanicalCostPerW + state.civilCostPerW + state.networkCostPerW;
-                const percentage = ((total - 8) / (18 - 8)) * 100;
-                facilityFill.style.width = `${Math.max(0, Math.min(100, percentage))}%`;
-                facilityValue.textContent = `$${total.toFixed(2)}/W`;
-            }
-            facilitySlider.addEventListener('input', function() {
-                const newTotal = parseFloat(this.value);
-                // Scale each component proportionally (maintain report ratios)
-                const state = CostModel.getState();
-                const oldTotal = state.electricalCostPerW + state.mechanicalCostPerW + state.civilCostPerW + state.networkCostPerW;
-                const scale = newTotal / oldTotal;
-                CostModel.updateState('electricalCostPerW', state.electricalCostPerW * scale);
-                CostModel.updateState('mechanicalCostPerW', state.mechanicalCostPerW * scale);
-                CostModel.updateState('civilCostPerW', state.civilCostPerW * scale);
-                CostModel.updateState('networkCostPerW', state.networkCostPerW * scale);
-                updateFacilitySlider();
-                updateUI();
-            });
-            updateFacilitySlider();
-        }
+        // Land cost slider
+        setupSlider('land-cost-slider', 'land-cost-fill', 'land-cost-value', 5, 200, 'landCostPerAcre', v => `$${v}k/acre`);
         
         // Initial UI update
         updateUI();
         
         // Load references
         loadReferences();
-        
-        // Position ticks after DOM is ready and sliders are initialized
-        positionSliderTicks();
     }
     
     // Initialize when DOM is ready

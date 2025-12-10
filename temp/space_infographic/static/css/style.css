@@ -195,8 +195,7 @@ body {
     background: var(--orbital);
 }
 
-.ngcc-indicator,
-.terrestrial-indicator {
+.ngcc-indicator {
     background: var(--ngcc);
 }
 
@@ -218,8 +217,7 @@ body {
     color: var(--orbital);
 }
 
-.ngcc .column-total,
-.terrestrial .column-total {
+.ngcc .column-total {
     color: var(--ngcc);
 }
 
@@ -256,8 +254,7 @@ body {
     background: linear-gradient(90deg, var(--orbital) 0%, var(--orbital-light) 100%);
 }
 
-.ngcc-bar,
-.terrestrial-bar {
+.ngcc-bar {
     background: linear-gradient(90deg, var(--ngcc) 0%, var(--ngcc-light) 100%);
 }
 
@@ -358,7 +355,7 @@ body {
 
 /* Sliders */
 .slider-container {
-    margin-bottom: 2.25rem;
+    margin-bottom: 1.75rem;
 }
 
 .slider-container.full-width {
@@ -374,7 +371,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .slider-label {
@@ -420,8 +417,7 @@ body {
     background: var(--orbital);
 }
 
-.ngcc-fill,
-.terrestrial-fill {
+.ngcc-fill {
     background: var(--ngcc);
 }
 
@@ -452,8 +448,7 @@ input[type="range"]::-webkit-slider-thumb {
     border-color: var(--orbital);
 }
 
-.ngcc-params input[type="range"]::-webkit-slider-thumb,
-.terrestrial-params input[type="range"]::-webkit-slider-thumb {
+.ngcc-params input[type="range"]::-webkit-slider-thumb {
     border-color: var(--ngcc);
 }
 
@@ -610,69 +605,31 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .assumption-content {
-    padding: 1rem 1.5rem;
+    padding: 1.25rem 1.5rem;
 }
 
-.assumption-bullets {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.assumption-bullets li {
-    font-family: var(--font-sans);
-    font-size: 0.85rem;
-    line-height: 1.5;
+.assumption-content p {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    line-height: 1.7;
     color: var(--ink-muted);
-    padding: 0.35rem 0;
-    padding-left: 1rem;
-    position: relative;
+    margin-bottom: 0.75rem;
 }
 
-.assumption-bullets li::before {
-    content: '·';
-    position: absolute;
-    left: 0;
-    color: var(--ink-light);
-    font-weight: bold;
+.assumption-content p:last-child {
+    margin-bottom: 0;
 }
 
-.assumption-bullets strong {
+.assumption-content strong {
     font-weight: 600;
     color: var(--ink);
     font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
 }
 
 /* Engineering Outputs Section */
 .engineering-outputs-section {
     padding-top: 2rem;
-}
-
-.engineering-outputs-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-}
-
-.engineering-outputs-header .figure-label {
-    margin-bottom: 0;
-}
-
-/* Back Link */
-.back-link {
-    display: inline-block;
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    color: var(--ink-light);
-    text-decoration: none;
-    margin-bottom: 1rem;
-    transition: color 0.15s;
-}
-
-.back-link:hover {
-    color: var(--orbital);
 }
 
 .engineering-outputs-grid {
@@ -739,8 +696,7 @@ input[type="range"]::-moz-range-thumb {
     color: var(--orbital);
 }
 
-.engineering-output-column.ngcc .eng-stat-value,
-.engineering-output-column.terrestrial .eng-stat-value {
+.engineering-output-column.ngcc .eng-stat-value {
     color: var(--ngcc);
 }
 
@@ -902,151 +858,6 @@ input[type="range"]::-moz-range-thumb {
     font-family: var(--font-sans);
     font-size: 0.7rem;
     color: var(--ink-light);
-}
-
-/* Essay Section */
-.essay-section {
-    padding-top: 3rem;
-}
-
-.essay-title-main {
-    font-family: var(--font-serif);
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 2rem;
-    letter-spacing: -0.02em;
-}
-
-.essay-content {
-    max-width: 100%;
-}
-
-.essay-content p {
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: var(--ink-muted);
-    margin-bottom: 1.5rem;
-    text-align: justify;
-    hyphens: auto;
-}
-
-.essay-content h3 {
-    font-family: var(--font-sans);
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin-top: 3rem;
-    margin-bottom: 1.25rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.essay-content h4 {
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    font-style: italic;
-}
-
-.essay-content strong {
-    color: var(--ink);
-    font-weight: 600;
-}
-
-.essay-content em {
-    font-style: italic;
-}
-
-.essay-list {
-    margin: 1.5rem 0;
-    padding-left: 1.5rem;
-}
-
-.essay-list li {
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: var(--ink-muted);
-    margin-bottom: 0.75rem;
-}
-
-.essay-quote {
-    margin: 2rem 0;
-    padding: 1.5rem 2rem;
-    background: var(--paper-dark);
-    border-left: 4px solid var(--orbital);
-    border-radius: 0 8px 8px 0;
-}
-
-.essay-quote p {
-    font-family: var(--font-serif);
-    font-size: 1.05rem;
-    font-style: italic;
-    line-height: 1.7;
-    color: var(--ink);
-    margin-bottom: 0.75rem;
-    text-align: left;
-}
-
-.essay-quote cite {
-    font-family: var(--font-sans);
-    font-size: 0.85rem;
-    font-style: normal;
-    color: var(--ink-light);
-}
-
-.essay-callout {
-    margin: 2rem 0;
-    padding: 1.5rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    border: 1px solid var(--rule-light);
-}
-
-.essay-callout p {
-    font-family: var(--font-serif);
-    font-size: 1.05rem;
-    line-height: 1.7;
-    color: var(--ink);
-    margin-bottom: 0;
-    text-align: left;
-}
-
-.essay-callout.warning {
-    border-left: 4px solid var(--ngcc);
-    background: linear-gradient(90deg, rgba(139, 69, 19, 0.05) 0%, white 100%);
-}
-
-.essay-callout.emphasis {
-    border-left: 4px solid var(--orbital);
-    background: linear-gradient(90deg, rgba(30, 58, 95, 0.05) 0%, white 100%);
-}
-
-.essay-callout.question {
-    text-align: center;
-    border: 2px solid var(--orbital);
-    background: linear-gradient(135deg, rgba(30, 58, 95, 0.03) 0%, rgba(74, 144, 217, 0.03) 100%);
-}
-
-.essay-callout.question p {
-    font-size: 1.15rem;
-    text-align: center;
-}
-
-.essay-note {
-    font-family: var(--font-sans);
-    font-size: 0.95rem;
-    color: var(--ink-light);
-    padding: 1rem 1.5rem;
-    background: var(--paper-dark);
-    border-radius: 4px;
-    margin-top: 2rem;
 }
 
 /* Footer */
