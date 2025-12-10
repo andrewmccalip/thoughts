@@ -58,13 +58,17 @@ const CostModel = (function() {
         launchCostPerKg: 1000,
         satelliteCostPerW: 9,
         specificPowerWPerKg: 45,  // W/kg - user adjustable
-        sunFraction: 0.80,
+        satellitePowerKW: 27,     // kW per satellite - V2 Mini default
+        sunFraction: 0.98,        // Terminator orbit default
+        cellDegradation: 2.5,     // % per year silicon cell degradation
+        nreCost: 500,             // NRE cost in millions ($500M default)
         
         // NatGas parameters
         capexPerKW: 898,
         fuelCostPerMWh: 25,
         omCostPerMWh: 6,
-        landCostPerAcre: 50
+        landCostPerAcre: 50,
+        capacityFactor: 0.85      // 85% capacity factor default
     };
     
     // Satellite specific power presets (W/kg)
@@ -106,16 +110,27 @@ const CostModel = (function() {
         // Base cost before overhead/maintenance/comms
         const baseCost = hardwareCost + launchCost;
         
+        // O&M cost (as fraction of hardware)
+        const omCost = hardwareCost * (constants.ORBITAL_OVERHEAD_FRAC + constants.ORBITAL_MAINTENANCE_FRAC + constants.ORBITAL_COMMS_FRAC);
+        
+        // NRE cost (non-recurring engineering)
+        const nreCost = state.nreCost * 1e6;  // Convert from millions
+        
         // Overhead, maintenance, communications
         const overheadCost = baseCost * constants.ORBITAL_OVERHEAD_FRAC;
         const maintenanceCost = baseCost * constants.ORBITAL_MAINTENANCE_FRAC;
         const commsCost = baseCost * constants.ORBITAL_COMMS_FRAC;
         
-        // Total system cost
-        const totalCost = baseCost + overheadCost + maintenanceCost + commsCost;
+        // Total system cost (including NRE)
+        const totalCost = baseCost + overheadCost + maintenanceCost + commsCost + nreCost;
         
-        // Energy output: power × hours × sun fraction
-        const energyMWh = constants.TARGET_POWER_MW * totalHours * state.sunFraction;
+        // Calculate average degradation factor over analysis period
+        // Using average of start and end degradation: (1 + (1-deg*years))/2
+        const endDegradation = 1 - (state.cellDegradation / 100 * state.years);
+        const avgDegradation = (1 + Math.max(0.5, endDegradation)) / 2;
+        
+        // Energy output: power × hours × sun fraction × degradation factor
+        const energyMWh = constants.TARGET_POWER_MW * totalHours * state.sunFraction * avgDegradation;
         
         // Cost per watt
         const costPerW = totalCost / derived.TARGET_POWER_W;
@@ -124,8 +139,8 @@ const CostModel = (function() {
         const lcoe = totalCost / energyMWh;
         
         // Engineering outputs
-        const satelliteCount = Math.ceil(totalMassKg / constants.STARLINK_MASS_KG);
-        const arrayAreaM2 = (derived.TARGET_POWER_W / (constants.STARLINK_POWER_KW * 1000)) * constants.STARLINK_ARRAY_M2;
+        const satelliteCount = Math.ceil(derived.TARGET_POWER_W / (state.satellitePowerKW * 1000));
+        const arrayAreaM2 = (derived.TARGET_POWER_W / (state.satellitePowerKW * 1000)) * constants.STARLINK_ARRAY_M2;
         const arrayAreaKm2 = arrayAreaM2 / 1e6;
         const starshipLaunches = Math.ceil(totalMassKg / constants.STARSHIP_PAYLOAD_KG);
         const loxGallons = starshipLaunches * constants.STARSHIP_LOX_GAL_PER_LAUNCH;
@@ -135,6 +150,8 @@ const CostModel = (function() {
             totalMassKg,
             hardwareCost,
             launchCost,
+            omCost,
+            nreCost,
             baseCost,
             overheadCost,
             maintenanceCost,
@@ -147,7 +164,8 @@ const CostModel = (function() {
             arrayAreaKm2,
             starshipLaunches,
             loxGallons,
-            methaneGallons
+            methaneGallons,
+            avgDegradation
         };
     }
     
@@ -158,8 +176,8 @@ const CostModel = (function() {
         // Capex: $/kW × kW
         const capexTotal = state.capexPerKW * derived.TARGET_POWER_KW;
         
-        // Energy output: power × hours (continuous operation)
-        const energyMWh = constants.TARGET_POWER_MW * totalHours;
+        // Energy output: power × hours × capacity factor
+        const energyMWh = constants.TARGET_POWER_MW * totalHours * state.capacityFactor;
         
         // Fuel cost: $/MWh × MWh
         const fuelCostTotal = state.fuelCostPerMWh * energyMWh;
@@ -208,7 +226,8 @@ const CostModel = (function() {
             lcoe,
             totalHours,
             gasConsumptionBCF,
-            turbineCount
+            turbineCount,
+            capacityFactor: state.capacityFactor
         };
     }
     

@@ -104,6 +104,11 @@ def preferences():
     """Constants editor for Space Datacenters"""
     return render_template('preferences.html')
 
+@app.route('/quote-styles')
+def quote_styles():
+    """Temp page to preview quote styles"""
+    return render_template('quote-styles.html')
+
 # ==========================================
 # API ENDPOINTS
 # ==========================================

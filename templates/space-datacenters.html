@@ -72,6 +72,13 @@
                             </div>
                             <div class="bar-value" id="orbital-launch-value">$22.2B</div>
                         </div>
+                        <div class="bar-item">
+                            <div class="bar-label">O&M</div>
+                            <div class="bar-container">
+                                <div class="bar orbital-bar" id="orbital-om-bar"></div>
+                            </div>
+                            <div class="bar-value" id="orbital-om-value">$3.1B</div>
+                        </div>
                     </div>
                     
                     <div class="stats-table">
@@ -278,11 +285,28 @@
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <span class="slider-label">Orbit Sunlight Fraction</span>
-                            <span class="slider-value" id="sun-fraction-value">80%</span>
+                            <span class="slider-label">Satellite Size</span>
+                            <span class="slider-value" id="sat-size-value">27 kW</span>
                         </div>
                         <div class="slider-track-container">
-                            <input type="range" id="sun-fraction-slider" min="0.55" max="1.0" step="0.01" value="0.80">
+                            <input type="range" id="sat-size-slider" min="10" max="100" step="1" value="27">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="sat-size-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="15">V1</span>
+                            <span class="tick" data-value="27">V2 Mini</span>
+                            <span class="tick" data-value="50">V3</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Orbit Sunlight Fraction</span>
+                            <span class="slider-value" id="sun-fraction-value">98%</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="sun-fraction-slider" min="0.55" max="1.0" step="0.01" value="0.98">
                             <div class="slider-track"></div>
                             <div class="slider-fill orbital-fill" id="sun-fraction-fill"></div>
                         </div>
@@ -290,6 +314,40 @@
                             <span class="tick" data-value="0.60">LEO (~60%)</span>
                             <span class="tick" data-value="0.80">SSO (~80%)</span>
                             <span class="tick" data-value="0.98">Terminator (~98%)</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Cell Degradation</span>
+                            <span class="slider-value" id="degradation-value">2.5%/yr</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="degradation-slider" min="0" max="5" step="0.1" value="2.5">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="degradation-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="0">None</span>
+                            <span class="tick" data-value="2.5">Typical</span>
+                            <span class="tick" data-value="5">High</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">NRE (Development)</span>
+                            <span class="slider-value" id="nre-value">$500M</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="nre-slider" min="0" max="2000" step="50" value="500">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="nre-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="0">$0</span>
+                            <span class="tick" data-value="500">$500M</span>
+                            <span class="tick" data-value="2000">$2B</span>
                         </div>
                     </div>
                 </div>
@@ -391,10 +449,6 @@
                             <span class="eng-stat-value" id="eng-orbital-mass">22.2M kg</span>
                         </div>
                         <div class="eng-stat-row">
-                            <span class="eng-stat-label">Specific Power</span>
-                            <span class="eng-stat-value" id="eng-orbital-specific-power">45 W/kg</span>
-                        </div>
-                        <div class="eng-stat-row">
                             <span class="eng-stat-label">Solar Array Area</span>
                             <span class="eng-stat-value" id="eng-orbital-array-area">2.3 km²</span>
                         </div>
@@ -436,6 +490,10 @@
                         <div class="eng-stat-row">
                             <span class="eng-stat-label">GE 7HA.03 Turbines</span>
                             <span class="eng-stat-value" id="eng-ngcc-turbines">2 units</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Capacity Factor</span>
+                            <span class="eng-stat-value" id="eng-ngcc-capacity-factor">85%</span>
                         </div>
                         <div class="eng-stat-row">
                             <span class="eng-stat-label">Heat Rate</span>

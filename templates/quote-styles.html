@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Styles</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --text: #e5e5e5;
+            --text-muted: #888888;
+            --accent: #3b82f6;
+            --accent-secondary: #f59e0b;
+            --purple: #a855f7;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 3rem 2rem;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+        
+        .style-section {
+            margin-bottom: 3rem;
+        }
+        
+        .style-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        /* ========================================
+           STYLE 1: Elegant Serif with Side Lines (KEEP)
+           ======================================== */
+        .quote-1 {
+            position: relative;
+            padding: 2rem 2.5rem;
+            text-align: center;
+        }
+        
+        .quote-1::before,
+        .quote-1::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--text-muted), transparent);
+        }
+        
+        .quote-1::before { left: 0; }
+        .quote-1::after { right: 0; }
+        
+        .quote-1 .quote-text {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.15rem;
+            font-style: italic;
+            color: var(--text);
+            line-height: 1.8;
+        }
+        
+        .quote-1 .highlight {
+            color: var(--accent-secondary);
+            font-style: normal;
+            font-weight: 600;
+        }
+        
+        .quote-1 .quote-source {
+            justify-content: center;
+            padding-left: 0;
+        }
+
+        /* ========================================
+           STYLE 2: Floating Quotation Marks
+           ======================================== */
+        .quote-2 {
+            position: relative;
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+        }
+        
+        .quote-2::before,
+        .quote-2::after {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 6rem;
+            line-height: 1;
+            position: absolute;
+            color: var(--accent);
+            opacity: 0.15;
+        }
+        
+        .quote-2::before {
+            content: '"';
+            top: -0.5rem;
+            left: 1rem;
+        }
+        
+        .quote-2::after {
+            content: '"';
+            bottom: 0;
+            right: 1rem;
+        }
+        
+        .quote-2 .quote-text {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--text);
+            line-height: 1.8;
+        }
+        
+        .quote-2 .highlight {
+            color: var(--accent);
+            font-style: normal;
+            font-weight: 600;
+        }
+        
+        .quote-2 .quote-source {
+            justify-content: center;
+            padding-left: 0;
+        }
+
+        /* ========================================
+           STYLE 3: Underline Reveal
+           ======================================== */
+        .quote-3 {
+            padding: 1.5rem 0;
+        }
+        
+        .quote-3 .quote-text {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.15rem;
+            font-style: italic;
+            color: var(--text-muted);
+            line-height: 2;
+            padding-left: 0;
+        }
+        
+        .quote-3 .highlight {
+            color: var(--text);
+            font-style: normal;
+            font-weight: 500;
+            border-bottom: 2px solid var(--accent-secondary);
+            padding-bottom: 2px;
+        }
+        
+        .quote-3 .quote-source {
+            padding-left: 0;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #222;
+        }
+
+        /* ========================================
+           STYLE 4: Card with Accent Corner
+           ======================================== */
+        .quote-4 {
+            background: #111;
+            border-radius: 8px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quote-4::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent) 0%, transparent 50%);
+            opacity: 0.3;
+        }
+        
+        .quote-4 .quote-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-style: normal;
+            font-weight: 400;
+            color: var(--text);
+            line-height: 1.8;
+            padding-left: 0;
+        }
+        
+        .quote-4 .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* ========================================
+           STYLE 5: Split Design
+           ======================================== */
+        .quote-5 {
+            display: grid;
+            grid-template-columns: 4px 1fr;
+            gap: 1.5rem;
+        }
+        
+        .quote-5-bar {
+            background: linear-gradient(180deg, var(--accent) 0%, var(--purple) 50%, var(--accent-secondary) 100%);
+            border-radius: 2px;
+        }
+        
+        .quote-5 .quote-content {
+            padding: 0.5rem 0;
+        }
+        
+        .quote-5 .quote-text {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--text);
+            line-height: 1.8;
+            padding-left: 0;
+        }
+        
+        .quote-5 .highlight {
+            background: linear-gradient(90deg, var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-style: normal;
+            font-weight: 600;
+        }
+        
+        .quote-5 .quote-source {
+            padding-left: 0;
+        }
+
+        /* ========================================
+           STYLE 6: Monospace Editorial
+           ======================================== */
+        .quote-6 {
+            padding: 1.5rem;
+            border: 1px solid #333;
+        }
+        
+        .quote-6::before {
+            content: 'QUOTE';
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        
+        .quote-6 .quote-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-style: normal;
+            color: var(--text);
+            line-height: 1.9;
+            padding-left: 0;
+        }
+        
+        .quote-6 .highlight {
+            color: #3fb950;
+            font-weight: 500;
+        }
+        
+        .quote-6 .quote-source {
+            padding-left: 0;
+        }
+        
+        .quote-6 .quote-source a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+        }
+
+        /* ========================================
+           STYLE 7: Glow Effect
+           ======================================== */
+        .quote-7 {
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .quote-7::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 100px;
+            background: radial-gradient(ellipse, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .quote-7 .quote-text {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--text);
+            line-height: 1.8;
+            padding-left: 0;
+            position: relative;
+        }
+        
+        .quote-7 .highlight {
+            color: #60a5fa;
+            font-style: normal;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+        }
+        
+        .quote-7 .quote-source {
+            justify-content: center;
+            padding-left: 0;
+        }
+
+        /* ========================================
+           STYLE 8: Newspaper Column
+           ======================================== */
+        .quote-8 {
+            padding: 1.5rem 2rem;
+            border-top: 3px double var(--text-muted);
+            border-bottom: 3px double var(--text-muted);
+        }
+        
+        .quote-8 .quote-text {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--text);
+            line-height: 1.9;
+            padding-left: 0;
+            text-align: justify;
+        }
+        
+        .quote-8 .highlight {
+            font-variant: small-caps;
+            font-style: normal;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            color: var(--text);
+        }
+        
+        .quote-8 .quote-source {
+            padding-left: 0;
+            justify-content: flex-end;
+        }
+        
+        .quote-8 .quote-source a {
+            border: none;
+            background: none;
+            padding: 0;
+            font-style: italic;
+        }
+
+        /* ========================================
+           STYLE 9: Offset Box
+           ======================================== */
+        .quote-9 {
+            position: relative;
+            padding: 2rem;
+            margin-left: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .quote-9::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #151515;
+            border-radius: 8px;
+            z-index: 0;
+        }
+        
+        .quote-9::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: 8px;
+            bottom: 8px;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            z-index: -1;
+        }
+        
+        .quote-9 .quote-text {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--text);
+            line-height: 1.8;
+            padding-left: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .quote-9 .highlight {
+            color: var(--accent);
+            font-style: normal;
+            font-weight: 600;
+        }
+        
+        .quote-9 .quote-source {
+            padding-left: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========================================
+           SHARED STYLES
+           ======================================== */
+        .quote-text {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.05rem;
+            font-style: italic;
+            line-height: 1.7;
+            color: var(--text);
+            padding-left: 1.5rem;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 600;
+            font-style: normal;
+        }
+        
+        .quote-source {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .quote-source a {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: 0.03em;
+            padding: 0.3rem 0.6rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+        
+        .quote-source a:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quote Block Styles</h1>
+        <p class="subtitle">9 options. Pick your favorite.</p>
+        
+        <!-- Style 1 (Original Style 3) -->
+        <div class="style-section">
+            <p class="style-label">Style 1 · Elegant Serif with Side Lines</p>
+            <div class="quote-1">
+                <p class="quote-text">"McCalip preferred not to dwell, and instead chose to focus on what he had set out to do: <span class="highlight">making the thing</span>"</p>
+                <div class="quote-source">
+                    <a href="#">WIRED ↗</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Style 2 -->
+        <div class="style-section">
+            <p class="style-label">Style 2 · Floating Quotation Marks</p>
+            <div class="quote-2">
+                <p class="quote-text">McCalip preferred not to dwell, and instead chose to focus on what he had set out to do: <span class="highlight">making the thing</span></p>
+                <div class="quote-source">
+                    <a href="#">WIRED ↗</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Style 3 -->
+        <div class="style-section">
+            <p class="style-label">Style 3 · Underline Reveal</p>
+            <div class="quote-3">
+                <p class="quote-text">"McCalip preferred not to dwell, and instead chose to focus on what he had set out to do: <span class="highlight">making the thing</span>"</p>
+                <div class="quote-source">
+                    <a href="#">WIRED ↗</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Style 4 -->
+        <div class="style-section">
+            <p class="style-label">Style 4 · Card with Accent Corner</p>
+            <div class="quote-4">
+                <p class="quote-text">"McCalip preferred not to dwell, and instead chose to focus on what he had set out to do: <span class="highlight">making the thing</span>"</p>
+                <div class="quote-source">
+                    <a href="#">WIRED ↗</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Style 5 -->
+        <div class="style-section">
+            <p class="style-label">Style 5 · Split Design with Gradient Bar</p>
+            <div class="quote-5">
+                <div class="quote-5-bar"></div>
+                <div class="quote-content">
+                    <p class="quote-text">"McCalip preferred not to dwell, and instead chose to focus on what he had set out to do: <span class="highlight">making the thing</span>"</p>
+                    <div class="quote-source">
+                        <a href="#">WIRED ↗</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Style 6 -->
+        <div class="style-section">
+            <p class="style-label">Style 6 · Monospace Editorial</p>
+            <div class="quote-6">
+                <p class="quote-text">"McCalip preferred not to dwell, and instead chose to focus on what he had set out to do: <span class="highlight">making the thing</span>"</p>
+                <div class="quote-source">
+                    <a href="#">WIRED ↗</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Style 7 -->
+        <div class="style-section">
+            <p class="style-label">Style 7 · Subtle Glow</p>
+            <div class="quote-7">
+                <p class="quote-text">"McCalip preferred not to dwell, and instead chose to focus on what he had set out to do: <span class="highlight">making the thing</span>"</p>
+                <div class="quote-source">
+                    <a href="#">WIRED ↗</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Style 8 -->
+        <div class="style-section">
+            <p class="style-label">Style 8 · Newspaper Column</p>
+            <div class="quote-8">
+                <p class="quote-text">"McCalip preferred not to dwell, and instead chose to focus on what he had set out to do: <span class="highlight">making the thing</span>"</p>
+                <div class="quote-source">
+                    <a href="#">— WIRED</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Style 9 -->
+        <div class="style-section">
+            <p class="style-label">Style 9 · Offset Box</p>
+            <div class="quote-9">
+                <p class="quote-text">"McCalip preferred not to dwell, and instead chose to focus on what he had set out to do: <span class="highlight">making the thing</span>"</p>
+                <div class="quote-source">
+                    <a href="#">WIRED ↗</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

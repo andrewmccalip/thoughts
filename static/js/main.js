@@ -143,6 +143,7 @@
         const maxCost = Math.max(
             orbital.hardwareCost,
             orbital.launchCost,
+            orbital.omCost,
             natgas.capexTotal,
             natgas.fuelCostTotal,
             natgas.omCostTotal,
@@ -164,6 +165,8 @@
         // Update orbital bars
         document.getElementById('orbital-hardware-bar').style.width = `${(orbital.hardwareCost / maxCost) * 100}%`;
         document.getElementById('orbital-launch-bar').style.width = `${(orbital.launchCost / maxCost) * 100}%`;
+        document.getElementById('orbital-om-bar').style.width = `${(orbital.omCost / maxCost) * 100}%`;
+        updateText('orbital-om-value', CostModel.formatCost(orbital.omCost));
         
         // Update NatGas display
         updateText('ngcc-total', CostModel.formatCost(natgas.totalCost));
@@ -213,7 +216,6 @@
         
         // Update engineering outputs - Orbital
         updateText('eng-orbital-mass', CostModel.formatMass(orbital.totalMassKg));
-        updateText('eng-orbital-specific-power', `${state.specificPowerWPerKg} W/kg`);
         updateText('eng-orbital-array-area', `${orbital.arrayAreaKm2.toFixed(1)} km²`);
         updateText('eng-orbital-sat-count', `~${orbital.satelliteCount.toLocaleString()}`);
         updateText('eng-orbital-launches', `~${orbital.starshipLaunches.toLocaleString()}`);
@@ -224,6 +226,7 @@
         // Update engineering outputs - NatGas
         updateText('eng-ngcc-footprint', `${constants.NGCC_ACRES} acres`);
         updateText('eng-ngcc-turbines', `${natgas.turbineCount} units`);
+        updateText('eng-ngcc-capacity-factor', `${Math.round(natgas.capacityFactor * 100)}%`);
         updateText('eng-ngcc-heat-rate', `${constants.NGCC_HEAT_RATE_BTU_KWH.toLocaleString()} BTU/kWh`);
         updateText('eng-ngcc-gas-consumption', `${natgas.gasConsumptionBCF.toFixed(0)} BCF`);
         updateText('eng-ngcc-energy', CostModel.formatEnergy(natgas.energyMWh));
@@ -269,8 +272,17 @@
         // Specific power slider
         setupSlider('specific-power-slider', 'specific-power-fill', 'specific-power-value', 3, 100, 'specificPowerWPerKg', v => `${v} W/kg`);
         
+        // Satellite size slider
+        setupSlider('sat-size-slider', 'sat-size-fill', 'sat-size-value', 10, 100, 'satellitePowerKW', v => `${v} kW`);
+        
         // Sun fraction slider
         setupSlider('sun-fraction-slider', 'sun-fraction-fill', 'sun-fraction-value', 0.55, 1.0, 'sunFraction', v => `${Math.round(v * 100)}%`);
+        
+        // Cell degradation slider
+        setupSlider('degradation-slider', 'degradation-fill', 'degradation-value', 0, 5, 'cellDegradation', v => `${v.toFixed(1)}%/yr`);
+        
+        // NRE cost slider
+        setupSlider('nre-slider', 'nre-fill', 'nre-value', 0, 2000, 'nreCost', v => v >= 1000 ? `$${(v/1000).toFixed(1)}B` : `$${v}M`);
         
         // NatGas Capex slider
         setupSlider('capex-slider', 'capex-fill', 'capex-value', 400, 2000, 'capexPerKW', v => `$${v.toLocaleString()}/kW`);
