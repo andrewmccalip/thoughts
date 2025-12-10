@@ -56,6 +56,7 @@ const CostModel = (function() {
     let state = {
         // Shared parameters
         years: 5,
+        targetGW: 1,                    // Target capacity in GW (default 1 GW)
         // Thermal analysis parameters
         emissivity: 0.85,           // Radiator emissivity (dimensionless)
         albedoViewFactor: 0.2,      // Fraction of view to Earth albedo (reduces effective radiation)
@@ -142,9 +143,11 @@ const CostModel = (function() {
     // ==========================================
     
     function getDerived() {
+        const targetPowerMW = state.targetGW * 1000;
         return {
-            TARGET_POWER_W: constants.TARGET_POWER_MW * 1e6,
-            TARGET_POWER_KW: constants.TARGET_POWER_MW * 1000
+            TARGET_POWER_MW: targetPowerMW,
+            TARGET_POWER_W: targetPowerMW * 1e6,
+            TARGET_POWER_KW: targetPowerMW * 1000
         };
     }
 
@@ -223,7 +226,7 @@ const CostModel = (function() {
         // ========================================
         
         // Energy output: target average power × hours (sized to offset eclipse + degradation)
-        const energyMWh = constants.TARGET_POWER_MW * totalHours;
+        const energyMWh = derived.TARGET_POWER_MW * totalHours;
         
         // Cost per watt (of delivered average power, not initial capacity)
         const costPerW = totalCost / derived.TARGET_POWER_W;
@@ -312,7 +315,7 @@ const CostModel = (function() {
         // ========================================
         
         // Energy output: IT power × hours × capacity factor
-        const energyMWh = constants.TARGET_POWER_MW * totalHours * state.capacityFactor;
+        const energyMWh = derived.TARGET_POWER_MW * totalHours * state.capacityFactor;
         
         // Total generation needed (IT load × PUE)
         const generationMWh = energyMWh * state.pue;
@@ -342,7 +345,7 @@ const CostModel = (function() {
         const gasConsumptionBCF = totalBTU / constants.BTU_PER_CF / constants.CF_PER_BCF;
         
         // Turbine count (H-class ~430 MW each)
-        const totalGenerationMW = constants.TARGET_POWER_MW * state.pue;
+        const totalGenerationMW = derived.TARGET_POWER_MW * state.pue;
         const turbineCount = Math.ceil(totalGenerationMW / constants.GE_7HA_POWER_MW);
         
         // Fuel cost per W-year (for display)
@@ -384,7 +387,7 @@ const CostModel = (function() {
     function calculateBreakeven() {
         const derived = getDerived();
         const totalHours = state.years * constants.HOURS_PER_YEAR;
-        const energyMWh = constants.TARGET_POWER_MW * totalHours * state.capacityFactor;
+        const energyMWh = derived.TARGET_POWER_MW * totalHours * state.capacityFactor;
         const generationMWh = energyMWh * state.pue;
         
         // Terrestrial costs (5 buckets from report)

@@ -193,10 +193,12 @@
         updateText('breakeven-launch', CostModel.formatCostPerKg(breakeven));
         
         // Update header subtitle and footer
+        updateText('capacity-display', state.targetGW);
         updateText('years-display', state.years);
         updateText('footer-sun', `${Math.round(state.sunFraction * 100)}%`);
         
         // Update assumptions
+        updateText('assumption-capacity', `${state.targetGW} GW`);
         updateText('assumption-years', `${state.years} years`);
         updateText('assumption-mass', CostModel.formatMass(orbital.totalMassKg));
         updateText('assumption-specific-power', `${state.specificPowerWPerKg} W/kg`);
@@ -318,6 +320,9 @@
     }
     
     function init() {
+        // Target capacity slider (GW)
+        setupSlider('capacity-slider', 'capacity-fill', 'capacity-value', 1, 100, 'targetGW', v => `${v} GW`);
+        
         // Years slider
         setupSlider('years-slider', 'years-fill', 'years-value', 3, 10, 'years', v => `${v} years`);
         

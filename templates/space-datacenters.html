@@ -19,7 +19,7 @@
                 Terrestrial DataCenters
             </h1>
             <p class="paper-subtitle">
-                A first-principles cost model for 1 GW capacity over <span id="years-display">5</span> years
+                A first-principles cost model for <span id="capacity-display">1</span> GW capacity over <span id="years-display">5</span> years
             </p>
         </header>
 
@@ -51,8 +51,6 @@
                 <strong>Note:</strong> This analysis is vibe-coded using publicly available information — 
                 a collation of public statements, filings, and reports. No proprietary data. These are 
                 Andrew's personal thoughts and do not represent the views of any company or organization.
-                <a href="https://chatgpt.com/share/69391474-4b24-8005-bb93-ebd4340c65d8" target="_blank">Starlink BOM & performance references →</a>
-                <a href="https://gemini.google.com/share/56191222774f" target="_blank">Datacenter & power gen references →</a>
             </p>
         </section>
 
@@ -213,23 +211,41 @@
         <section class="paper-section parameters-section">
             <div class="figure-label">Engineering · System Parameters</div>
             
-            <!-- Analysis Period (Full Width) -->
+            <!-- Shared Parameters (Full Width) -->
             <div class="param-group shared-params">
-                <div class="slider-container analysis-period-slider">
-                    <div class="slider-header">
-                        <span class="slider-label">Analysis Period</span>
-                        <span class="slider-value" id="years-value">5 years</span>
+                <div class="shared-params-grid">
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Target Capacity</span>
+                            <span class="slider-value" id="capacity-value">1 GW</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="capacity-slider" min="1" max="100" step="1" value="1">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill" id="capacity-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="1">1 GW</span>
+                            <span class="tick" data-value="50">50 GW</span>
+                            <span class="tick" data-value="100">100 GW</span>
+                        </div>
                     </div>
-                    <div class="slider-track-container">
-                        <input type="range" id="years-slider" min="3" max="10" step="1" value="5">
-                        <div class="slider-track"></div>
-                        <div class="slider-fill" id="years-fill"></div>
-                    </div>
-                    <div class="slider-ticks">
-                        <span class="tick" data-value="3">3y</span>
-                        <span class="tick" data-value="5">5y</span>
-                        <span class="tick" data-value="7">7y</span>
-                        <span class="tick" data-value="10">10y</span>
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Analysis Period</span>
+                            <span class="slider-value" id="years-value">5 years</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="years-slider" min="3" max="10" step="1" value="5">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill" id="years-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="3">3y</span>
+                            <span class="tick" data-value="5">5y</span>
+                            <span class="tick" data-value="7">7y</span>
+                            <span class="tick" data-value="10">10y</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -423,7 +439,7 @@
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <span class="slider-label">Facility Capex</span>
+                            <span class="slider-label">DC Infrastructure (Elec/Mech/Civil/Net)</span>
                             <span class="slider-value" id="facility-value">$12.50/W</span>
                         </div>
                         <div class="slider-track-container">
@@ -567,9 +583,9 @@
                     </div>
                     <div class="assumption-content">
                         <ul class="assumption-bullets">
-                            <li>Target capacity: <strong>1 GW</strong> nameplate electrical</li>
+                            <li>Target capacity: <strong id="assumption-capacity">1 GW</strong> nameplate electrical</li>
                             <li>Analysis period: <strong id="assumption-years">5 years</strong></li>
-                            <li>All figures in 2024 USD, no discounting</li>
+                            <li>All figures in 2025 USD, no FMV</li>
                         </ul>
                     </div>
                 </div>
@@ -740,19 +756,37 @@
                 <h3>Technical Engineering Challenges</h3>
 
                 <p>
-                    A recurring constraint in orbital power systems is thermal management. A satellite has two independent heat sources that the radiators must reject, and both are governed by basic physics rather than implementation details.
+                    The governing constraint for orbital compute is thermal management. <strong>Every object in space reaches a natural equilibrium temperature where power in equals power out.</strong> There is no air to carry heat away. No conduction to a cold sink. The only mechanism is radiation, governed by the Stefan–Boltzmann law.
+                </p>
+
+                <div class="essay-callout emphasis">
+                    <p>
+                        Your design variables are <strong>radiator area</strong>, <strong>surface emissivity</strong>, and <strong>operating temperature</strong>. For a given heat load, these are coupled through Stefan-Boltzmann: P = εσAT⁴. Every component must survive at whatever equilibrium temperature closes the thermal balance.
+                    </p>
+                </div>
+
+                <p>
+                    A satellite running compute has <strong>two independent heat sources</strong> that must be rejected simultaneously:
                 </p>
 
                 <p>
-                    The first source is waste heat from the solar arrays. The panels intercept the full solar flux. Standard single-junction silicon cells convert roughly twenty-two percent of that flux into electrical power. The remaining majority is absorbed as heat. Silicon photovoltaic materials have an upper operating limit on the order of one hundred thirty-five degrees Celsius, so the arrays themselves cannot simply run hotter to compensate. In vacuum there is no convective or conductive path to the environment, so this absorbed energy can only be rejected by radiating it to space. That links the array temperature, radiator area, and allowable heat flux through the Stefan–Boltzmann relation.
+                    <strong>First: solar panel waste heat.</strong> In a sun-synchronous orbit, arrays intercept the full 1,361 W/m² solar flux. Standard silicon cells convert roughly twenty-two percent into electricity; the remaining ~78% is absorbed as heat. Panels in direct sunlight typically equilibrate between 100°C and 150°C (silicon photovoltaics tolerate up to ~135°C). This heat must radiate to space from the panel surfaces.
                 </p>
 
                 <p>
-                    The second source is electrical heat from the payload. Every watt delivered to compute becomes heat inside the electronics. Modern GPU dies have allowable junction temperatures near eighty-five degrees Celsius, which caps the thermal gradient available between the die and the radiator. This gradient defines the maximum heat flux through the thermal path, and it must remain within material and interface limits.
+                    <strong>Second: electrical heat from compute.</strong> Every watt delivered to GPUs becomes heat inside the electronics. Modern dies have junction temperature limits near 85°C—far below the panel equilibrium temperature. This heat must also be rejected, through whatever thermal path connects the payload to a radiating surface.
                 </p>
 
                 <p>
-                    These two heat sources add directly in the steady-state balance. The waste-heat term from the arrays typically dominates, with the electrical load superimposed. Because both the solar cells and the compute hardware have hard temperature ceilings, you cannot solve the problem by simply “running hotter.” If the radiator is sized only for electrical power, it exceeds its allowable temperature as soon as the arrays see full sunlight. Correct sizing requires treating both terms explicitly in the heat-balance equation and ensuring that radiator area and operating temperature close under worst-case illumination while respecting the material temperature limits of both the solar cells and the compute hardware.
+                    These two loads add directly in steady state. The panel waste heat typically dominates, with the electrical load superimposed. The design challenge: the solar panel equilibrates at 100–150°C while the payload needs to stay below 85°C. In vacuum, there's no convective path between them.
+                </p>
+
+                <p>
+                    The design space is bounded. Emissivity maxes out around 0.95 for practical surfaces. Running hotter improves radiative rejection (T⁴ scaling), but GPU junction limits constrain this. Additional radiator area is effective but adds mass, which flows directly to launch cost.
+                </p>
+
+                <p>
+                    The interactive model below lets you explore these tradeoffs. Adjust emissivity, die temperature limits, and thermal interface performance to see whether the back side of the solar arrays provides sufficient radiator area. Many configurations require dedicated radiator mass beyond what the arrays provide—but the exact threshold depends on your assumptions.
                 </p>
 
                 <!-- Thermal Analysis Panel -->
