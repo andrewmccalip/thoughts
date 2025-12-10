@@ -232,10 +232,17 @@
         
         // Margin - pass if positive (capacity > load)
         const marginEl = document.getElementById('thermal-margin');
+        const marginBadgeEl = document.getElementById('thermal-margin-badge');
         if (marginEl) {
             marginEl.textContent = `${thermal.marginPct.toFixed(1)}%`;
             marginEl.classList.toggle('status-pass', thermal.marginPct >= 0);
             marginEl.classList.toggle('status-fail', thermal.marginPct < 0);
+        }
+        if (marginBadgeEl) {
+            const pass = thermal.marginPct >= 0;
+            marginBadgeEl.textContent = pass ? 'PASS' : 'FAIL';
+            marginBadgeEl.classList.toggle('status-pass', pass);
+            marginBadgeEl.classList.toggle('status-fail', !pass);
         }
         
         // Required temp - fail if above max die temp (physically impossible)
