@@ -7,6 +7,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}], throwOnError: false});"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -21,6 +25,7 @@
             <p class="paper-subtitle">
                 A first-principles cost model for <span id="capacity-display">1</span> GW capacity over <span id="years-display">5</span> years
             </p>
+            <p class="paper-subtitle">Model version: GPT-5.1</p>
         </header>
 
         <!-- Introduction -->
@@ -336,7 +341,7 @@
 
                     <div class="slider-container" data-highlight="launch-cost">
                         <div class="slider-header">
-                            <a href="https://chatgpt.com/share/693a57e4-ae14-8005-92d7-39b4d9699678" target="_blank" class="slider-label slider-label-link">Launch Cost to LEO<sup class="ref-sup">4</sup></a>
+                            <a href="https://chatgpt.com/share/693a57e4-ae14-8005-92d7-39b4d9699678" target="_blank" class="slider-label slider-label-link">Launch Cost to LEO (GPT-5.1)<sup class="ref-sup">4</sup></a>
                             <span class="slider-value" id="launch-cost-value">$1,000/kg</span>
                         </div>
                         <div class="slider-track-container">
@@ -353,7 +358,7 @@
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <a href="https://chatgpt.com/share/69391474-4b24-8005-bb93-ebd4340c65d8" target="_blank" class="slider-label slider-label-link">Satellite Hardware Cost<sup class="ref-sup">3</sup></a>
+                            <a href="https://chatgpt.com/share/69391474-4b24-8005-bb93-ebd4340c65d8" target="_blank" class="slider-label slider-label-link">Satellite Hardware Cost (GPT-5.1)<sup class="ref-sup">3</sup></a>
                             <span class="slider-value" id="sat-cost-value">$22/W</span>
                         </div>
                         <div class="slider-track-container">
@@ -370,7 +375,7 @@
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <a href="https://chatgpt.com/share/69391474-4b24-8005-bb93-ebd4340c65d8" target="_blank" class="slider-label slider-label-link">Specific Power<sup class="ref-sup">3</sup></a>
+                            <a href="https://chatgpt.com/share/69391474-4b24-8005-bb93-ebd4340c65d8" target="_blank" class="slider-label slider-label-link">Specific Power (GPT-5.1)<sup class="ref-sup">3</sup></a>
                             <span class="slider-value" id="specific-power-value">36.5 W/kg</span>
                         </div>
                         <div class="slider-track-container">
@@ -406,7 +411,7 @@
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <a href="https://chatgpt.com/share/693a7a0d-dc38-8005-8244-94cb70a5d1f2" target="_blank" class="slider-label slider-label-link">Orbit Sunlight Fraction<sup class="ref-sup">6</sup></a>
+                            <a href="https://chatgpt.com/share/693a7a0d-dc38-8005-8244-94cb70a5d1f2" target="_blank" class="slider-label slider-label-link">Orbit Sunlight Fraction (GPT-5.1)<sup class="ref-sup">6</sup></a>
                             <span class="slider-value" id="sun-fraction-value">98%</span>
                         </div>
                         <div class="slider-track-container">
@@ -680,6 +685,12 @@
             <div class="assumptions-header">
                 <h2 class="section-heading">Model Assumptions</h2>
             </div>
+
+            <div class="paper-subsection">
+                <h4>Orbit Basics: Beta Angle & Earth Albedo</h4>
+                <p><strong>Beta angle (β):</strong> the angle between the orbital plane and the Sun. High β (near 90°) means almost continuous sunlight with minimal thermal cycling; low β increases eclipse time and heating from reflected light.</p>
+                <p><strong>Earth albedo:</strong> the fraction of sunlight Earth reflects back to space (≈0.30 on average). Higher albedo means more reflected energy warming spacecraft surfaces that see the planet.</p>
+            </div>
             
             <div class="assumptions-list">
                 <!-- Global -->
@@ -879,71 +890,87 @@
                 </div>
                 
                 <h3>Technical Engineering Challenges</h3>
+                
+                <p>
+                    The governing constraint for orbital compute is <strong>thermodynamics</strong>. Terrestrial datacenters leverage convective cooling—dumping waste heat into the atmosphere or water sources, effectively using the planet as an infinite cold reservoir. In the vacuum of space, convection is impossible. Heat rejection relies exclusively on radiation.
+                </p>
 
                 <p>
-                    The governing constraint for orbital compute is thermal management. <strong>Every object in space reaches a natural equilibrium temperature where power in equals power out.</strong> There is no air to carry heat away. No conduction to a cold sink. The only mechanism is radiation, governed by the Stefan–Boltzmann law.
+                    Every object in space settles to an equilibrium temperature where absorbed power equals radiated power. If heat generation exceeds radiative capacity, the temperature rises until the $T^4$ term in the Stefan-Boltzmann law balances the equation:
                 </p>
+
+                $$\dot{Q}_{\text{rad}} = \varepsilon \sigma A T^4$$
+
+                <p>
+                    The engineering challenge is ensuring this equilibrium temperature remains below the safe operating limits of silicon processors.
+                </p>
+                
+                <h4>Energy Balance and Heat Rejection</h4>
+                
+                <p>
+                    To dimension the radiator surface, we must account for the total thermal load managed by the satellite bus. In this model, based on a Starlink-style bifacial architecture (PV on front, radiator on back), the system must reject the aggregate energy of two distinct paths:
+                </p>
+
+                <ol class="essay-list">
+                    <li><strong>Incident Solar Flux:</strong> The sun delivers $G_{\text{sc}} = 1361\;\text{W/m}^2$ (AM0). With a solar absorptivity $\alpha = 0.92$, the panel absorbs approximately $\sim 1250\;\text{W/m}^2$.</li>
+                    <li><strong>Energy Partitioning:</strong>
+                        <ul>
+                            <li><strong>Electrical Path ($\sim$22%):</strong> High-efficiency cells convert $\sim 300\;\text{W/m}^2$ into electricity. This power drives the compute payload and is converted entirely back into heat by the processors. A liquid cooling loop collects this heat and returns it to the panel structure for rejection.</li>
+                            <li><strong>Thermal Absorption ($\sim$70%):</strong> The remaining $\sim 950\;\text{W/m}^2$ is not converted to electricity but is absorbed immediately as lattice heat (phonon generation) within the panel structure.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Total Heat Load:</strong> The radiator must reject the sum of both the immediate thermal absorption and the returned electrical waste heat—effectively <strong>100% of the absorbed solar flux</strong>.</li>
+                </ol>
 
                 <div class="essay-callout emphasis">
                     <p>
-                        Your design variables are <strong>radiator area</strong>, <strong>surface emissivity</strong>, and <strong>operating temperature</strong>. For a given heat load, these are coupled through Stefan-Boltzmann: P = εσAT⁴. Every component must survive at whatever equilibrium temperature closes the thermal balance.
+                        This imposes a strict area density limit. High-power compute requires large collection areas, which inherently absorb large amounts of solar heat. The radiator must be sized to reject this aggregate load while maintaining an operating temperature below the junction limit.
                     </p>
                 </div>
 
-                <h4>Solar Panel Thermal Limits</h4>
-
+                <h4>Operating Temperature Limits</h4>
+                
                 <p>
-                    In a sun-synchronous orbit, solar arrays intercept the full 1,361 W/m² solar flux. Standard silicon cells convert roughly twenty-two percent into electricity; the remaining ~78% is absorbed as heat. Panels in direct sunlight typically equilibrate between 100°C and 150°C. Silicon photovoltaics tolerate up to ~135°C before degradation accelerates, so panel temperature is constrained by cell physics rather than spacecraft design.
+                    Modern AI accelerators (H100/B200 class) typically throttle at junction temperatures $T_j > 85\text{–}100\degree\text{C}$. To maintain a junction at 85°C, and accounting for the thermal gradient across cold plates and interface materials ($\Delta T \approx 10\degree\text{C}$), the radiator surface temperature $T_{\text{rad}}$ is constrained to approximately 75°C.
                 </p>
 
                 <p>
-                    This absorbed heat must radiate to space from the panel surfaces. The front face sees the sun; the back face sees cold space (with some Earth albedo contribution). For a given array area, the equilibrium temperature is fixed by the balance of absorbed solar flux and radiated thermal power. You cannot "cool" the panels in any conventional sense—you can only size them so the equilibrium falls within material limits.
-                </p>
-
-                <h4>Liquid Cooling Loops</h4>
-
-                <p>
-                    The second heat source is electrical: every watt delivered to GPUs becomes heat inside the electronics. Modern dies have junction temperature limits near 85°C—far below the panel equilibrium temperature. This creates the central thermal design problem: the power source equilibrates at 100–150°C while the payload needs to stay below 85°C. In vacuum, there's no convective path between them.
-                </p>
-
-                <p>
-                    The solution is an active thermal loop. Liquid coolant absorbs heat at the GPU cold plates, transports it through plumbing to a dedicated radiator, and rejects it to space. The radiator must operate below the die temperature limit minus whatever ΔT the thermal interfaces impose. If the die limit is 85°C and the interface drops 10°C, the radiator surface must stay below ~75°C to close the loop.
-                </p>
-
-                <p>
-                    This means the compute radiator is thermally decoupled from the solar panels. You cannot simply use the back side of the arrays as your compute radiator—the panels run too hot. You need additional radiator area at a lower temperature, which adds mass, which flows directly to launch cost.
-                </p>
-
-                <p>
-                    The design space is bounded. Emissivity maxes out around 0.95 for practical surfaces. Running hotter improves radiative rejection (T⁴ scaling), but GPU junction limits constrain this. The interactive model below lets you explore these tradeoffs.
+                    The model below calculates the equilibrium temperature for a bifacial array in a terminator orbit ($\beta = 90^\circ$). It accounts for solar flux, Earth IR ($\sim 237\;\text{W/m}^2$), and albedo. If the calculated equilibrium temperature $T_{\text{eq}}$ exceeds the target radiator temperature, the design fails.
                 </p>
 
                 <!-- Thermal Balance Diagram -->
                 <div class="thermal-diagram-container">
                     <div class="figure-label">Thermal Balance · Bifacial Panel Model</div>
+                    
+                    <!-- Energy Balance Equation - Above Diagram -->
+                    <div class="energy-equation">
+                        <span class="eq-text">Steady-State Energy Balance</span>
+                        <span class="eq-formula">$\dot{Q}_{\text{sol}} + \dot{Q}_{\text{IR}} + \dot{Q}_{\text{alb}} + \dot{Q}_{\text{loop}} = \dot{Q}_{\text{rad,A}} + \dot{Q}_{\text{rad,B}}$</span>
+                    </div>
+                    
                     <div class="thermal-diagram">
                         
                         <!-- LEFT SIDE: Heat Inputs (+) -->
                         <div class="diagram-inputs">
-                            <div class="input-header">+ Heat In</div>
+                            <div class="input-header">+ Q̇<sub>in</sub></div>
                             <div class="input-group">
                                 <div class="input-row">
-                                    <span class="input-label">Q<sub>solar</sub> <span class="input-source">(☀️ Sun)</span></span>
+                                    <span class="input-label"><i>Q̇</i><sub>sol</sub> <span class="input-source">(☀️)</span></span>
                                     <span class="input-value" id="diagram-q-solar">0 MW</span>
                                     <div class="input-arrow"></div>
                                 </div>
                                 <div class="input-row">
-                                    <span class="input-label">Q<sub>IR</sub> <span class="input-source">(🌍 Earth)</span></span>
+                                    <span class="input-label"><i>Q̇</i><sub>IR</sub> <span class="input-source">(🌍)</span></span>
                                     <span class="input-value" id="diagram-q-earth-ir">0 MW</span>
                                     <div class="input-arrow"></div>
                                 </div>
                                 <div class="input-row">
-                                    <span class="input-label">Q<sub>albedo</sub> <span class="input-source">(🌍 Earth)</span></span>
+                                    <span class="input-label"><i>Q̇</i><sub>alb</sub> <span class="input-source">(🌍)</span></span>
                                     <span class="input-value" id="diagram-q-albedo">0 MW</span>
                                     <div class="input-arrow"></div>
                                 </div>
                                 <div class="input-row input-heatloop">
-                                    <span class="input-label">Q<sub>heatloop</sub> <span class="input-source">(🖥️ GPUs)</span></span>
+                                    <span class="input-label"><i>Q̇</i><sub>loop</sub> <span class="input-source">(🖥️)</span></span>
                                     <span class="input-value" id="diagram-q-heatloop">0 MW</span>
                                     <div class="input-arrow"></div>
                                 </div>
@@ -954,49 +981,43 @@
                         <div class="bifacial-panel">
                             <div class="panel-side panel-side-a">
                                 <span class="side-label">Side A</span>
-                                <span class="side-desc">PV</span>
-                                <span class="side-props">α=0.92</span>
-                                <span class="side-props">ε=0.85</span>
+                                <span class="side-desc">PV Array</span>
+                                <span class="side-props"><i>α</i> = 0.92</span>
+                                <span class="side-props"><i>ε</i><sub>A</sub> = 0.85</span>
                             </div>
                             <div class="panel-core">
                                 <span class="core-temp" id="diagram-eq-temp">0°C</span>
-                                <span class="core-label">T<sub>eq</sub></span>
+                                <span class="core-label"><i>T</i><sub>eq</sub></span>
                             </div>
                             <div class="panel-side panel-side-b">
                                 <span class="side-label">Side B</span>
                                 <span class="side-desc">Radiator</span>
-                                <span class="side-props">ε=0.90</span>
+                                <span class="side-props"><i>ε</i><sub>B</sub> = 0.90</span>
                             </div>
                         </div>
                         
                         <!-- RIGHT SIDE: Outputs (-) -->
                         <div class="diagram-outputs">
-                            <div class="output-header">− Heat Out</div>
+                            <div class="output-header">− Q̇<sub>out</sub></div>
                             <div class="output-group">
                                 <div class="output-row output-radiation">
                                     <div class="output-arrow output-arrow-rad"></div>
-                                    <span class="output-label">Q<sub>rad,A</sub> <span class="output-dest">(→ Space)</span></span>
+                                    <span class="output-label"><i>Q̇</i><sub>rad,A</sub> <span class="output-dest">(→ ∞)</span></span>
                                     <span class="output-value" id="diagram-q-rad-pv">0 MW</span>
                                 </div>
                                 <div class="output-row output-radiation">
                                     <div class="output-arrow output-arrow-rad"></div>
-                                    <span class="output-label">Q<sub>rad,B</sub> <span class="output-dest">(→ Space)</span></span>
+                                    <span class="output-label"><i>Q̇</i><sub>rad,B</sub> <span class="output-dest">(→ ∞)</span></span>
                                     <span class="output-value" id="diagram-q-rad-back">0 MW</span>
                                 </div>
                                 <div class="output-row output-electrical">
                                     <div class="output-arrow output-arrow-elec"></div>
-                                    <span class="output-label">P<sub>elec</sub> <span class="output-dest">(→ GPUs)</span></span>
+                                    <span class="output-label"><i>P</i><sub>elec</sub> <span class="output-dest">(→ GPU)</span></span>
                                     <span class="output-value" id="diagram-power-out">0 MW</span>
                                 </div>
                             </div>
                         </div>
                         
-                    </div>
-                    
-                    <!-- Energy Balance Equation -->
-                    <div class="energy-equation">
-                        <span class="eq-text">Energy Balance: </span>
-                        <span class="eq-formula">Q<sub>solar</sub> + Q<sub>IR</sub> + Q<sub>albedo</sub> + Q<sub>heatloop</sub> = Q<sub>rad,A</sub> + Q<sub>rad,B</sub></span>
                     </div>
                 </div>
 
@@ -1141,73 +1162,103 @@
 
                             <div class="engineering-stats">
                                 <div class="eng-stat-row eng-stat-header">
-                                    <span class="eng-stat-label">Geometry</span>
+                                    <span class="eng-stat-label">Geometry & Properties</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="A = N_sat × A_array_per_sat">
-                                    <span class="eng-stat-label">Panel Area (both sides)</span>
+                                <div class="eng-stat-row has-formula" data-formula="A = N_sat · A_panel&#10;&#10;Total radiating surface area">
+                                    <span class="eng-stat-label"><i>A</i> (panel area)</span>
                                     <span class="eng-stat-value" id="thermal-available-area">0.00 km²</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="β = orbit inclination angle&#10;90° = terminator (coldest)&#10;60° = seasonal limit (hottest)">
-                                    <span class="eng-stat-label">Beta Angle</span>
+                                <div class="eng-stat-row has-formula" data-formula="β = orbit beta angle&#10;&#10;90° → terminator (coldest)&#10;60° → seasonal limit (hottest)">
+                                    <span class="eng-stat-label"><i>β</i> (orbit angle)</span>
                                     <span class="eng-stat-value" id="thermal-beta-angle">90°</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="VF_earth = 0.08 + (90 - β) × 0.002&#10;View factor increases as β decreases">
-                                    <span class="eng-stat-label">Earth View Factor</span>
+                                <div class="eng-stat-row has-formula" data-formula="VF_⊕ = 0.08 + (90 − β)·0.002&#10;&#10;View factor to Earth&#10;Increases as β decreases">
+                                    <span class="eng-stat-label"><i>VF</i><sub>⊕</sub></span>
                                     <span class="eng-stat-value" id="thermal-view-factor">0.080</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="ε_total = ε_pv + ε_rad&#10;Both sides radiate to space">
-                                    <span class="eng-stat-label">Total Emissivity (ε<sub>pv</sub>+ε<sub>rad</sub>)</span>
+                                <div class="eng-stat-row has-formula" data-formula="ε_tot = ε_A + ε_B&#10;&#10;Bifacial: both sides radiate">
+                                    <span class="eng-stat-label"><i>ε</i><sub>tot</sub></span>
                                     <span class="eng-stat-value" id="thermal-total-emissivity">1.75</span>
                                 </div>
                                 
                                 <div class="eng-stat-row eng-stat-header">
-                                    <span class="eng-stat-label">Heat Inputs</span>
+                                    <span class="eng-stat-label">Heat Fluxes</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="Q_solar = G × α_pv × A&#10;&#10;G = 1361 W/m² (solar constant)&#10;α_pv = solar absorptivity&#10;All absorbed solar ends as heat onboard">
-                                    <span class="eng-stat-label">Q<sub>solar</sub> (absorbed)</span>
+                                <div class="eng-stat-row has-formula" data-formula="Q̇_sol = G·α·A − P_elec&#10;&#10;G = 1361 W/m² (AM0)&#10;Absorbed solar minus electrical conversion">
+                                    <span class="eng-stat-label"><i>Q̇</i><sub>sol</sub> (solar waste)</span>
                                     <span class="eng-stat-value" id="thermal-q-solar">0 MW</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="Q_IR = E_earth × VF × (ε_pv + ε_rad) × A&#10;&#10;E_earth = 237 W/m²&#10;VF = Earth view factor&#10;Both sides absorb Earth IR">
-                                    <span class="eng-stat-label">Q<sub>Earth IR</sub></span>
+                                <div class="eng-stat-row has-formula" data-formula="Q̇_IR = E_⊕ · VF · (ε_A + ε_B) · A&#10;&#10;E_⊕ = 237 W/m² (Earth IR)&#10;Both sides absorb">
+                                    <span class="eng-stat-label"><i>Q̇</i><sub>IR</sub> (Earth thermal)</span>
                                     <span class="eng-stat-value" id="thermal-q-earth-ir">0 MW</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="Q_albedo = G × ρ × VF × cos(β) × α_pv × A&#10;&#10;ρ = 0.30 (Earth albedo)&#10;cos(β) = albedo scaling&#10;Zero at β=90°, max at β=60°">
-                                    <span class="eng-stat-label">Q<sub>albedo</sub></span>
+                                <div class="eng-stat-row has-formula" data-formula="Q̇_alb = G · ρ · VF · cos(β) · α · A&#10;&#10;ρ = 0.30 (Earth albedo)&#10;Zero at β = 90°">
+                                    <span class="eng-stat-label"><i>Q̇</i><sub>alb</sub> (reflected)</span>
                                     <span class="eng-stat-value" id="thermal-q-albedo">0 MW</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="Q_heatloop = 0&#10;&#10;Explicit loop term zeroed to avoid double counting&#10;Solar absorption already includes power that becomes heat">
-                                    <span class="eng-stat-label">Q<sub>heatloop</sub></span>
+                                <div class="eng-stat-row has-formula" data-formula="Q̇_loop = P_elec&#10;&#10;GPU waste heat returned&#10;via liquid cooling loop">
+                                    <span class="eng-stat-label"><i>Q̇</i><sub>loop</sub> (GPU return)</span>
                                     <span class="eng-stat-value" id="thermal-q-heatloop">0 MW</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="Q_total = Q_solar + Q_IR + Q_albedo + Q_heatloop&#10;&#10;Sum of all heat inputs&#10;including GPU waste heat return">
-                                    <span class="eng-stat-label">Total Heat In</span>
+                                <div class="eng-stat-row has-formula" data-formula="ΣQ̇_in = Q̇_sol + Q̇_IR + Q̇_alb + Q̇_loop&#10;&#10;Total thermal load to reject">
+                                    <span class="eng-stat-label">Σ<i>Q̇</i><sub>in</sub></span>
                                     <span class="eng-stat-value" id="thermal-total-heat-in">0 MW</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="P_elec = G × η × A&#10;&#10;G = 1361 W/m²&#10;η = PV efficiency&#10;Generated electricity is consumed onboard">
-                                    <span class="eng-stat-label">Power Generated (P<sub>elec</sub>)</span>
+                                <div class="eng-stat-row has-formula" data-formula="P_elec = G · η · A&#10;&#10;η = PV efficiency&#10;Delivered to GPUs">
+                                    <span class="eng-stat-label"><i>P</i><sub>elec</sub> (generated)</span>
                                     <span class="eng-stat-value" id="thermal-power-generated">0 MW</span>
                                 </div>
                                 
                                 <div class="eng-stat-row eng-stat-header">
-                                    <span class="eng-stat-label">Equilibrium Results</span>
+                                    <span class="eng-stat-label">Equilibrium</span>
                                 </div>
-                                <div class="eng-stat-row eng-stat-highlight has-formula" data-formula="T_eq = (Q_in / (σ × A × ε_total) + T_space⁴)^0.25&#10;&#10;σ = 5.67×10⁻⁸ W/m²K⁴&#10;T_space = 3K&#10;&#10;Stefan-Boltzmann equilibrium">
-                                    <span class="eng-stat-label">Equilibrium Temperature</span>
+                                <div class="eng-stat-row eng-stat-highlight has-formula" data-formula="T_eq = [ΣQ̇_in / (σ·A·ε_tot) + T_∞⁴]^¼&#10;&#10;σ = 5.67×10⁻⁸ W·m⁻²·K⁻⁴&#10;T_∞ = 3 K (deep space)&#10;&#10;Stefan-Boltzmann Law">
+                                    <span class="eng-stat-label"><i>T</i><sub>eq</sub></span>
                                     <span class="eng-stat-value" id="thermal-eq-temp">0.0 °C</span>
                                 </div>
-                                <div class="eng-stat-row eng-stat-highlight has-formula" data-formula="Margin = T_target - T_eq&#10;&#10;PASS if T_eq < T_target&#10;(equilibrium below die limit)">
-                                    <span class="eng-stat-label">Temperature Margin</span>
+                                <div class="eng-stat-row eng-stat-highlight has-formula" data-formula="ΔT = T_max − T_eq&#10;&#10;PASS: T_eq < T_max&#10;T_max = die limit − interface ΔT">
+                                    <span class="eng-stat-label">Δ<i>T</i> margin</span>
                                     <span class="eng-stat-value" id="thermal-margin">0 °C</span>
                                     <span class="status-badge" id="thermal-margin-badge">FAIL</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="A_req = Q_in / (σ × ε_total × ΔT⁴)&#10;&#10;ΔT⁴ = T_target⁴ - T_space⁴&#10;Area to achieve target temp">
-                                    <span class="eng-stat-label">Area Needed (at target temp)</span>
+                                <div class="eng-stat-row has-formula" data-formula="A_req = ΣQ̇_in / [σ·ε_tot·(T_max⁴ − T_∞⁴)]&#10;&#10;Radiator area needed&#10;to achieve T_max">
+                                    <span class="eng-stat-label"><i>A</i><sub>req</sub></span>
                                     <span class="eng-stat-value" id="thermal-required-area">0.00 km²</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <h4>Understanding Orbit Geometry: Beta Angle and Albedo</h4>
+
+                <p>
+                    Two parameters dominate the thermal environment of any LEO spacecraft: the <strong>orbit beta angle (β)</strong> and <strong>Earth's albedo</strong>. Understanding them is essential to sizing radiators and predicting equilibrium temperatures.
+                </p>
+
+                <p>
+                    <strong>Beta Angle (β)</strong> is the angle between the orbital plane and the Sun vector. It determines how much time a satellite spends in sunlight versus shadow, and how the Sun's rays strike the spacecraft:
+                </p>
+
+                <ul class="essay-list">
+                    <li><strong>β = 0°:</strong> The orbital plane contains the Sun. The satellite experiences maximum eclipse time (~35% of each orbit in shadow) and the most extreme thermal cycling—baking in full sun, then plunging into Earth's shadow.</li>
+                    <li><strong>β = 90°:</strong> The orbital plane is perpendicular to the Sun vector—a "terminator orbit." The satellite rides the day-night boundary, seeing nearly continuous sunlight (~98%) with minimal thermal cycling. This is the coldest steady-state configuration because the sun strikes only the edge of the orbit, reducing direct heating while maintaining constant power generation.</li>
+                    <li><strong>Intermediate values (60°–75°):</strong> Represent seasonal extremes for sun-synchronous orbits. Lower beta angles increase both eclipse fraction and albedo loading from sunlit Earth below.</li>
+                </ul>
+
+                <div class="essay-callout">
+                    <p>
+                        For orbital compute, high-beta (terminator) orbits are attractive: near-constant power, minimal battery mass, and the coldest achievable equilibrium temperature. The tradeoff is orbital slot availability and potential conjunction density.
+                    </p>
+                </div>
+
+                <p>
+                    <strong>Earth Albedo</strong> is the fraction of sunlight Earth reflects back into space; a practical global-average value is <strong>ρ ≈ 0.30</strong> (but it varies a lot with clouds and surface).
+                </p>
+
+                <p>
+                    Thermally, albedo is “extra sunlight” added to any surface that can see Earth, roughly scaling with solar flux × <strong>ρ</strong> × Earth view factor × absorptivity × area, and typically decreasing as <strong>β</strong> increases (less sunlit Earth in view). This is one reason high-beta/terminator-like geometries tend to run cooler.
+                </p>
 
                 <p class="essay-note">
                     <em>More analysis to come on thermal management, radiation hardening, and orbital mechanics constraints...</em>

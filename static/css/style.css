@@ -1765,9 +1765,9 @@ input[type="range"]::-moz-range-thumb {
     gap: 1.5rem;
     width: 100%;
     max-width: 700px;
-    min-height: 250px;
+    min-height: 280px;
     margin: 0 auto;
-    padding: 2.5rem 1rem;
+    padding: 3rem 1.5rem;
     background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 100%);
     border-radius: 8px;
 }
@@ -2058,25 +2058,138 @@ input[type="range"]::-moz-range-thumb {
 }
 
 
-/* Energy Balance Equation */
+/* Energy Balance Equation - positioned above diagram */
 .energy-equation {
-    margin-top: 1rem;
-    padding: 0.75rem 1rem;
-    background: var(--paper-dark);
-    border-radius: 4px;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: transparent;
     text-align: center;
 }
 
 .eq-text {
     font-family: var(--font-sans);
-    font-size: 0.8rem;
-    color: var(--ink-muted);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    display: block;
+    margin-bottom: 0.35rem;
 }
 
 .eq-formula {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
+    display: block;
+    font-size: 0.9rem;
     color: var(--ink);
+}
+
+.eq-formula .katex {
+    font-size: 0.95em;
+}
+
+/* Academic/Engineering Symbol Styling */
+.var {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-style: italic;
+    font-weight: normal;
+}
+
+.unit {
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-size: 0.9em;
+}
+
+/* KaTeX Math Styling */
+.katex {
+    font-size: 1.05em;
+}
+
+.essay-content .katex {
+    color: var(--ink);
+}
+
+.essay-content p .katex {
+    font-size: 1.0em;
+}
+
+/* Display math blocks */
+.katex-display {
+    margin: 1.75rem 0;
+    padding: 1.25rem 2rem;
+    background: linear-gradient(135deg, rgba(30, 58, 95, 0.03) 0%, rgba(74, 144, 217, 0.02) 100%);
+    border: 1px solid rgba(30, 58, 95, 0.12);
+    border-left: 3px solid var(--orbital);
+    border-radius: 0 6px 6px 0;
+    overflow-x: auto;
+}
+
+.katex-display > .katex {
+    font-size: 1.25em;
+}
+
+/* Inline math in essay paragraphs */
+.essay-content p .katex,
+.essay-content li .katex {
+    padding: 0 0.15em;
+}
+
+/* Math in callouts */
+.essay-callout .katex {
+    color: var(--ink);
+}
+
+/* Math in list items - slightly smaller */
+.essay-list .katex {
+    font-size: 0.95em;
+}
+
+/* Ensure proper spacing around display math */
+.essay-content .katex-display {
+    text-align: center;
+}
+
+/* Heat flux Q styling */
+.input-label, .output-label {
+    font-family: var(--font-mono);
+}
+
+.input-label sub, .output-label sub {
+    font-size: 0.7em;
+    font-style: normal;
+}
+
+/* Panel property labels - more academic */
+.side-props {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 0.55rem;
+    font-style: italic;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.02em;
+}
+
+.panel-side-b .side-props {
+    color: #666;
+}
+
+/* Slider label symbols - italic variables */
+.slider-label sub {
+    font-style: italic;
+    font-size: 0.75em;
+}
+
+/* Stat row symbols */
+.eng-stat-label sub {
+    font-size: 0.75em;
+    font-style: italic;
+}
+
+/* Formula tooltip styling - more academic */
+.eng-stat-row.has-formula::after {
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 0.68rem;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
 }
 
 /* Responsive */

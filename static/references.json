@@ -40,5 +40,17 @@
         "title": "Solar Cell Degradation in LEO",
         "url": "https://gemini.google.com/share/d84edc09c455",
         "year": "2025"
+    },
+    {
+        "id": 8,
+        "title": "Thermal Analysis Validation (GPT-5.1)",
+        "url": "https://chatgpt.com/share/693b0b6f-f9fc-8005-8bf5-f13242061e0b",
+        "year": "2025"
+    },
+    {
+        "id": 9,
+        "title": "Thermal Analysis Validation (Grok)",
+        "url": "https://grok.com/share/c2hhcmQtMi1jb3B5_57c48b0e-c107-49f3-95bd-6042e14282f9",
+        "year": "2025"
     }
 ]

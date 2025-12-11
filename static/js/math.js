@@ -453,7 +453,13 @@ const CostModel = (function() {
         // 1. Direct Solar Load (Side A only)
         // All absorbed solar energy ultimately becomes heat onboard (no export)
         const powerGenerated = constants.SOLAR_IRRADIANCE_W_M2 * pvEfficiency * areaM2;
-        const qSolar = constants.SOLAR_IRRADIANCE_W_M2 * alphaPV * areaM2;
+        
+        // Total solar energy absorbed by the panel
+        const qAbsorbedTotal = constants.SOLAR_IRRADIANCE_W_M2 * alphaPV * areaM2;
+        
+        // Split: Energy that becomes heat immediately vs energy that becomes electricity
+        // (Electricity returns as heat via the loop, but we separate for clarity)
+        const qSolarWaste = qAbsorbedTotal - powerGenerated;
 
         // 2. Earth IR Load (Both sides see Earth partially)
         // Both sides have a partial view of Earth
@@ -466,12 +472,12 @@ const CostModel = (function() {
         const qAlbedo = (constants.SOLAR_IRRADIANCE_W_M2 * constants.EARTH_ALBEDO_FACTOR * vfEarth * albedoScaling) * alphaPV * areaM2;
 
         // 4. Heat Loop Return (from compute)
-        // Electricity is consumed onboard; heat loop term kept for clarity but already
-        // accounted for in qSolar when power is not exported. Set to zero to avoid double count.
-        const qHeatLoop = 0;
+        // Electricity is consumed onboard and returned as heat
+        const qHeatLoop = powerGenerated;
 
-        // Total heat input: solar absorption + Earth IR + albedo + any loop return
-        const totalHeatIn = qSolar + qEarthIR + qAlbedo + qHeatLoop;
+        // Total heat input: solar waste + Earth IR + albedo + loop return
+        // Note: Sum is numerically equal to qAbsorbedTotal + qEarthIR + qAlbedo
+        const totalHeatIn = qSolarWaste + qEarthIR + qAlbedo + qHeatLoop;
 
         // --- C. HEAT REJECTION (OUTPUTS) ---
         // Q_out = sigma * Area * (eps_front + eps_back) * (T^4 - T_space^4)
@@ -524,7 +530,7 @@ const CostModel = (function() {
             areaRequiredKm2: areaRequiredM2 / 1e6,
             
             // Heat loads (inputs)
-            qSolarW: qSolar,
+            qSolarW: qSolarWaste,
             qEarthIRW: qEarthIR,
             qAlbedoW: qAlbedo,
             qHeatLoopW: qHeatLoop,
@@ -556,7 +562,7 @@ const CostModel = (function() {
             capacityW: radiativeCapacityW,
             heatLoadW: totalHeatIn,
             incidentSolarW: constants.SOLAR_IRRADIANCE_W_M2 * areaM2,
-            wasteHeatW: qSolar,
+            wasteHeatW: qSolarWaste,
             electricalHeatW: powerGenerated,
             requiredTempK: eqTempK,
             requiredTempC: eqTempC
