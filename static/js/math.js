@@ -169,9 +169,12 @@ const CostModel = (function() {
         // DEGRADATION: Calculate capacity needed to maintain 1GW average
         // ========================================
         
-        // Year-by-year degradation: capacity at year n = (1 - deg)^n
-        // More accurate than linear approximation
-        const annualRetention = 1 - (state.cellDegradation / 100);
+        // Year-by-year retention factors for PV degradation and GPU attrition.
+        // We assume failed GPUs are unrecoverable on orbit, so their loss reduces
+        // available compute just like PV degradation reduces solar output.
+        const annualPvRetention = 1 - (state.cellDegradation / 100);
+        const annualGpuRetention = 1 - (state.gpuFailureRate / 100);
+        const annualRetention = annualPvRetention * annualGpuRetention;
         
         // Calculate average capacity factor over analysis period
         // Sum of geometric series: (1 + r + r^2 + ... + r^(n-1)) / n
@@ -218,14 +221,14 @@ const CostModel = (function() {
         // Ops cost (comms, infra) - 1% of hardware
         const opsCost = hardwareCost * constants.ORBITAL_OPS_FRAC;
         
-        // GPU failure replacement cost (% of hardware per year × years)
-        const gpuReplacementCost = hardwareCost * (state.gpuFailureRate / 100) * state.years;
+        // GPU replacement is not possible on orbit; keep property for UI but zero it out.
+        const gpuReplacementCost = 0;
         
         // NRE cost (non-recurring engineering)
         const nreCost = state.nreCost * 1e6;  // Convert from millions
         
         // Total system cost (including NRE, ops, GPU replacement)
-        const totalCost = baseCost + opsCost + gpuReplacementCost + nreCost;
+        const totalCost = baseCost + opsCost + nreCost;
         
         // ========================================
         // ENERGY OUTPUT

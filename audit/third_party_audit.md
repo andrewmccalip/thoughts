@@ -16,7 +16,7 @@
 | Analysis window | 5 years | `state.years = 5`
 | Sunlight fraction | 0.98 | Terminator orbit assumption
 | Cell degradation | 2.5%/yr | Compounded via geometric mean
-| GPU failure rate | 9%/yr | Applied to full hardware cost annually
+| GPU failure rate | 9%/yr | Irrecoverable attrition folded into capacity sizing
 | Launch cost | $1,000/kg | Starship early price target
 | Satellite cost | $22/W | Derived from ~$800/kg BOM
 | Specific power | 36.5 W/kg | Starlink V2 Mini reference
@@ -26,10 +26,12 @@
 
 ## Orbital Cost Model Review
 Key equations are implemented in `calculateOrbital()` and follow the sequence shown below:
-```164:263:static/js/math.js
+```164:265:static/js/math.js
 function calculateOrbital() {
     const totalHours = state.years * constants.HOURS_PER_YEAR;
-    const annualRetention = 1 - (state.cellDegradation / 100);
+    const annualPvRetention = 1 - (state.cellDegradation / 100);
+    const annualGpuRetention = 1 - (state.gpuFailureRate / 100);
+    const annualRetention = annualPvRetention * annualGpuRetention;
     let capacitySum = 0;
     for (let year = 0; year < state.years; year++) {
         capacitySum += Math.pow(annualRetention, year);
@@ -43,9 +45,9 @@ function calculateOrbital() {
     const hardwareCost = state.satelliteCostPerW * (satelliteCount * state.satellitePowerKW * 1000);
     const launchCost = state.launchCostPerKg * totalMassKg;
     const opsCost = hardwareCost * constants.ORBITAL_OPS_FRAC;
-    const gpuReplacementCost = hardwareCost * (state.gpuFailureRate / 100) * state.years;
+    const gpuReplacementCost = 0; // failures are irrecoverable on orbit
     const nreCost = state.nreCost * 1e6;
-    const totalCost = hardwareCost + launchCost + opsCost + gpuReplacementCost + nreCost;
+    const totalCost = hardwareCost + launchCost + opsCost + nreCost;
     const energyMWh = derived.TARGET_POWER_MW * totalHours;
     const costPerW = totalCost / derived.TARGET_POWER_W;
     const lcoe = totalCost / energyMWh;
@@ -60,27 +62,27 @@ function calculateOrbital() {
 ### Baseline numeric trace
 | Step | Result | Validation |
 | --- | --- | --- |
-| Average capacity retention | 0.95123 | Geometric mean of 2.5% annual loss over 5 yrs
-| Required initial power | 1.0727 GW | 1 GW / (0.95123 × 0.98)
-| Satellite count | 39,731 | Ceiling(1.0727 GW / 27 kW)
+| Average capacity retention | 0.79852 | Product of PV (97.5%) and GPU (91%) retention over 5 yrs
+| Required initial power | 1.2779 GW | 1 GW / (0.79852 × 0.98)
+| Satellite count | 47,329 | Ceiling(1.2779 GW / 27 kW)
 | Mass per satellite | 739.7 kg | 27,000 W / 36.5 W·kg⁻¹
-| Total mass to LEO | 29.39 Mkg | 39,731 × 739.7 kg
-| Hardware cost | $23.60 B | $22/W × 1.0727 GW
-| Launch cost | $29.39 B | $1,000/kg × 29.39 Mkg
-| GPU replacement | $10.62 B | $23.60 B × 9% × 5 yrs
+| Total mass to LEO | 35.01 Mkg | 47,329 × 739.7 kg
+| Hardware cost | $28.11 B | $22/W × 1.2779 GW
+| Launch cost | $35.01 B | $1,000/kg × 35.01 Mkg
+| GPU replacement | $0 | Replacements impossible on orbit
 | NRE | $0.50 B | 500 M USD slider (converted from millions)
-| Total program cost | $64.35 B | Sum of all contributions
-| Cost per delivered watt | $64.35/W | $64.35 B / 1 GW
-| LCOE | $1,469/MWh | $64.35 B / 43.8 M MWh
-| Degradation margin | 7.27% | (1.0727 GW / 1 GW − 1)
-| Starship launches | 294 flights | 29.39 Mkg / 100 t per launch
-| Array area | 4.61 km² | 39,731 × 116 m²
+| Total program cost | $63.91 B | Sum of all contributions
+| Cost per delivered watt | $63.91/W | $63.91 B / 1 GW
+| LCOE | $1,459/MWh | $63.91 B / 43.8 M MWh
+| Degradation margin | 27.79% | (1.2779 GW / 1 GW − 1)
+| Starship launches | 351 flights | 35.01 Mkg / 100 t per launch
+| Array area | 5.49 km² | 47,329 × 116 m²
 
 ### Observations
-- Launch spending (45.7%) exceeds the hardware bill (36.7%), so any launch-cost optimism directly dominates the model outcome.
-- Replacement GPUs are applied as a linear multiple of the *initial* hardware cost without discounting, meaning the cost stack is conservative on a cash-flow basis but accurate for undiscounted sums.
-- The model sizes solely for average power; no explicit battery, thermal, or interconnect mass penalties are included, so results are optimistic relative to a full orbital compute stack.
-- Starship propellant bookkeeping (231 M gal LOX, 222 M gal CH₄) matches 294 launches × manifest propellant per `constants` and is internally consistent.
+- Launch spending (54.8%) now dominates the hardware bill (44.0%), so any launch-cost optimism directly drives total program cost.
+- GPU attrition is treated like PV degradation, forcing a 27.8% overbuild up front and increasing required launches from 294 → 351.
+- The model still sizes solely for average power; no explicit battery, thermal, or interconnect mass penalties are included, so results remain optimistic relative to a full orbital compute stack.
+- Starship propellant bookkeeping (276 M gal LOX, 265 M gal CH₄) matches 351 launches × manifest propellant per `constants` and is internally consistent.
 
 ## Terrestrial Cost Model Review
 The terrestrial pathway lives in `calculateTerrestrial()`:
@@ -130,30 +132,30 @@ Full JSON output: `audit/setpoint_runs.json`. Key metrics:
 
 | Scenario | Orbital $/W | Orbital LCOE ($/MWh) | Starship flights | Terrestrial $/W | Terrestrial LCOE ($/MWh) |
 | --- | --- | --- | --- | --- | --- |
-| Baseline | 64.35 | 1,469 | 294 | 15.43 | 414 |
-| Orbital – optimistic Starship | 23.76 | 542 | 190 | 15.43 | 414 |
-| Orbital – pessimistic | 144.91 | 3,308 | 430 | 15.43 | 414 |
-| Terrestrial – high gas ($8/MMBtu) | 64.35 | 1,469 | 294 | 16.60 | 446 |
-| Terrestrial – low CF (0.60, PUE 1.3) | 64.35 | 1,469 | 294 | 15.44 | 588 |
-| 2 GW scale-up (7 yrs) | 60.41 | 985 | 603 | 16.09 | 292 |
+| Baseline | 63.91 | 1,459 | 351 | 15.43 | 414 |
+| Orbital – optimistic Starship | 21.88 | 499 | 209 | 15.43 | 414 |
+| Orbital – pessimistic | 154.76 | 3,533 | 541 | 15.43 | 414 |
+| Terrestrial – high gas ($8/MMBtu) | 63.91 | 1,459 | 351 | 16.60 | 446 |
+| Terrestrial – low CF (0.60, PUE 1.3) | 63.91 | 1,459 | 351 | 15.44 | 588 |
+| 2 GW scale-up (7 yrs) | 60.06 | 979 | 779 | 16.09 | 292 |
 
 ### Scenario insights
-- Even after stacking optimistic orbital assumptions (200 $/kg launch, 55 W/kg buses, 35 kW sats, lower degradation), cost per watt bottoms out at $23.76—still ~54% higher than terrestrial capex.
-- Pessimistic orbital inputs explode the budget: 430 launches, $145/W, and $3.3k/MWh LCOE due to compounded degradation + pricier hardware.
-- Terrestrial economics are comparatively insensitive; doubling gas cost to $8/MMBtu only raises cost per watt by $1.17 (7.5%) and LCOE by $32/MWh.
+- Even after stacking optimistic orbital assumptions (200 $/kg launch, 55 W/kg buses, 35 kW sats, gentler degradation), cost per watt bottoms out at $21.88—still ~42% higher than terrestrial capex—and needs 209 Starship flights.
+- Pessimistic orbital inputs explode the budget: 541 launches, $155/W, and $3.5k/MWh LCOE due to compounded degradation plus higher launch/hardware costs.
+- Terrestrial economics remain comparatively insensitive; doubling gas cost to $8/MMBtu only raises cost per watt by $1.17 (7.5%) and LCOE by $32/MWh.
 - Low capacity factor punishes terrestrial LCOE (energy denominator shrinks) but barely moves cost per watt because capex is unchanged—consistent with expectations.
-- Scaling the system to 2 GW with a longer life modestly improves orbital LCOE (985 vs 1,469) but still leaves a 4× gap against the terrestrial $292/MWh result.
+- Scaling to 2 GW with a longer life still leaves orbital LCOE at $979/MWh versus $292/MWh on Earth, even before considering the 779-launch logistics burden.
 
 ## Sanity Checks (high-level)
-- **Mass-to-orbit feasibility:** 29.39 million kg requires 294 Starship launches (100 t each). At a sustained rate of 60 launches/year, this program alone would consume nearly the entire manifested capacity for five years—highlighting logistics strain beyond pure cost.
-- **Array area plausibility:** 39,731 satellites × 116 m² per V2 Mini array yields 4.61 km² of deployed PV/radiator surface, matching the code’s engineering outputs and aligning with known Starlink geometries.
+- **Mass-to-orbit feasibility:** 35.0 million kg now requires 351 Starship launches (100 t each). At a sustained rate of 60 launches/year, this single program would still monopolize the manifest for nearly six years—highlighting logistics strain beyond pure cost.
+- **Array area plausibility:** 47,329 satellites × 116 m² per V2 Mini array yields 5.49 km² of deployed PV/radiator surface, matching the engineering outputs and aligning with known Starlink geometries.
 - **Energy accounting:** Orbital energy tally (43.8 million MWh for 1 GW × 5 yrs) equals the terrestrial IT-load energy (37.23 million MWh) once the 0.85 capacity factor is applied, confirming both models share a consistent load target.
 - **Fuel burn realism:** 277 BCF over five years implies 55.4 BCF/yr, ~0.14% of US annual natural gas production—large but within the throughput of a single interstate pipeline, so the terrestrial supply assumption is credible.
-- **Cost comparison vs market:** A $414/MWh LCOE for the terrestrial NGCC-powered datacenter is ~10× higher than wholesale electricity because the analysis allocates the entire facility capex to “power production.” This conservative framing still undercuts orbital solutions by ~3.5× on cost per watt and ~3.5× on LCOE.
+- **Cost comparison vs market:** A $414/MWh LCOE for the terrestrial NGCC-powered datacenter is ~10× higher than wholesale electricity because the analysis allocates the entire facility capex to “power production.” This conservative framing still undercuts orbital solutions by ~4× on cost per watt and LCOE.
 
 ## Issues & Variances
-1. **Static HTML numbers diverge from model outputs:** The placeholder figures baked into `templates/space-datacenters.html` (e.g., `$31.2B` orbital total, `$14.8B` terrestrial) no longer match the current math engine (>$64B orbital). The JavaScript overwrites these at runtime, but users with scripting disabled would see stale values. Recommend syncing or generating these values server-side to avoid audit drift.
-2. **Undiscounted replacement cost assumption:** `gpuReplacementCost` multiplies the *initial* hardware cost by failure rate × years, implicitly replacing the whole fleet each year without salvage. This is conservative but may double-count capex if replacements are staggered or if only failed units are swapped.
+1. **Static HTML numbers diverge from model outputs:** The placeholder figures baked into `templates/space-datacenters.html` (e.g., `$31.2B` orbital total, `$14.8B` terrestrial) no longer match the current math engine (>$63B orbital). The JavaScript overwrites these at runtime, but users with scripting disabled would see stale values. Recommend syncing or generating these values server-side to avoid audit drift.
+2. **Legacy `gpuReplacementCost` field:** The property now always returns zero (failures are irrecoverable and handled via sizing). Consider renaming or hiding it in the UI so readers don’t assume orbital ops budgets cover swaps that cannot occur.
 3. **Terrestrial O&M exclusions:** Fixed O&M (labor, insurance) and financing are omitted, which understates terrestrial costs by ~5–10%. Given the magnitude of the orbital premium, this does not flip the conclusion but is worth documenting.
 
 No arithmetic defects were found inside `calculateOrbital` or `calculateTerrestrial`; recomputation via Python (`temp/check_numbers.py`) matched the Node outputs to machine precision.

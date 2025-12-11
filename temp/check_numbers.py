@@ -82,7 +82,9 @@ def calculate_orbital(state):
     derived = get_derived(state)
     total_hours = state["years"] * CONSTANTS["HOURS_PER_YEAR"]
 
-    annual_retention = 1 - (state["cellDegradation"] / 100)
+    annual_pv_retention = 1 - (state["cellDegradation"] / 100)
+    annual_gpu_retention = 1 - (state["gpuFailureRate"] / 100)
+    annual_retention = annual_pv_retention * annual_gpu_retention
     capacity_sum = sum(pow(annual_retention, year) for year in range(state["years"]))
     avg_capacity_factor = capacity_sum / state["years"]
     sunlight_adjusted = avg_capacity_factor * state["sunFraction"]
@@ -97,9 +99,9 @@ def calculate_orbital(state):
     launch_cost = state["launchCostPerKg"] * total_mass_kg
     base_cost = hardware_cost + launch_cost
     ops_cost = hardware_cost * CONSTANTS["ORBITAL_OPS_FRAC"]
-    gpu_replace = hardware_cost * (state["gpuFailureRate"] / 100) * state["years"]
+    gpu_replace = 0
     nre_cost = state["nreCost"] * 1e6
-    total_cost = base_cost + ops_cost + gpu_replace + nre_cost
+    total_cost = base_cost + ops_cost + nre_cost
 
     energy_mwh = derived.TARGET_POWER_MW * total_hours
     cost_per_w = total_cost / derived.TARGET_POWER_W
