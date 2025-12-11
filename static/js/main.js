@@ -68,27 +68,7 @@
     }
     
     function setupHighlights() {
-        // Find all elements with data-highlight attribute
-        document.querySelectorAll('[data-highlight]').forEach(el => {
-            el.classList.add('highlightable');
-            
-            el.addEventListener('mouseenter', () => {
-                const key = el.getAttribute('data-highlight');
-                showHighlight(key);
-            });
-            // No mouseleave handler - panel stays for 30 seconds
-        });
-        
-        // Close button
-        const sidebar = document.getElementById('highlights-sidebar');
-        if (sidebar) {
-            const closeBtn = sidebar.querySelector('.highlights-close');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', () => {
-                    hideHighlight(true);
-                });
-            }
-        }
+        // Highlights disabled
     }
 
     // ==========================================
