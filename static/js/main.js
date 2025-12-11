@@ -377,10 +377,18 @@
         updateText('diagram-q-earth-ir', `${(thermal.qEarthIRW / 1e6).toFixed(1)} MW`);
         updateText('diagram-q-albedo', `${(thermal.qAlbedoW / 1e6).toFixed(1)} MW`);
         updateText('diagram-q-heatloop', `${(thermal.qHeatLoopW / 1e6).toFixed(0)} MW`);
-        updateText('diagram-q-rad-pv', `${(thermal.radiativeCapacityW / 2e6).toFixed(0)} MW`);
-        updateText('diagram-q-rad-back', `${(thermal.radiativeCapacityW / 2e6).toFixed(0)} MW`);
-        updateText('diagram-eq-temp', `${thermal.eqTempC.toFixed(0)}°C`);
+        // Separate radiation for each side based on different emissivities
+        updateText('diagram-q-rad-pv', `${(thermal.qRadAW / 1e6).toFixed(0)} MW`);
+        updateText('diagram-q-rad-back', `${(thermal.qRadBW / 1e6).toFixed(0)} MW`);
         updateText('diagram-power-out', `${(thermal.powerGeneratedW / 1e6).toFixed(0)} MW`);
+        
+        // Update T_eq with pass/fail coloring
+        const eqTempEl = document.getElementById('diagram-eq-temp');
+        if (eqTempEl) {
+            eqTempEl.textContent = `${thermal.eqTempC.toFixed(0)}°C`;
+            eqTempEl.classList.toggle('temp-pass', thermal.areaSufficient);
+            eqTempEl.classList.toggle('temp-fail', !thermal.areaSufficient);
+        }
     }
 
     // ==========================================

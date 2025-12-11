@@ -922,24 +922,41 @@
                 <div class="thermal-diagram-container">
                     <div class="figure-label">Thermal Balance · Bifacial Panel Model</div>
                     <div class="thermal-diagram">
-                        <!-- Sun -->
-                        <div class="thermal-sun">
-                            <div class="sun-icon">☀️</div>
-                            <span class="sun-label">Sun</span>
+                        
+                        <!-- LEFT SIDE: Heat Inputs (+) -->
+                        <div class="diagram-inputs">
+                            <div class="input-header">+ Heat In</div>
+                            <div class="input-group">
+                                <div class="input-row">
+                                    <span class="input-label">Q<sub>solar</sub> <span class="input-source">(☀️ Sun)</span></span>
+                                    <span class="input-value" id="diagram-q-solar">0 MW</span>
+                                    <div class="input-arrow"></div>
+                                </div>
+                                <div class="input-row">
+                                    <span class="input-label">Q<sub>IR</sub> <span class="input-source">(🌍 Earth)</span></span>
+                                    <span class="input-value" id="diagram-q-earth-ir">0 MW</span>
+                                    <div class="input-arrow"></div>
+                                </div>
+                                <div class="input-row">
+                                    <span class="input-label">Q<sub>albedo</sub> <span class="input-source">(🌍 Earth)</span></span>
+                                    <span class="input-value" id="diagram-q-albedo">0 MW</span>
+                                    <div class="input-arrow"></div>
+                                </div>
+                                <div class="input-row input-heatloop">
+                                    <span class="input-label">Q<sub>heatloop</sub> <span class="input-source">(🖥️ GPUs)</span></span>
+                                    <span class="input-value" id="diagram-q-heatloop">0 MW</span>
+                                    <div class="input-arrow"></div>
+                                </div>
+                            </div>
                         </div>
                         
-                        <!-- Heat flow arrows - inputs -->
-                        <div class="heat-flow heat-flow-solar">
-                            <div class="heat-arrow heat-arrow-down"></div>
-                            <span class="heat-label">Q<sub>solar</sub></span>
-                            <span class="heat-value" id="diagram-q-solar">0 MW</span>
-                        </div>
-                        
-                        <!-- Bifacial Panel -->
+                        <!-- CENTER: Bifacial Panel -->
                         <div class="bifacial-panel">
                             <div class="panel-side panel-side-a">
                                 <span class="side-label">Side A</span>
-                                <span class="side-desc">PV (α=0.92, ε=0.85)</span>
+                                <span class="side-desc">PV</span>
+                                <span class="side-props">α=0.92</span>
+                                <span class="side-props">ε=0.85</span>
                             </div>
                             <div class="panel-core">
                                 <span class="core-temp" id="diagram-eq-temp">0°C</span>
@@ -947,58 +964,33 @@
                             </div>
                             <div class="panel-side panel-side-b">
                                 <span class="side-label">Side B</span>
-                                <span class="side-desc">Radiator (ε=0.90)</span>
+                                <span class="side-desc">Radiator</span>
+                                <span class="side-props">ε=0.90</span>
                             </div>
                         </div>
                         
-                        <!-- Heat flow arrows - radiation out -->
-                        <div class="heat-flow heat-flow-rad-a">
-                            <div class="heat-arrow heat-arrow-up-left"></div>
-                            <span class="heat-label">Q<sub>rad,A</sub></span>
-                            <span class="heat-value" id="diagram-q-rad-pv">0 MW</span>
-                        </div>
-                        <div class="heat-flow heat-flow-rad-b">
-                            <div class="heat-arrow heat-arrow-up-right"></div>
-                            <span class="heat-label">Q<sub>rad,B</sub></span>
-                            <span class="heat-value" id="diagram-q-rad-back">0 MW</span>
-                        </div>
-                        
-                        <!-- Earth contributions -->
-                        <div class="thermal-earth">
-                            <div class="earth-icon">🌍</div>
-                            <span class="earth-label">Earth</span>
-                        </div>
-                        
-                        <div class="heat-flow heat-flow-earth-ir">
-                            <div class="heat-arrow heat-arrow-up"></div>
-                            <span class="heat-label">Q<sub>IR</sub></span>
-                            <span class="heat-value" id="diagram-q-earth-ir">0 MW</span>
+                        <!-- RIGHT SIDE: Outputs (-) -->
+                        <div class="diagram-outputs">
+                            <div class="output-header">− Heat Out</div>
+                            <div class="output-group">
+                                <div class="output-row output-radiation">
+                                    <div class="output-arrow output-arrow-rad"></div>
+                                    <span class="output-label">Q<sub>rad,A</sub> <span class="output-dest">(→ Space)</span></span>
+                                    <span class="output-value" id="diagram-q-rad-pv">0 MW</span>
+                                </div>
+                                <div class="output-row output-radiation">
+                                    <div class="output-arrow output-arrow-rad"></div>
+                                    <span class="output-label">Q<sub>rad,B</sub> <span class="output-dest">(→ Space)</span></span>
+                                    <span class="output-value" id="diagram-q-rad-back">0 MW</span>
+                                </div>
+                                <div class="output-row output-electrical">
+                                    <div class="output-arrow output-arrow-elec"></div>
+                                    <span class="output-label">P<sub>elec</sub> <span class="output-dest">(→ GPUs)</span></span>
+                                    <span class="output-value" id="diagram-power-out">0 MW</span>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="heat-flow heat-flow-albedo">
-                            <div class="heat-arrow heat-arrow-up-diag"></div>
-                            <span class="heat-label">Q<sub>albedo</sub></span>
-                            <span class="heat-value" id="diagram-q-albedo">0 MW</span>
-                        </div>
-                        
-                        <!-- Power output to GPUs -->
-                        <div class="power-output">
-                            <div class="power-arrow"></div>
-                            <span class="power-label">P<sub>elec</sub> → GPUs</span>
-                            <span class="power-value" id="diagram-power-out">0 MW</span>
-                        </div>
-                        
-                        <!-- Heat loop return -->
-                        <div class="heat-loop-return">
-                            <div class="heat-loop-arrow"></div>
-                            <span class="heat-loop-label">Q<sub>heatloop</sub> ←</span>
-                            <span class="heat-loop-value" id="diagram-q-heatloop">0 MW</span>
-                        </div>
-                        
-                        <!-- Deep space sink -->
-                        <div class="space-sink">
-                            <span class="sink-label">Deep Space (3K)</span>
-                        </div>
                     </div>
                     
                     <!-- Energy Balance Equation -->
@@ -1171,8 +1163,8 @@
                                 <div class="eng-stat-row eng-stat-header">
                                     <span class="eng-stat-label">Heat Inputs</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="Q_solar = G × α_pv × A - P_elec&#10;&#10;G = 1361 W/m² (solar constant)&#10;α_pv = solar absorptivity&#10;P_elec subtracted if exported">
-                                    <span class="eng-stat-label">Q<sub>solar</sub> (absorbed - exported)</span>
+                                <div class="eng-stat-row has-formula" data-formula="Q_solar = G × α_pv × A&#10;&#10;G = 1361 W/m² (solar constant)&#10;α_pv = solar absorptivity&#10;All absorbed solar ends as heat onboard">
+                                    <span class="eng-stat-label">Q<sub>solar</sub> (absorbed)</span>
                                     <span class="eng-stat-value" id="thermal-q-solar">0 MW</span>
                                 </div>
                                 <div class="eng-stat-row has-formula" data-formula="Q_IR = E_earth × VF × (ε_pv + ε_rad) × A&#10;&#10;E_earth = 237 W/m²&#10;VF = Earth view factor&#10;Both sides absorb Earth IR">
@@ -1183,15 +1175,15 @@
                                     <span class="eng-stat-label">Q<sub>albedo</sub></span>
                                     <span class="eng-stat-value" id="thermal-q-albedo">0 MW</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="Q_heatloop = P_elec&#10;&#10;Electricity sent to remote GPUs&#10;returns as heat through cooling loop&#10;GPUs: 100% electrical → heat">
-                                    <span class="eng-stat-label">Q<sub>heatloop</sub> (GPU return)</span>
+                                <div class="eng-stat-row has-formula" data-formula="Q_heatloop = 0&#10;&#10;Explicit loop term zeroed to avoid double counting&#10;Solar absorption already includes power that becomes heat">
+                                    <span class="eng-stat-label">Q<sub>heatloop</sub></span>
                                     <span class="eng-stat-value" id="thermal-q-heatloop">0 MW</span>
                                 </div>
                                 <div class="eng-stat-row has-formula" data-formula="Q_total = Q_solar + Q_IR + Q_albedo + Q_heatloop&#10;&#10;Sum of all heat inputs&#10;including GPU waste heat return">
                                     <span class="eng-stat-label">Total Heat In</span>
                                     <span class="eng-stat-value" id="thermal-total-heat-in">0 MW</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="P_elec = G × η × A&#10;&#10;G = 1361 W/m²&#10;η = PV efficiency&#10;Sent to GPUs, returns as Q_heatloop">
+                                <div class="eng-stat-row has-formula" data-formula="P_elec = G × η × A&#10;&#10;G = 1361 W/m²&#10;η = PV efficiency&#10;Generated electricity is consumed onboard">
                                     <span class="eng-stat-label">Power Generated (P<sub>elec</sub>)</span>
                                     <span class="eng-stat-value" id="thermal-power-generated">0 MW</span>
                                 </div>
@@ -1202,18 +1194,6 @@
                                 <div class="eng-stat-row eng-stat-highlight has-formula" data-formula="T_eq = (Q_in / (σ × A × ε_total) + T_space⁴)^0.25&#10;&#10;σ = 5.67×10⁻⁸ W/m²K⁴&#10;T_space = 3K&#10;&#10;Stefan-Boltzmann equilibrium">
                                     <span class="eng-stat-label">Equilibrium Temperature</span>
                                     <span class="eng-stat-value" id="thermal-eq-temp">0.0 °C</span>
-                                </div>
-                                <div class="eng-stat-row has-formula" data-formula="Same formula, but P_elec&#10;stays onboard as heat&#10;&#10;Q_in includes full solar&#10;absorption (no export)">
-                                    <span class="eng-stat-label">Temp if Compute Onboard</span>
-                                    <span class="eng-stat-value" id="thermal-compute-temp">0.0 °C</span>
-                                </div>
-                                <div class="eng-stat-row has-formula" data-formula="T_target = T_die_max - ΔT&#10;&#10;T_die_max = GPU junction limit&#10;ΔT = thermal interface drop">
-                                    <span class="eng-stat-label">Target Radiator Temp</span>
-                                    <span class="eng-stat-value" id="thermal-radiator-target">75.0 °C</span>
-                                </div>
-                                <div class="eng-stat-row has-formula" data-formula="Q_rad = σ × A × ε_total × (T⁴ - T_space⁴)&#10;&#10;Radiative power at equilibrium&#10;Should equal Q_total (balanced)">
-                                    <span class="eng-stat-label">Radiative Capacity @ T<sub>eq</sub></span>
-                                    <span class="eng-stat-value" id="thermal-capacity">0 MW</span>
                                 </div>
                                 <div class="eng-stat-row eng-stat-highlight has-formula" data-formula="Margin = T_target - T_eq&#10;&#10;PASS if T_eq < T_target&#10;(equilibrium below die limit)">
                                     <span class="eng-stat-label">Temperature Margin</span>

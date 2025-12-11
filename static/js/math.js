@@ -451,10 +451,9 @@ const CostModel = (function() {
         // --- B. HEAT LOADS (INPUTS) ---
 
         // 1. Direct Solar Load (Side A only)
-        // Assumes sun-tracking, so Cos(theta) = 1
-        // Solar absorption minus electrical conversion (electricity leaves the panel)
+        // All absorbed solar energy ultimately becomes heat onboard (no export)
         const powerGenerated = constants.SOLAR_IRRADIANCE_W_M2 * pvEfficiency * areaM2;
-        const qSolar = constants.SOLAR_IRRADIANCE_W_M2 * alphaPV * areaM2 - powerGenerated;
+        const qSolar = constants.SOLAR_IRRADIANCE_W_M2 * alphaPV * areaM2;
 
         // 2. Earth IR Load (Both sides see Earth partially)
         // Both sides have a partial view of Earth
@@ -466,12 +465,12 @@ const CostModel = (function() {
         const albedoScaling = Math.cos(betaAngle * Math.PI / 180); // 0 at 90 deg, 0.5 at 60 deg
         const qAlbedo = (constants.SOLAR_IRRADIANCE_W_M2 * constants.EARTH_ALBEDO_FACTOR * vfEarth * albedoScaling) * alphaPV * areaM2;
 
-        // 4. Heat Loop Return (from remote GPUs)
-        // All electrical power is sent to GPUs, then returns as heat through cooling loop
-        // GPUs convert 100% of electrical input to heat
-        const qHeatLoop = powerGenerated;
+        // 4. Heat Loop Return (from compute)
+        // Electricity is consumed onboard; heat loop term kept for clarity but already
+        // accounted for in qSolar when power is not exported. Set to zero to avoid double count.
+        const qHeatLoop = 0;
 
-        // Total heat input: solar absorption + Earth IR + albedo + heat returning from GPUs
+        // Total heat input: solar absorption + Earth IR + albedo + any loop return
         const totalHeatIn = qSolar + qEarthIR + qAlbedo + qHeatLoop;
 
         // --- C. HEAT REJECTION (OUTPUTS) ---
@@ -487,18 +486,17 @@ const CostModel = (function() {
         );
         const eqTempC = eqTempK - 273.15;
 
-        // Radiative capacity at equilibrium temperature
-        const radiativeCapacityW = SIGMA * areaM2 * totalEmissivity * (Math.pow(eqTempK, 4) - Math.pow(spaceTempK, 4));
+        // Radiative capacity at equilibrium temperature - SEPARATE for each side
+        const deltaT4_eq = Math.pow(eqTempK, 4) - Math.pow(spaceTempK, 4);
+        const qRadA = SIGMA * areaM2 * epsilonPV * deltaT4_eq;   // Side A (PV) radiation
+        const qRadB = SIGMA * areaM2 * epsilonRad * deltaT4_eq;  // Side B (Radiator) radiation
+        const radiativeCapacityW = qRadA + qRadB;
 
         // --- D. COMPUTE THERMAL ANALYSIS ---
-        // For compute scenario: what temp would we need if power stays onboard?
-        // (adds back the electrical power as heat instead of exporting it)
-        const computeHeatIn = qSolar + qEarthIR + qAlbedo + powerGenerated;
-        const computeTempK = Math.pow(
-            (computeHeatIn / (SIGMA * areaM2 * totalEmissivity)) + Math.pow(spaceTempK, 4),
-            0.25
-        );
-        const computeTempC = computeTempK - 273.15;
+        // With no export scenario, compute heat equals total heat
+        const computeHeatIn = totalHeatIn;
+        const computeTempK = eqTempK;
+        const computeTempC = eqTempC;
 
         // Margin calculation: is equilibrium temp below die limit?
         const radiatorTempC = state.maxDieTempC - state.tempDropC;
@@ -532,6 +530,10 @@ const CostModel = (function() {
             qHeatLoopW: qHeatLoop,
             totalHeatInW: totalHeatIn,
             powerGeneratedW: powerGenerated,
+            
+            // Heat rejection (outputs) - separate for each side
+            qRadAW: qRadA,      // Side A (PV side) radiation to space
+            qRadBW: qRadB,      // Side B (Radiator side) radiation to space
             
             // Thermal outputs
             eqTempK,
