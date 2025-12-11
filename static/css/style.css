@@ -488,6 +488,152 @@ input[type="range"]::-moz-range-thumb {
     white-space: nowrap;
 }
 
+/* DC Infrastructure Breakdown */
+.dc-breakdown {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: var(--paper-dark);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.dc-breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+}
+
+.dc-cat {
+    color: var(--ink-muted);
+}
+
+.dc-pct {
+    color: var(--ink-light);
+    margin-left: 0.5rem;
+    margin-right: auto;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+}
+
+.dc-val {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--ngcc);
+}
+
+/* Clickable slider labels with reference */
+.slider-label-link {
+    text-decoration: none;
+    color: var(--ink-muted);
+    transition: color 0.15s;
+}
+
+.slider-label-link:hover {
+    color: var(--ngcc);
+}
+
+.ref-sup {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--ngcc);
+    margin-left: 2px;
+    vertical-align: super;
+}
+
+/* DC Cost Detail Panel */
+.dc-cost-detail-panel {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border-left: 4px solid var(--ngcc);
+}
+
+.dc-cost-detail-header {
+    margin-bottom: 1rem;
+}
+
+.dc-cost-detail-title {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink);
+}
+
+.dc-cost-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.dc-cost-table th {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 2px solid var(--rule);
+    color: var(--ink-light);
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dc-cost-table td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--rule-light);
+    color: var(--ink-muted);
+}
+
+.dc-cost-table td:first-child {
+    color: var(--ink);
+}
+
+.dc-cost-table td:not(:first-child) {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-align: right;
+}
+
+.dc-cost-table th:not(:first-child) {
+    text-align: right;
+}
+
+.dc-cost-table .total-row td {
+    border-top: 2px solid var(--rule);
+    border-bottom: none;
+    color: var(--ngcc);
+}
+
+.dc-cost-notes {
+    margin-top: 1rem;
+}
+
+.dc-cost-notes p {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.dc-cost-notes p strong {
+    color: var(--ink);
+}
+
+.dc-cost-disclaimer {
+    font-style: italic;
+    color: var(--ink-light) !important;
+    margin-top: 0.75rem !important;
+}
+
 .status-pass {
     color: #2f855a !important; /* green */
     font-weight: 600;
@@ -849,23 +995,123 @@ input[type="range"]::-moz-range-thumb {
     font-weight: 500;
 }
 
-/* References Sidebar - Floating in right margin */
-.references-sidebar {
+/* Sidebar Container - Fixed in right margin */
+.sidebar-container {
     position: fixed;
     top: 180px;
     right: calc((100vw - var(--content-width)) / 2 - 220px);
     width: 180px;
-    padding-left: 1.5rem;
-    border-left: 1px solid var(--rule);
     max-height: calc(100vh - 220px);
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 /* Hide on smaller screens where there's no margin space */
 @media (max-width: 1300px) {
-    .references-sidebar {
+    .sidebar-container {
         display: none;
     }
+}
+
+/* Highlights Sidebar - Similar style to references */
+.highlights-sidebar {
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--ngcc);
+    display: none;
+}
+
+.highlights-sidebar.visible {
+    display: block;
+}
+
+.highlights-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.highlights-close {
+    width: 16px;
+    height: 16px;
+    border: none;
+    background: transparent;
+    color: var(--ink-light);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    transition: color 0.15s;
+}
+
+.highlights-close:hover {
+    color: var(--ink);
+}
+
+.highlights-title {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin: 0;
+}
+
+.highlights-content {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--ink-muted);
+}
+
+.highlights-content p {
+    margin: 0 0 0.5rem 0;
+}
+
+.highlights-content strong {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.highlights-content .highlight-value {
+    font-family: var(--font-mono);
+    color: var(--orbital);
+    font-weight: 500;
+}
+
+.highlights-content .highlight-label {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--ink-light);
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Highlightable elements in content */
+.highlightable {
+    cursor: help;
+    border-bottom: 1px dotted var(--ink-light);
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.highlightable:hover {
+    border-color: var(--orbital);
+    color: var(--orbital);
+}
+
+/* References Sidebar */
+.references-sidebar {
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--rule);
 }
 
 .references-title {

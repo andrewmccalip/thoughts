@@ -9,6 +9,88 @@
     'use strict';
 
     // ==========================================
+    // HIGHLIGHTS PANEL
+    // ==========================================
+    
+    // Highlight definitions: map data-highlight attribute to content
+    const HIGHLIGHTS = {
+        'dc-infrastructure': {
+            content: `
+                <span class="highlight-label">Cost Ranges by Market</span>
+                <p><strong>Low $9.70-$10.50/W</strong><br>
+                San Antonio, Atlanta, Kansas City. Standard air cooling, N+1 redundancy.</p>
+                <p><strong>Rep. $11.50-$13.50/W</strong><br>
+                NoVA, Dallas, Chicago, Phoenix. Hybrid cooling ready.</p>
+                <p><strong>High $14-$17+/W</strong><br>
+                Silicon Valley, NYC, Zurich, Tokyo. Full liquid cooling, >50kW/rack.</p>
+            `
+        }
+    };
+    
+    let highlightTimeout = null;
+    
+    function showHighlight(key) {
+        const sidebar = document.getElementById('highlights-sidebar');
+        const content = document.getElementById('highlights-content');
+        if (!sidebar || !content) return;
+        
+        const highlight = HIGHLIGHTS[key];
+        if (!highlight) return;
+        
+        // Clear any pending hide
+        if (highlightTimeout) {
+            clearTimeout(highlightTimeout);
+            highlightTimeout = null;
+        }
+        
+        content.innerHTML = highlight.content;
+        sidebar.classList.add('visible');
+        
+        // Auto-hide after 30 seconds
+        highlightTimeout = setTimeout(() => {
+            sidebar.classList.remove('visible');
+        }, 30000);
+    }
+    
+    function hideHighlight(immediate = false) {
+        if (immediate) {
+            const sidebar = document.getElementById('highlights-sidebar');
+            if (sidebar) {
+                sidebar.classList.remove('visible');
+            }
+            if (highlightTimeout) {
+                clearTimeout(highlightTimeout);
+                highlightTimeout = null;
+            }
+        }
+        // Don't auto-hide on mouseleave - only after 30 seconds or clicking X
+    }
+    
+    function setupHighlights() {
+        // Find all elements with data-highlight attribute
+        document.querySelectorAll('[data-highlight]').forEach(el => {
+            el.classList.add('highlightable');
+            
+            el.addEventListener('mouseenter', () => {
+                const key = el.getAttribute('data-highlight');
+                showHighlight(key);
+            });
+            // No mouseleave handler - panel stays for 30 seconds
+        });
+        
+        // Close button
+        const sidebar = document.getElementById('highlights-sidebar');
+        if (sidebar) {
+            const closeBtn = sidebar.querySelector('.highlights-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    hideHighlight(true);
+                });
+            }
+        }
+    }
+
+    // ==========================================
     // REFERENCES
     // ==========================================
     
@@ -302,13 +384,26 @@
             const min = parseFloat(slider.min);
             const max = parseFloat(slider.max);
             const range = max - min;
+            const ticks = ticksContainer.querySelectorAll('.tick');
+            const tickCount = ticks.length;
             
-            ticksContainer.querySelectorAll('.tick').forEach(tick => {
+            ticks.forEach((tick, index) => {
                 const value = parseFloat(tick.dataset.value);
                 const percentage = ((value - min) / range) * 100;
                 tick.style.left = percentage + '%';
                 tick.style.position = 'absolute';
-                tick.style.transform = 'translateX(-50%)';
+                
+                // Adjust transform based on position to prevent overflow
+                if (index === 0) {
+                    // First tick: align left edge
+                    tick.style.transform = 'translateX(0)';
+                } else if (index === tickCount - 1) {
+                    // Last tick: align right edge
+                    tick.style.transform = 'translateX(-100%)';
+                } else {
+                    // Middle ticks: center
+                    tick.style.transform = 'translateX(-50%)';
+                }
             });
             
             // Ensure ticks container is positioned relatively
@@ -366,18 +461,39 @@
         setupSlider('die-temp-slider', 'die-temp-fill', 'die-temp-value', 60, 90, 'maxDieTempC', v => `${v.toFixed(0)} °C`);
         setupSlider('temp-drop-slider', 'temp-drop-fill', 'temp-drop-value', 5, 25, 'tempDropC', v => `${v.toFixed(0)} °C`);
         
-        // Facility capex slider (combined 4 buckets: electrical + mechanical + civil + network)
-        // From report: ~$12.50/W total (excluding power gen)
+        // DC Infrastructure slider with breakdown
+        // Percentages from report: Electrical 45%, Mechanical 20%, Shell 17%, Fit-out 8%, Site 5%, Fees 5%
         const facilitySlider = document.getElementById('facility-slider');
         const facilityFill = document.getElementById('facility-fill');
         const facilityValue = document.getElementById('facility-value');
         if (facilitySlider && facilityFill && facilityValue) {
+            const DC_BREAKDOWN_PCTS = {
+                electrical: 0.45,
+                mechanical: 0.20,
+                shell: 0.17,
+                fitout: 0.08,
+                site: 0.05,
+                fees: 0.05
+            };
+            
             function updateFacilitySlider() {
                 const state = CostModel.getState();
                 const total = state.electricalCostPerW + state.mechanicalCostPerW + state.civilCostPerW + state.networkCostPerW;
-                const percentage = ((total - 8) / (18 - 8)) * 100;
+                const percentage = ((total - 10) / (17 - 10)) * 100;
                 facilityFill.style.width = `${Math.max(0, Math.min(100, percentage))}%`;
                 facilityValue.textContent = `$${total.toFixed(2)}/W`;
+                
+                // Update breakdown display
+                const updateEl = (id, val) => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = `$${val.toFixed(2)}/W`;
+                };
+                updateEl('dc-electrical', total * DC_BREAKDOWN_PCTS.electrical);
+                updateEl('dc-mechanical', total * DC_BREAKDOWN_PCTS.mechanical);
+                updateEl('dc-shell', total * DC_BREAKDOWN_PCTS.shell);
+                updateEl('dc-fitout', total * DC_BREAKDOWN_PCTS.fitout);
+                updateEl('dc-site', total * DC_BREAKDOWN_PCTS.site);
+                updateEl('dc-fees', total * DC_BREAKDOWN_PCTS.fees);
             }
             facilitySlider.addEventListener('input', function() {
                 const newTotal = parseFloat(this.value);
@@ -391,7 +507,14 @@
                 CostModel.updateState('networkCostPerW', state.networkCostPerW * scale);
                 updateFacilitySlider();
                 updateUI();
+                // Show highlight panel
+                showHighlight('dc-infrastructure');
             });
+            
+            // Show highlight on hover/focus (stays for 30 seconds)
+            facilitySlider.addEventListener('mouseenter', () => showHighlight('dc-infrastructure'));
+            facilitySlider.addEventListener('focus', () => showHighlight('dc-infrastructure'));
+            
             updateFacilitySlider();
         }
         
@@ -400,6 +523,9 @@
         
         // Load references
         loadReferences();
+        
+        // Setup highlights panel
+        setupHighlights();
         
         // Position ticks after DOM is ready and sliders are initialized
         positionSliderTicks();

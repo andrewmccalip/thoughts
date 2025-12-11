@@ -197,11 +197,25 @@
             </div>
                 </div>
 
-                <!-- References Sidebar -->
-                <div class="references-sidebar">
-                    <h4 class="references-title">References</h4>
-                    <div id="references-list" class="references-list">
-                        <!-- Populated by JavaScript -->
+                <!-- Sidebar Container (fixed position) -->
+                <div class="sidebar-container">
+                    <!-- Highlights Sidebar (appears on hover) -->
+                    <div class="highlights-sidebar" id="highlights-sidebar">
+                        <div class="highlights-header">
+                            <h4 class="highlights-title">Details</h4>
+                            <button class="highlights-close" aria-label="Close">&times;</button>
+                        </div>
+                        <div id="highlights-content" class="highlights-content">
+                            <!-- Populated dynamically on hover -->
+                        </div>
+                    </div>
+
+                    <!-- References Sidebar -->
+                    <div class="references-sidebar">
+                        <h4 class="references-title">References</h4>
+                        <div id="references-list" class="references-list">
+                            <!-- Populated by JavaScript -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -386,6 +400,31 @@
                         <h4>Terrestrial (On-Site CCGT)</h4>
                     </div>
 
+                    <div class="slider-container dc-infrastructure-slider">
+                        <div class="slider-header">
+                            <a href="https://gemini.google.com/share/941986fab378" target="_blank" class="slider-label slider-label-link">Datacenter Infrastructure<sup class="ref-sup">1</sup></a>
+                            <span class="slider-value" id="facility-value">$12.50/W</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="facility-slider" min="10" max="17" step="0.25" value="12.5">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill terrestrial-fill" id="facility-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="10">$10 (Low)</span>
+                            <span class="tick" data-value="12.5">$12.50 (Rep)</span>
+                            <span class="tick" data-value="17">$17 (High)</span>
+                        </div>
+                        <div class="dc-breakdown">
+                            <div class="dc-breakdown-item"><span class="dc-cat">Electrical</span><span class="dc-pct">45%</span><span class="dc-val" id="dc-electrical">$5.63/W</span></div>
+                            <div class="dc-breakdown-item"><span class="dc-cat">Mechanical</span><span class="dc-pct">20%</span><span class="dc-val" id="dc-mechanical">$2.50/W</span></div>
+                            <div class="dc-breakdown-item"><span class="dc-cat">Shell & Core</span><span class="dc-pct">17%</span><span class="dc-val" id="dc-shell">$2.13/W</span></div>
+                            <div class="dc-breakdown-item"><span class="dc-cat">Fit-Out</span><span class="dc-pct">8%</span><span class="dc-val" id="dc-fitout">$1.00/W</span></div>
+                            <div class="dc-breakdown-item"><span class="dc-cat">Site/Civil</span><span class="dc-pct">5%</span><span class="dc-val" id="dc-site">$0.62/W</span></div>
+                            <div class="dc-breakdown-item"><span class="dc-cat">Gen. Cond./Fees</span><span class="dc-pct">5%</span><span class="dc-val" id="dc-fees">$0.62/W</span></div>
+                        </div>
+                    </div>
+
                     <div class="slider-container">
                         <div class="slider-header">
                             <span class="slider-label">CCGT NatGas Turbine</span>
@@ -439,23 +478,6 @@
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <span class="slider-label">DC Infrastructure (Elec/Mech/Civil/Net)</span>
-                            <span class="slider-value" id="facility-value">$12.50/W</span>
-                        </div>
-                        <div class="slider-track-container">
-                            <input type="range" id="facility-slider" min="8" max="18" step="0.5" value="12.5">
-                            <div class="slider-track"></div>
-                            <div class="slider-fill terrestrial-fill" id="facility-fill"></div>
-                        </div>
-                        <div class="slider-ticks">
-                            <span class="tick" data-value="10">Low</span>
-                            <span class="tick" data-value="12.5">Report</span>
-                            <span class="tick" data-value="16">High</span>
-                        </div>
-                    </div>
-
-                    <div class="slider-container">
-                        <div class="slider-header">
                             <span class="slider-label">Power Usage Effectiveness (PUE)</span>
                             <span class="slider-value" id="pue-value">1.20</span>
                         </div>
@@ -470,6 +492,39 @@
                             <span class="tick" data-value="1.5">Old Units (~1.5)</span>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Datacenter Infrastructure Cost Range Detail -->
+            <div class="dc-cost-detail-panel">
+                <div class="dc-cost-detail-header">
+                    <span class="dc-cost-detail-title">Datacenter Infrastructure Cost Ranges by Market</span>
+                </div>
+                <table class="dc-cost-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Low ($/W)</th>
+                            <th>Rep. ($/W)</th>
+                            <th>High ($/W)</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Electrical Systems</td><td>$4.50</td><td>$5.63</td><td>$7.50</td><td>45%</td></tr>
+                        <tr><td>Mechanical Systems</td><td>$1.90</td><td>$2.50</td><td>$3.50</td><td>20%</td></tr>
+                        <tr><td>Shell & Core</td><td>$1.60</td><td>$2.13</td><td>$2.80</td><td>17%</td></tr>
+                        <tr><td>Architectural / Fit-out</td><td>$0.80</td><td>$1.00</td><td>$1.40</td><td>8%</td></tr>
+                        <tr><td>Site & Civil</td><td>$0.40</td><td>$0.62</td><td>$0.90</td><td>5%</td></tr>
+                        <tr><td>General Conditions / Fees</td><td>$0.50</td><td>$0.62</td><td>$0.90</td><td>5%</td></tr>
+                        <tr class="total-row"><td><strong>Total</strong></td><td><strong>$9.70</strong></td><td><strong>$12.50</strong></td><td><strong>$17.00</strong></td><td>100%</td></tr>
+                    </tbody>
+                </table>
+                <div class="dc-cost-notes">
+                    <p><strong>Low ($9.70-$10.50/W):</strong> San Antonio, Atlanta, Kansas City. Standard air cooling, N+1 redundancy, lower labor.</p>
+                    <p><strong>Rep. ($11.50-$13.50/W):</strong> NoVA, Dallas, Chicago, Phoenix. Hybrid cooling ready, robust security.</p>
+                    <p><strong>High ($14-$17+/W):</strong> Silicon Valley, NYC, Zurich, Tokyo. Full liquid cooling, >50kW/rack, unionized labor.</p>
+                    <p class="dc-cost-disclaimer">Does not include IT hardware or gas turbine plant CapEx.</p>
                 </div>
             </div>
         </section>
