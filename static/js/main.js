@@ -442,18 +442,36 @@
         // NRE cost slider
         setupSlider('nre-slider', 'nre-fill', 'nre-value', 0, 2000, 'nreCost', v => v >= 1000 ? `$${(v/1000).toFixed(1)}B` : `$${v}M`);
         
-        // Terrestrial sliders (5 buckets from report)
-        // CCGT turbine capex slider
-        setupSlider('gas-turbine-slider', 'gas-turbine-fill', 'gas-turbine-value', 900, 1500, 'gasTurbineCapexPerKW', v => `$${v.toLocaleString()}/kW`);
+        // Terrestrial sliders
+        // Gas turbine capex slider ($/W, converted to $/kW for state)
+        const gasTurbineSlider = document.getElementById('gas-turbine-slider');
+        const gasTurbineFill = document.getElementById('gas-turbine-fill');
+        const gasTurbineValue = document.getElementById('gas-turbine-value');
+        if (gasTurbineSlider && gasTurbineFill && gasTurbineValue) {
+            function updateGasTurbineSlider() {
+                const state = CostModel.getState();
+                const valuePerW = state.gasTurbineCapexPerKW / 1000;
+                const percentage = ((valuePerW - 1.45) / (2.30 - 1.45)) * 100;
+                gasTurbineFill.style.width = `${Math.max(0, Math.min(100, percentage))}%`;
+                gasTurbineValue.textContent = `$${valuePerW.toFixed(2)}/W`;
+            }
+            gasTurbineSlider.addEventListener('input', function() {
+                const valuePerW = parseFloat(this.value);
+                CostModel.updateState('gasTurbineCapexPerKW', valuePerW * 1000);
+                updateGasTurbineSlider();
+                updateUI();
+            });
+            updateGasTurbineSlider();
+        }
         
         // Heat rate slider
         setupSlider('heat-rate-slider', 'heat-rate-fill', 'heat-rate-value', 6000, 9000, 'heatRateBtuKwh', v => `${v.toLocaleString()} BTU/kWh`);
         
-        // Gas price slider
-        setupSlider('gas-price-slider', 'gas-price-fill', 'gas-price-value', 2, 10, 'gasPricePerMMBtu', v => `$${v.toFixed(2)}/MMBtu`);
+        // Gas price slider (regional pricing)
+        setupSlider('gas-price-slider', 'gas-price-fill', 'gas-price-value', 2, 15, 'gasPricePerMMBtu', v => `$${v.toFixed(2)}/MMBtu`);
         
         // PUE slider
-        setupSlider('pue-slider', 'pue-fill', 'pue-value', 1.05, 1.6, 'pue', v => v.toFixed(2));
+        setupSlider('pue-slider', 'pue-fill', 'pue-value', 1.1, 1.5, 'pue', v => v.toFixed(2));
 
         // Thermal sliders
         setupSlider('emissivity-slider', 'emissivity-fill', 'emissivity-value', 0.6, 0.98, 'emissivity', v => v.toFixed(2));

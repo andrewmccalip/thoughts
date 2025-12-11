@@ -77,8 +77,8 @@ const CostModel = (function() {
         // Total Capex Target: ~$13.80/W (range $11.60-$16.00/W)
         
         // CAPEX buckets (5 categories from report)
-        // 1. Power Generation: $1.30/W (9%) - Turbines, Gas Lateral, Tap
-        gasTurbineCapexPerKW: 1100,    // Frame CCGT $/kW ($1,084-$1,420 range)
+        // 1. Power Generation - Gas Turbine Capex
+        gasTurbineCapexPerKW: 1450,    // Frame CCGT $/kW ($1.45/W default)
         
         // 2. Electrical Distribution: $5.25/W (38%) - Switchgear, Transformers, UPS, Gensets
         electricalCostPerW: 5.25,      // MV/LV switchgear, UPS (Li-ion), backup gensets, busway
@@ -507,8 +507,9 @@ const CostModel = (function() {
     }
     
     function formatEnergy(mwh) {
-        if (mwh >= 1e6) return `${(mwh / 1e6).toFixed(1)} TWh`;
-        return `${(mwh / 1e3).toFixed(1)} GWh`;
+        // Always display in megawatt-hours to avoid mixed units in the UI.
+        if (mwh >= 1e6) return `${mwh.toLocaleString(undefined, { maximumFractionDigits: 0 })} MWhr`;
+        return `${mwh.toLocaleString(undefined, { maximumFractionDigits: 1 })} MWhr`;
     }
     
     function formatLCOE(lcoe) {

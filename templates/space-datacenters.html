@@ -106,7 +106,7 @@
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">Energy Output</span>
-                            <span class="stat-value" id="orbital-energy">35.0 TWh</span>
+                            <span class="stat-value" id="orbital-energy">35.0 MWhr</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">Implied LCOE</span>
@@ -186,7 +186,7 @@
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">Energy Output</span>
-                            <span class="stat-value" id="terrestrial-energy">37.2 TWh</span>
+                            <span class="stat-value" id="terrestrial-energy">37.2 MWhr</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">LCOE</span>
@@ -427,24 +427,24 @@
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <span class="slider-label">CCGT NatGas Turbine</span>
-                            <span class="slider-value" id="gas-turbine-value">$1,100/kW</span>
+                            <a href="https://gemini.google.com/share/b44c01d3863b" target="_blank" class="slider-label slider-label-link">Gas Turbine Capex<sup class="ref-sup">2</sup></a>
+                            <span class="slider-value" id="gas-turbine-value">$1.45/W</span>
                         </div>
                         <div class="slider-track-container">
-                            <input type="range" id="gas-turbine-slider" min="900" max="1500" step="50" value="1100">
+                            <input type="range" id="gas-turbine-slider" min="1.45" max="2.30" step="0.05" value="1.45">
                             <div class="slider-track"></div>
                             <div class="slider-fill terrestrial-fill" id="gas-turbine-fill"></div>
                         </div>
                         <div class="slider-ticks">
-                            <span class="tick" data-value="1000">EIA</span>
-                            <span class="tick" data-value="1100">Typical</span>
-                            <span class="tick" data-value="1400">High</span>
+                            <span class="tick" data-value="1.45">$1.45 (Efficient)</span>
+                            <span class="tick" data-value="1.80">$1.80 (Typical)</span>
+                            <span class="tick" data-value="2.30">$2.30 (Complex)</span>
                         </div>
                     </div>
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <span class="slider-label">Fuel Efficiency (BTU/kWh)</span>
+                            <span class="slider-label">Turbine Heat Rate</span>
                             <span class="slider-value" id="heat-rate-value">6,200 BTU/kWh</span>
                         </div>
                         <div class="slider-track-container">
@@ -453,26 +453,26 @@
                             <div class="slider-fill terrestrial-fill" id="heat-rate-fill"></div>
                         </div>
                         <div class="slider-ticks">
-                            <span class="tick" data-value="6200">CCGT</span>
-                            <span class="tick" data-value="7500">Mid</span>
-                            <span class="tick" data-value="8500">SC</span>
+                            <span class="tick" data-value="6000">Best (~58%)</span>
+                            <span class="tick" data-value="7500">Average (~45%)</span>
+                            <span class="tick" data-value="9000">Older (~38%)</span>
                         </div>
                     </div>
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <span class="slider-label">Gas Price</span>
+                            <a href="https://gemini.google.com/share/b44c01d3863b" target="_blank" class="slider-label slider-label-link">Gas Price<sup class="ref-sup">2</sup></a>
                             <span class="slider-value" id="gas-price-value">$4.30/MMBtu</span>
                         </div>
                         <div class="slider-track-container">
-                            <input type="range" id="gas-price-slider" min="2" max="10" step="0.1" value="4.3">
+                            <input type="range" id="gas-price-slider" min="2" max="15" step="0.1" value="4.3">
                             <div class="slider-track"></div>
                             <div class="slider-fill terrestrial-fill" id="gas-price-fill"></div>
                         </div>
                         <div class="slider-ticks">
-                            <span class="tick" data-value="2.5">Low</span>
-                            <span class="tick" data-value="4.3">2025</span>
-                            <span class="tick" data-value="8">Crisis</span>
+                            <span class="tick" data-value="2">Permian</span>
+                            <span class="tick" data-value="5">Typical</span>
+                            <span class="tick" data-value="15">Constrained</span>
                         </div>
                     </div>
 
@@ -482,14 +482,14 @@
                             <span class="slider-value" id="pue-value">1.20</span>
                         </div>
                         <div class="slider-track-container">
-                            <input type="range" id="pue-slider" min="1.05" max="1.6" step="0.05" value="1.2">
+                            <input type="range" id="pue-slider" min="1.1" max="1.5" step="0.05" value="1.2">
                             <div class="slider-track"></div>
                             <div class="slider-fill terrestrial-fill" id="pue-fill"></div>
                         </div>
                         <div class="slider-ticks">
-                            <span class="tick" data-value="1.1">Google (~1.1)</span>
-                            <span class="tick" data-value="1.2">AWS (~1.2)</span>
-                            <span class="tick" data-value="1.5">Old Units (~1.5)</span>
+                            <span class="tick" data-value="1.1">Best (1.1)</span>
+                            <span class="tick" data-value="1.3">Typical (1.3)</span>
+                            <span class="tick" data-value="1.5">Older (1.5)</span>
                         </div>
                     </div>
                 </div>
@@ -575,7 +575,7 @@
                         </div>
                         <div class="eng-stat-row">
                             <span class="eng-stat-label">Energy Output</span>
-                            <span class="eng-stat-value" id="eng-orbital-energy">35.0 TWh</span>
+                            <span class="eng-stat-value" id="eng-orbital-energy">35.0 MWhr</span>
                         </div>
                     </div>
                 </div>
@@ -614,7 +614,7 @@
                         </div>
                         <div class="eng-stat-row">
                             <span class="eng-stat-label">Energy Output</span>
-                            <span class="eng-stat-value" id="eng-ngcc-energy">37.2 TWh</span>
+                            <span class="eng-stat-value" id="eng-ngcc-energy">37.2 MWhr</span>
                         </div>
                     </div>
                 </div>

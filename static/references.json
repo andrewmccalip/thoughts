@@ -1,16 +1,26 @@
 [
     {
         "id": 1,
+        "title": "Datacenter Infrastructure Costs",
+        "url": "https://gemini.google.com/share/941986fab378",
+        "year": "2025"
+    },
+    {
+        "id": 2,
+        "title": "Gas Turbine Capex",
+        "url": "https://gemini.google.com/share/b44c01d3863b",
+        "year": "2025"
+    },
+    {
+        "id": 3,
         "title": "Starlink BOM & Performance",
         "url": "https://chatgpt.com/share/69391474-4b24-8005-bb93-ebd4340c65d8",
         "year": "2024"
     },
     {
-        "id": 2,
-        "title": "Datacenter & Power Gen",
+        "id": 4,
+        "title": "Datacenter & Power Gen Analysis",
         "url": "https://gemini.google.com/share/56191222774f",
         "year": "2024"
     }
 ]
-
-

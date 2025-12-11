@@ -246,7 +246,7 @@ const SpaceVsGasInfographic = () => {
     <h3>NatGas Economics</h3>
     <p>Natural gas plants have overnight capital costs of ~$${capexPerKW}/kW, with typical capacity factors of ${(capacityFactor * 100).toFixed(0)}%.<sup data-ref="4">4</sup> Over ${years} years at current fuel prices (~$${fuelCostPerMWh}/MWh), fuel costs dominate the total cost of ownership.<sup data-ref="5">5</sup></p>
     
-    <p>The NatGas system generates ${(ngccCosts.energyMWh / 1e6).toFixed(1)} TWh over ${years} years, with a levelized cost of ${formatLCOE(ngccCosts.lcoe)}.</p>
+    <p>The NatGas system generates ${ngccCosts.energyMWh.toLocaleString(undefined, { maximumFractionDigits: 0 })} MWhr over ${years} years, with a levelized cost of ${formatLCOE(ngccCosts.lcoe)}.</p>
     
     <h3>Crossover Analysis</h3>
     <p>At $${launchCostPerKg.toLocaleString()}/kg launch costs, orbital solar costs ${formatCost(orbitalCosts.totalCost)} vs ${formatCost(ngccCosts.totalCost)} for NatGas. The crossover point occurs around $50–100/kg launch costs, which Starship may achieve at high flight rates.<sup data-ref="6">6</sup></p>
@@ -399,7 +399,7 @@ const SpaceVsGasInfographic = () => {
               <div className="mt-6 pt-4 space-y-1.5" style={{ borderTop: `1px solid ${colors.rule}` }}>
                 <div className="flex justify-between text-sm">
                   <span style={{ color: colors.inkLight }}>Energy Output</span>
-                  <span className="font-mono">{(ngccCosts.energyMWh / 1e6).toFixed(1)} TWh</span>
+                  <span className="font-mono">{ngccCosts.energyMWh.toLocaleString(undefined, { maximumFractionDigits: 0 })} MWhr</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span style={{ color: colors.inkLight }}>Cost per Watt</span>
