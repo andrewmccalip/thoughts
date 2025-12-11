@@ -90,25 +90,23 @@ Assumptions
 
 ### **Orbital Solar System (Starlink-class satellites)**
 
--   Use a **Starlink V2 Mini--style bus** as the reference unit:
+-   Use a **Starlink V2 Mini–style bus** as the reference unit:
 
-    -   About **105 m²** deployed solar array area.
+    -   About **116 m²** deployed solar array area.
 
-    -   About **600 kg** mass.
+    -   About **740 kg** mass.
 
-    -   About **27--30 kW** of electrical power at 1 AU (consistent with silicon-class efficiency, packing losses, and DC conversion).
+    -   About **27 kW** of electrical power at 1 AU.
 
--   This yields an **effective specific power of ~45 W/kg**.
+-   This yields an **effective specific power of ~36.5 W/kg** and a hardware cost of **~$22/W**.
 
 -   To reach **1 GW**, such a system requires:
 
-    -   **22.2 million kg** delivered to LEO.
+    -   **~29.4 million kg** delivered to LEO.
 
-    -   Hardware cost of **250,000 dollars per satellite**, which works out to roughly **9 dollars per watt**.
+    -   Total hardware cost: **~$23.6 billion** for the constellation.
 
-    -   Total hardware cost: **~9.0 billion dollars** for a 1 GW constellation.
-
--   We assume **no fuel cost** in orbit and ignore O&M because it is small relative to launch and hardware costs.
+-   We assume **no fuel cost** in orbit; O&M is modeled as small relative to launch and hardware but included as a percentage of hardware plus GPU replacements in the calculator.
 
 ### **Launch Costs**
 
@@ -122,7 +120,7 @@ Assumptions
 
     -   100 dollars per kg (aggressive long-run target).
 
--   Launch cost is applied to the full **22.2 million kg** required for the orbital system.
+-   Launch cost is applied to the full **~29.4 million kg** required for the orbital system.
 
 ### **Natural Gas Combined Cycle (NGCC) System**
 
@@ -142,18 +140,18 @@ Assumptions
 
 --
 
-5-Year Total System Cost (final numbers)
-----------------------------------------
+5-Year Total System Cost (current model defaults)
+-------------------------------------------------
 
--   Natural gas (build + 5 years fuel & O&M) = 1.8 billion dollars
+-   Natural gas (build + 5 years fuel & O&M) ≈ **$15.4 billion**
 
--   Falcon 9 (2,939 dollars/kg) = 74.3 billion dollars
+-   Falcon 9 (2,939 dollars/kg) ≈ **$121.4 billion**
 
--   Starship (1,000 dollars/kg) = 31.2 billion dollars
+-   Starship (1,000 dollars/kg) ≈ **$64.3 billion**
 
--   Starship (500 dollars/kg) = 20.1 billion dollars
+-   Starship (500 dollars/kg) ≈ **$49.7 billion**
 
--   Starship (100 dollars/kg) = 11.2 billion dollars
+-   Starship (100 dollars/kg) ≈ **$38.0 billion**
 
 **\
 **

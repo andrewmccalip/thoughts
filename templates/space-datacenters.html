@@ -362,9 +362,9 @@
                             <div class="slider-fill orbital-fill" id="sat-cost-fill"></div>
                         </div>
                         <div class="slider-ticks">
-                            <span class="tick" data-value="22">V2 Mini</span>
-                            <span class="tick" data-value="25">V3</span>
-                            <span class="tick" data-value="32">V1</span>
+                            <span class="tick" data-value="15">V2 Mini ($22)</span>
+                            <span class="tick" data-value="27">V3 ($25)</span>
+                            <span class="tick" data-value="40">V1 ($32)</span>
                         </div>
                     </div>
 
@@ -422,22 +422,22 @@
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <span class="slider-label">Cell Degradation</span>
+                            <a href="https://gemini.google.com/share/d84edc09c455" target="_blank" class="slider-label slider-label-link">Cell Degradation<sup class="ref-sup">7</sup></a>
                             <span class="slider-value" id="degradation-value">2.5%/yr</span>
                         </div>
                         <div class="slider-track-container">
-                            <input type="range" id="degradation-slider" min="0" max="5" step="0.1" value="2.5">
+                            <input type="range" id="degradation-slider" min="0" max="12" step="0.5" value="2.5">
                             <div class="slider-track"></div>
                             <div class="slider-fill orbital-fill" id="degradation-fill"></div>
                         </div>
                         <div class="slider-ticks">
-                            <span class="tick" data-value="0">None</span>
-                            <span class="tick" data-value="2.5">Typical</span>
-                            <span class="tick" data-value="5">High</span>
+                            <span class="tick" data-value="1">1% (shielded)</span>
+                            <span class="tick" data-value="6">6% (unshielded)</span>
+                            <span class="tick" data-value="12">12% (polar)</span>
                         </div>
                     </div>
 
-                    <div class="slider-container" data-highlight="gpu-failure">
+                    <div class="slider-container">
                         <div class="slider-header">
                             <a href="https://gemini.google.com/share/cd476ab11eeb" target="_blank" class="slider-label slider-label-link">GPU Failure Rate<sup class="ref-sup">5</sup></a>
                             <span class="slider-value" id="gpu-failure-value">9.0%/yr</span>
@@ -691,7 +691,8 @@
                         <ul class="assumption-bullets">
                             <li>Target capacity: <strong id="assumption-capacity">1 GW</strong> nameplate electrical</li>
                             <li>Analysis period: <strong id="assumption-years">5 years</strong></li>
-                            <li>All figures in 2025 USD, no FMV</li>
+                            <li>All figures in 2025 USD; excludes financing, taxes, incentives, and FMV</li>
+                            <li>Full availability assumed (no downtime derates), no insurance/logistics overheads</li>
                         </ul>
                     </div>
                 </div>
@@ -704,10 +705,13 @@
                     </div>
                     <div class="assumption-content">
                         <ul class="assumption-bullets">
-                            <li>V2 Mini: 740 kg, 116 m², 27 kW → <strong>36.5 W/kg</strong>, <strong>$22/W</strong></li>
-                            <li>V1: 283 kg, 30 m², 7 kW → 24.7 W/kg, $32/W</li>
-                            <li>V3 (spec): 1,900 kg, 250 m², 60 kW → 31.6 W/kg, $25/W</li>
-                            <li>BOM based on ~$800/kg manufacturing cost estimate</li>
+                            <li>Single bus class (Starlink V2 Mini heritage) scaled linearly to target power</li>
+                            <li>All mass delivered to LEO; no station-keeping propellant, no on-orbit servicing/logistics</li>
+                            <li>Launch pricing applied to total delivered mass; no cadence/manifest constraints modeled</li>
+                            <li>Thermal: only solar array area used as radiator; no dedicated radiator mass assumed</li>
+                            <li>Radiation/shielding impacts on mass ignored; no degradation of structures beyond panel aging</li>
+                            <li>No disposal, de-orbit, or regulatory compliance costs included</li>
+                            <li>Ops overhead and NRE treated as flat cost adders; no learning-curve discounts</li>
                         </ul>
                     </div>
                 </div>
@@ -720,11 +724,12 @@
                     </div>
                     <div class="assumption-content">
                         <ul class="assumption-bullets">
-                            <li>On-site H-Class Combined Cycle Gas Turbine (~430 MW each)</li>
-                            <li>Total Capex: <strong>~$13.80/W</strong> (EIA/Sargent & Lundy data)</li>
-                            <li>5 buckets: Power Gen (9%), Electrical (38%), Mechanical (22%), Civil (18%), Network (13%)</li>
-                            <li>Heat rate: <strong>6,200 BTU/kWh</strong> (CCGT efficiency ~58%)</li>
-                            <li>Gas price: <strong>$4.30/MMBtu</strong> (EIA 2025 forecast) → ~$27/MWh fuel</li>
+                            <li>On-site H-Class CCGT at the fence line; grid interconnect/transmission not costed</li>
+                            <li>Capex buckets embed site prep/land; permitting, taxes, and financing excluded</li>
+                            <li>Fuel price held flat; no carbon price, hedging, or escalation modeled</li>
+                            <li>Water/cooling availability assumed; no scarcity or discharge penalties</li>
+                            <li>Fixed PUE and capacity factor; no forced-outage or maintenance derates applied</li>
+                            <li>No efficiency gains or technology learning assumed over time for terrestrial plant</li>
                         </ul>
                     </div>
                 </div>
@@ -858,6 +863,19 @@
                 <p>
                     The numbers say no. Not marginally no. Even under optimistic Starship pricing, the launch bill alone overwhelms the entire five-year cost of a terrestrial NGCC plant. And that's before accounting for the additional mass and complexity required to run high-density compute hardware in vacuum.
                 </p>
+
+                <!-- Warning Banner -->
+                <div class="warning-banner">
+                    <div class="warning-header">
+                        <span>⚠</span> STOP <span>⚠</span> STOP <span>⚠</span> STOP <span>⚠</span> STOP <span>⚠</span> STOP <span>⚠</span> STOP <span>⚠</span>
+                    </div>
+                    <div class="warning-content">
+                        <p class="warning-title">YOU ARE NOW ENTERING THE TECHNICAL ENGINEERING SECTION</p>
+                        <p>If you skipped straight here looking for cool thermal diagrams and orbital mechanics—go back and read the economics section.</p>
+                        <p>The economics are the whole point. The technical challenges are interesting footnotes, but they don't matter if the unit economics don't close. <strong>No amount of clever engineering fixes a 10× cost gap.</strong></p>
+                        <p class="warning-cta">Seriously. Go back up. The sliders are fun. Play with them.</p>
+                    </div>
+                </div>
                 
                 <h3>Technical Engineering Challenges</h3>
 
@@ -871,28 +889,32 @@
                     </p>
                 </div>
 
+                <h4>Solar Panel Thermal Limits</h4>
+
                 <p>
-                    A satellite running compute has <strong>two independent heat sources</strong> that must be rejected simultaneously:
+                    In a sun-synchronous orbit, solar arrays intercept the full 1,361 W/m² solar flux. Standard silicon cells convert roughly twenty-two percent into electricity; the remaining ~78% is absorbed as heat. Panels in direct sunlight typically equilibrate between 100°C and 150°C. Silicon photovoltaics tolerate up to ~135°C before degradation accelerates, so panel temperature is constrained by cell physics rather than spacecraft design.
                 </p>
 
                 <p>
-                    <strong>First: solar panel waste heat.</strong> In a sun-synchronous orbit, arrays intercept the full 1,361 W/m² solar flux. Standard silicon cells convert roughly twenty-two percent into electricity; the remaining ~78% is absorbed as heat. Panels in direct sunlight typically equilibrate between 100°C and 150°C (silicon photovoltaics tolerate up to ~135°C). This heat must radiate to space from the panel surfaces.
+                    This absorbed heat must radiate to space from the panel surfaces. The front face sees the sun; the back face sees cold space (with some Earth albedo contribution). For a given array area, the equilibrium temperature is fixed by the balance of absorbed solar flux and radiated thermal power. You cannot "cool" the panels in any conventional sense—you can only size them so the equilibrium falls within material limits.
+                </p>
+
+                <h4>Liquid Cooling Loops</h4>
+
+                <p>
+                    The second heat source is electrical: every watt delivered to GPUs becomes heat inside the electronics. Modern dies have junction temperature limits near 85°C—far below the panel equilibrium temperature. This creates the central thermal design problem: the power source equilibrates at 100–150°C while the payload needs to stay below 85°C. In vacuum, there's no convective path between them.
                 </p>
 
                 <p>
-                    <strong>Second: electrical heat from compute.</strong> Every watt delivered to GPUs becomes heat inside the electronics. Modern dies have junction temperature limits near 85°C—far below the panel equilibrium temperature. This heat must also be rejected, through whatever thermal path connects the payload to a radiating surface.
+                    The solution is an active thermal loop. Liquid coolant absorbs heat at the GPU cold plates, transports it through plumbing to a dedicated radiator, and rejects it to space. The radiator must operate below the die temperature limit minus whatever ΔT the thermal interfaces impose. If the die limit is 85°C and the interface drops 10°C, the radiator surface must stay below ~75°C to close the loop.
                 </p>
 
                 <p>
-                    These two loads add directly in steady state. The panel waste heat typically dominates, with the electrical load superimposed. The design challenge: the solar panel equilibrates at 100–150°C while the payload needs to stay below 85°C. In vacuum, there's no convective path between them.
+                    This means the compute radiator is thermally decoupled from the solar panels. You cannot simply use the back side of the arrays as your compute radiator—the panels run too hot. You need additional radiator area at a lower temperature, which adds mass, which flows directly to launch cost.
                 </p>
 
                 <p>
-                    The design space is bounded. Emissivity maxes out around 0.95 for practical surfaces. Running hotter improves radiative rejection (T⁴ scaling), but GPU junction limits constrain this. Additional radiator area is effective but adds mass, which flows directly to launch cost.
-                </p>
-
-                <p>
-                    The interactive model below lets you explore these tradeoffs. Adjust emissivity, die temperature limits, and thermal interface performance to see whether the back side of the solar arrays provides sufficient radiator area. Many configurations require dedicated radiator mass beyond what the arrays provide—but the exact threshold depends on your assumptions.
+                    The design space is bounded. Emissivity maxes out around 0.95 for practical surfaces. Running hotter improves radiative rejection (T⁴ scaling), but GPU junction limits constrain this. The interactive model below lets you explore these tradeoffs.
                 </p>
 
                 <!-- Thermal Analysis Panel -->
@@ -908,18 +930,52 @@
 
                             <div class="slider-container">
                                 <div class="slider-header">
-                                    <span class="slider-label">Emissivity</span>
-                                    <span class="slider-value" id="emissivity-value">0.85</span>
+                                    <span class="slider-label">Sun-Side Emissivity</span>
+                                    <span class="slider-value" id="emissivity-front-value">0.80</span>
                                 </div>
                                 <div class="slider-track-container">
-                                    <input type="range" id="emissivity-slider" min="0.6" max="0.98" step="0.01" value="0.85">
+                                    <input type="range" id="emissivity-front-slider" min="0.6" max="0.98" step="0.01" value="0.8">
                                     <div class="slider-track"></div>
-                                    <div class="slider-fill orbital-fill" id="emissivity-fill"></div>
+                                    <div class="slider-fill orbital-fill" id="emissivity-front-fill"></div>
                                 </div>
                                 <div class="slider-ticks">
                                     <span class="tick" data-value="0.6">0.60</span>
-                                    <span class="tick" data-value="0.85">0.85</span>
+                                    <span class="tick" data-value="0.8">0.80</span>
                                     <span class="tick" data-value="0.95">0.95</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-header">
+                                    <span class="slider-label">Radiator-Side Emissivity</span>
+                                    <span class="slider-value" id="emissivity-back-value">0.90</span>
+                                </div>
+                                <div class="slider-track-container">
+                                    <input type="range" id="emissivity-back-slider" min="0.6" max="0.98" step="0.01" value="0.9">
+                                    <div class="slider-track"></div>
+                                    <div class="slider-fill orbital-fill" id="emissivity-back-fill"></div>
+                                </div>
+                                <div class="slider-ticks">
+                                    <span class="tick" data-value="0.6">0.60</span>
+                                    <span class="tick" data-value="0.9">0.90</span>
+                                    <span class="tick" data-value="0.98">0.98</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-header">
+                                    <span class="slider-label">Sun Disk View Factor</span>
+                                    <span class="slider-value" id="sun-view-value">0.08</span>
+                                </div>
+                                <div class="slider-track-container">
+                                    <input type="range" id="sun-view-slider" min="0.02" max="0.15" step="0.01" value="0.08">
+                                    <div class="slider-track"></div>
+                                    <div class="slider-fill orbital-fill" id="sun-view-fill"></div>
+                                </div>
+                                <div class="slider-ticks">
+                                    <span class="tick" data-value="0.02">0.02</span>
+                                    <span class="tick" data-value="0.08">0.08</span>
+                                    <span class="tick" data-value="0.15">0.15</span>
                                 </div>
                             </div>
 

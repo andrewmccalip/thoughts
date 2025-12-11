@@ -14,37 +14,37 @@ const CostModel = (function() {
     
     let constants = {
         // System target
-        TARGET_POWER_MW: 1000,              // 1 GW nameplate capacity
-        HOURS_PER_YEAR: 8760,               // 365 × 24
-        
+        TARGET_POWER_MW: 1000,                 // 1 GW nameplate capacity
+        HOURS_PER_YEAR: 8760,                  // 365 × 24
+
         // Starlink reference satellite (V2 Mini default)
         // Updated from Starlink techno-economic analysis
-        STARLINK_MASS_KG: 740,              // V2 Mini mass per satellite
-        STARLINK_POWER_KW: 27,              // V2 Mini power output per satellite (27 kW nameplate)
-        STARLINK_ARRAY_M2: 116,             // V2 Mini array area per satellite
-        
+        STARLINK_MASS_KG: 740,                 // V2 Mini mass per satellite
+        STARLINK_POWER_KW: 27,                 // V2 Mini power output per satellite (27 kW nameplate)
+        STARLINK_ARRAY_M2: 116,                // V2 Mini array area per satellite
+
         // Launch vehicle
-        STARSHIP_PAYLOAD_KG: 100000,        // Starship LEO payload capacity
-        STARSHIP_LOX_GAL_PER_LAUNCH: 787000,    // ~3,400 metric tons LOX
+        STARSHIP_PAYLOAD_KG: 100000,           // Starship LEO payload capacity
+        STARSHIP_LOX_GAL_PER_LAUNCH: 787000,   // ~3,400 metric tons LOX
         STARSHIP_METHANE_GAL_PER_LAUNCH: 755000, // ~1,200 metric tons CH4
-        
+
         // NatGas plant
-        NGCC_ACRES: 30,                     // Plant footprint
-        NGCC_HEAT_RATE_BTU_KWH: 6370,       // Modern NGCC heat rate
-        GE_7HA_POWER_MW: 430,               // GE 7HA.03 turbine output
-        BTU_PER_CF: 1000,                   // BTU per cubic foot of natural gas
-        CF_PER_BCF: 1e9,                    // Cubic feet per billion cubic feet
-        
+        NGCC_ACRES: 30,                        // Plant footprint
+        NGCC_HEAT_RATE_BTU_KWH: 6370,          // Modern NGCC heat rate
+        GE_7HA_POWER_MW: 430,                  // GE 7HA.03 turbine output
+        BTU_PER_CF: 1000,                      // BTU per cubic foot of natural gas
+        CF_PER_BCF: 1e9,                       // Cubic feet per billion cubic feet
+
         // Cost fractions - Orbital
-        ORBITAL_OPS_FRAC: 0.01,       // Ops (comms, infra) - 1%
-        
+        ORBITAL_OPS_FRAC: 0.01,                // Ops (comms, infra) - 1%
+
         // Cost fractions - NatGas
         NATGAS_OVERHEAD_FRAC: 0.04,
         NATGAS_MAINTENANCE_FRAC: 0.03,
         NATGAS_COMMS_FRAC: 0.01,
 
         // Space environment
-        SOLAR_IRRADIANCE_W_M2: 1361 // LEO solar constant
+        SOLAR_IRRADIANCE_W_M2: 1361            // LEO solar constant
     };
 
     // ==========================================
@@ -56,8 +56,11 @@ const CostModel = (function() {
         years: 5,
         targetGW: 1,                    // Target capacity in GW (default 1 GW)
         // Thermal analysis parameters
-        emissivity: 0.85,           // Radiator emissivity (dimensionless)
+        // Thermal surface properties
+        emissivityFront: 0.80,      // Sun-facing panel emissivity
+        emissivityBack: 0.90,       // Space-facing/radiator side emissivity
         albedoViewFactor: 0.2,      // Fraction of view to Earth albedo (reduces effective radiation)
+        sunViewFactor: 0.08,        // Fraction of sun-facing view that "sees" the hot sun disk
         maxDieTempC: 75,            // Max die temperature (°C)
         tempDropC: 10,              // Temperature drop from die to radiator surface (°C)
         
@@ -423,12 +426,18 @@ const CostModel = (function() {
         // Stefan-Boltzmann constant (W/m²/K⁴)
         const SIGMA = 5.670374419e-8;
 
-        // Use orbital array area as available radiator area (backside)
+        // Use orbital array area as available radiator area (one panel face)
         const orbital = calculateOrbital();
         const availableAreaM2 = orbital.arrayAreaKm2 * 1e6;
 
-        // Effective emissivity with albedo view factor knockdown
-        const effectiveEmissivity = Math.max(0, state.emissivity * (1 - state.albedoViewFactor));
+        // Surface properties
+        const frontEmissivity = Math.max(0, state.emissivityFront);
+        const backEmissivity = Math.max(0, state.emissivityBack);
+        const sunViewFactor = Math.min(Math.max(state.sunViewFactor, 0), 1); // 0–1
+
+        // Effective space-facing emissivity with albedo knockdown
+        const effectiveFrontEmissivity = Math.max(0, frontEmissivity * (1 - state.albedoViewFactor));
+        const effectiveBackEmissivity = Math.max(0, backEmissivity * (1 - state.albedoViewFactor));
 
         // Radiator (hot side) temperature in Kelvin
         const radiatorTempK = (state.maxDieTempC - state.tempDropC) + 273.15;
@@ -448,18 +457,28 @@ const CostModel = (function() {
         // the entire incident solar load twice.
         const heatLoadW = wasteHeatW + electricalHeatW;
 
-        // Capacity with current area and temps
-        const capacityW = effectiveEmissivity * SIGMA * availableAreaM2 * (Math.pow(radiatorTempK, 4) - Math.pow(spaceTempK, 4));
+        // Two-sided radiative capacity. The sun-facing side mostly sees deep space;
+        // a small view factor to the sun is excluded from its radiating solid angle.
+        const deltaT4 = Math.pow(radiatorTempK, 4) - Math.pow(spaceTempK, 4);
+        const frontRadiative = effectiveFrontEmissivity * (1 - sunViewFactor) * availableAreaM2 * deltaT4;
+        const backRadiative = effectiveBackEmissivity * availableAreaM2 * deltaT4;
+        const capacityW = SIGMA * (frontRadiative + backRadiative);
 
         // Temperature required (with current area) to reject full heatLoad
-        const requiredTempK = Math.pow((heatLoadW / (effectiveEmissivity * SIGMA * availableAreaM2)) + Math.pow(spaceTempK, 4), 0.25);
+        const requiredTempK = Math.pow(
+            (heatLoadW / (SIGMA * (frontRadiative / deltaT4 + backRadiative / deltaT4))) + Math.pow(spaceTempK, 4),
+            0.25
+        );
         const requiredTempC = requiredTempK - 273.15;
 
         // Area required if current radiator temp is fixed
-        const areaRequiredM2 = heatLoadW / (effectiveEmissivity * SIGMA * (Math.pow(radiatorTempK, 4) - Math.pow(spaceTempK, 4)));
+        const areaPerSideFactor = effectiveFrontEmissivity * (1 - sunViewFactor) + effectiveBackEmissivity;
+        const areaRequiredM2 = heatLoadW / (SIGMA * areaPerSideFactor * deltaT4);
 
         const areaSufficient = capacityW >= heatLoadW;
         const marginPct = (capacityW / heatLoadW - 1) * 100;
+
+        const effectiveEmissivity = (effectiveFrontEmissivity * (1 - sunViewFactor) + effectiveBackEmissivity) / 2;
 
         return {
             availableAreaM2,

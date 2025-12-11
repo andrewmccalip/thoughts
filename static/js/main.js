@@ -14,17 +14,6 @@
     
     // Highlight definitions: map data-highlight attribute to content
     const HIGHLIGHTS = {
-        'dc-infrastructure': {
-            content: `
-                <span class="highlight-label">Cost Ranges by Market</span>
-                <p><strong>Low $9.70-$10.50/W</strong><br>
-                San Antonio, Atlanta, Kansas City. Standard air cooling, N+1 redundancy.</p>
-                <p><strong>Rep. $11.50-$13.50/W</strong><br>
-                NoVA, Dallas, Chicago, Phoenix. Hybrid cooling ready.</p>
-                <p><strong>High $14-$17+/W</strong><br>
-                Silicon Valley, NYC, Zurich, Tokyo. Full liquid cooling, >50kW/rack.</p>
-            `
-        },
         'launch-cost': {
             content: `
                 <span class="highlight-label">Starship Cost Floor Analysis</span>
@@ -35,14 +24,6 @@
                 • Maintenance: ~$300k/launch<br>
                 • 100+ ton payload capacity</p>
                 <p>This is the theoretical in-the-limit pricing assuming mature operations and full vehicle reuse.</p>
-            `
-        },
-        'gpu-failure': {
-            content: `
-                <span class="highlight-label">GPU Failure Rates</span>
-                <p><strong>9%/year</strong> - Meta's reported GPU failure rate in datacenter environments.</p>
-                <p><strong>1.5%/year</strong> - Typical CPU failure rate for comparison.</p>
-                <p>Space environment adds thermal cycling, radiation, and vibration stress that may increase failure rates further.</p>
             `
         }
     };
@@ -495,17 +476,10 @@
         setupSlider('sun-fraction-slider', 'sun-fraction-fill', 'sun-fraction-value', 0.55, 1.0, 'sunFraction', v => `${Math.round(v * 100)}%`);
         
         // Cell degradation slider
-        setupSlider('degradation-slider', 'degradation-fill', 'degradation-value', 0, 5, 'cellDegradation', v => `${v.toFixed(1)}%/yr`);
+        setupSlider('degradation-slider', 'degradation-fill', 'degradation-value', 0, 12, 'cellDegradation', v => `${v.toFixed(1)}%/yr`);
         
         // GPU failure rate slider
         setupSlider('gpu-failure-slider', 'gpu-failure-fill', 'gpu-failure-value', 0, 10, 'gpuFailureRate', v => `${v.toFixed(1)}%/yr`);
-        
-        // Show highlight on hover for GPU failure
-        const gpuFailureSlider = document.getElementById('gpu-failure-slider');
-        if (gpuFailureSlider) {
-            gpuFailureSlider.addEventListener('mouseenter', () => showHighlight('gpu-failure'));
-            gpuFailureSlider.addEventListener('focus', () => showHighlight('gpu-failure'));
-        }
         
         // NRE cost slider
         setupSlider('nre-slider', 'nre-fill', 'nre-value', 0, 2000, 'nreCost', v => v >= 1000 ? `$${(v/1000).toFixed(1)}B` : `$${v}M`);
@@ -542,7 +516,9 @@
         setupSlider('pue-slider', 'pue-fill', 'pue-value', 1.1, 1.5, 'pue', v => v.toFixed(2));
 
         // Thermal sliders
-        setupSlider('emissivity-slider', 'emissivity-fill', 'emissivity-value', 0.6, 0.98, 'emissivity', v => v.toFixed(2));
+        setupSlider('emissivity-front-slider', 'emissivity-front-fill', 'emissivity-front-value', 0.6, 0.98, 'emissivityFront', v => v.toFixed(2));
+        setupSlider('emissivity-back-slider', 'emissivity-back-fill', 'emissivity-back-value', 0.6, 0.98, 'emissivityBack', v => v.toFixed(2));
+        setupSlider('sun-view-slider', 'sun-view-fill', 'sun-view-value', 0.02, 0.15, 'sunViewFactor', v => v.toFixed(2));
         setupSlider('albedo-slider', 'albedo-fill', 'albedo-value', 0.0, 0.5, 'albedoViewFactor', v => v.toFixed(2));
         setupSlider('die-temp-slider', 'die-temp-fill', 'die-temp-value', 60, 90, 'maxDieTempC', v => `${v.toFixed(0)} °C`);
         setupSlider('temp-drop-slider', 'temp-drop-fill', 'temp-drop-value', 5, 25, 'tempDropC', v => `${v.toFixed(0)} °C`);
@@ -593,13 +569,7 @@
                 CostModel.updateState('networkCostPerW', state.networkCostPerW * scale);
                 updateFacilitySlider();
                 updateUI();
-                // Show highlight panel
-                showHighlight('dc-infrastructure');
             });
-            
-            // Show highlight on hover/focus (stays for 30 seconds)
-            facilitySlider.addEventListener('mouseenter', () => showHighlight('dc-infrastructure'));
-            facilitySlider.addEventListener('focus', () => showHighlight('dc-infrastructure'));
             
             updateFacilitySlider();
         }
