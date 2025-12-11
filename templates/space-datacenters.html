@@ -54,172 +54,234 @@
             </p>
         </section>
 
-        <!-- Costs: Cost Comparison with References Sidebar -->
-        <section class="paper-section figure-section">
-            <div class="figure-with-refs">
-                <div class="figure-main">
-                    <div class="figure-label">Costs · Financial Analysis</div>
-                    
-                    <div class="comparison-grid">
+        <!-- Mobile Comparison Grid (shows only on smaller screens) -->
+        <section class="paper-section comparison-mobile">
+            <div class="comparison-grid-mobile">
                 <!-- Orbital Column -->
                 <div class="comparison-column orbital">
                     <div class="column-header">
                         <div class="column-indicator orbital-indicator"></div>
                         <div class="column-title-group">
                             <h3>Orbital Solar</h3>
-                            <p class="column-total" id="orbital-total">$31.2B</p>
+                            <p class="column-total" id="orbital-total-mobile">$31.2B</p>
                         </div>
                     </div>
-                    
                     <div class="bar-chart">
                         <div class="bar-item">
                             <div class="bar-label">Satellite</div>
-                            <div class="bar-container">
-                                <div class="bar orbital-bar" id="orbital-hardware-bar"></div>
-                            </div>
-                            <div class="bar-value" id="orbital-hardware-value">$9.0B</div>
+                            <div class="bar-container"><div class="bar orbital-bar" id="orbital-hardware-bar-mobile"></div></div>
+                            <div class="bar-value" id="orbital-hardware-value-mobile">$9.0B</div>
                         </div>
                         <div class="bar-item">
                             <div class="bar-label">Launch</div>
-                            <div class="bar-container">
-                                <div class="bar orbital-bar" id="orbital-launch-bar"></div>
-                            </div>
-                            <div class="bar-value" id="orbital-launch-value">$22.2B</div>
+                            <div class="bar-container"><div class="bar orbital-bar" id="orbital-launch-bar-mobile"></div></div>
+                            <div class="bar-value" id="orbital-launch-value-mobile">$22.2B</div>
                         </div>
                         <div class="bar-item">
-                            <div class="bar-label">O&M</div>
-                            <div class="bar-container">
-                                <div class="bar orbital-bar" id="orbital-om-bar"></div>
-                            </div>
-                            <div class="bar-value" id="orbital-om-value">$3.1B</div>
+                            <div class="bar-label">Ops (1%)</div>
+                            <div class="bar-container"><div class="bar orbital-bar" id="orbital-om-bar-mobile"></div></div>
+                            <div class="bar-value" id="orbital-om-value-mobile">$3.1B</div>
                         </div>
                     </div>
-                    
                     <div class="stats-table">
-                        <div class="stat-row">
-                            <span class="stat-label">Total Mass to LEO</span>
-                            <span class="stat-value" id="orbital-mass">22.2M kg</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Cost per Watt</span>
-                            <span class="stat-value" id="orbital-cpw">$31.20/W</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Energy Output</span>
-                            <span class="stat-value" id="orbital-energy">35.0 MWhr</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Implied LCOE</span>
-                            <span class="stat-value" id="orbital-lcoe">$891/MWh</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Overhead</span>
-                            <span class="stat-value" id="orbital-overhead">$1.6B</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Maintenance</span>
-                            <span class="stat-value" id="orbital-maintenance">$936M</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Communications</span>
-                            <span class="stat-value" id="orbital-comms">$624M</span>
-                        </div>
+                        <div class="stat-row"><span class="stat-label">Cost per Watt</span><span class="stat-value" id="orbital-cpw-mobile">$31.20/W</span></div>
+                        <div class="stat-row"><span class="stat-label">LCOE</span><span class="stat-value" id="orbital-lcoe-mobile">$891/MWh</span></div>
+                        <div class="stat-row"><span class="stat-label">Mass to LEO</span><span class="stat-value" id="orbital-mass-mobile">22.2M kg</span></div>
+                        <div class="stat-row"><span class="stat-label">Energy</span><span class="stat-value" id="orbital-energy-mobile">35.0 TWh</span></div>
                     </div>
                 </div>
-
-                <!-- Terrestrial Column (On-Site CCGT - 5 Buckets) -->
+                <!-- Terrestrial Column -->
                 <div class="comparison-column terrestrial">
                     <div class="column-header">
                         <div class="column-indicator terrestrial-indicator"></div>
                         <div class="column-title-group">
                             <h3>Terrestrial</h3>
-                            <p class="column-total" id="terrestrial-total">$14.8B</p>
+                            <p class="column-total" id="terrestrial-total-mobile">$14.8B</p>
                         </div>
                     </div>
-                    
                     <div class="bar-chart">
                         <div class="bar-item">
                             <div class="bar-label">Power Gen</div>
-                            <div class="bar-container">
-                                <div class="bar terrestrial-bar" id="terrestrial-powergen-bar"></div>
-                            </div>
-                            <div class="bar-value" id="terrestrial-powergen-value">$1.3B</div>
+                            <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-powergen-bar-mobile"></div></div>
+                            <div class="bar-value" id="terrestrial-powergen-value-mobile">$1.3B</div>
                         </div>
                         <div class="bar-item">
                             <div class="bar-label">Electrical</div>
-                            <div class="bar-container">
-                                <div class="bar terrestrial-bar" id="terrestrial-electrical-bar"></div>
-                            </div>
-                            <div class="bar-value" id="terrestrial-electrical-value">$5.3B</div>
+                            <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-electrical-bar-mobile"></div></div>
+                            <div class="bar-value" id="terrestrial-electrical-value-mobile">$5.3B</div>
                         </div>
                         <div class="bar-item">
                             <div class="bar-label">Mechanical</div>
-                            <div class="bar-container">
-                                <div class="bar terrestrial-bar" id="terrestrial-mechanical-bar"></div>
-                            </div>
-                            <div class="bar-value" id="terrestrial-mechanical-value">$3.0B</div>
+                            <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-mechanical-bar-mobile"></div></div>
+                            <div class="bar-value" id="terrestrial-mechanical-value-mobile">$3.0B</div>
                         </div>
                         <div class="bar-item">
                             <div class="bar-label">Civil/Shell</div>
-                            <div class="bar-container">
-                                <div class="bar terrestrial-bar" id="terrestrial-civil-bar"></div>
-                            </div>
-                            <div class="bar-value" id="terrestrial-civil-value">$2.5B</div>
+                            <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-civil-bar-mobile"></div></div>
+                            <div class="bar-value" id="terrestrial-civil-value-mobile">$2.5B</div>
                         </div>
                         <div class="bar-item">
-                            <div class="bar-label">Fuel (5yr)</div>
-                            <div class="bar-container">
-                                <div class="bar terrestrial-bar" id="terrestrial-fuel-bar"></div>
-                            </div>
-                            <div class="bar-value" id="terrestrial-fuel-value">$1.0B</div>
+                            <div class="bar-label">Fuel</div>
+                            <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-fuel-bar-mobile"></div></div>
+                            <div class="bar-value" id="terrestrial-fuel-value-mobile">$1.0B</div>
                         </div>
                     </div>
-                    
                     <div class="stats-table">
-                        <div class="stat-row">
-                            <span class="stat-label">Capex $/W</span>
-                            <span class="stat-value" id="terrestrial-capex-cpw">$13.80/W</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Total Cost per Watt</span>
-                            <span class="stat-value" id="terrestrial-cpw">$14.80/W</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Energy Output</span>
-                            <span class="stat-value" id="terrestrial-energy">37.2 MWhr</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">LCOE</span>
-                            <span class="stat-value" id="terrestrial-lcoe">$398/MWh</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                </div>
-
-                <!-- Sidebar Container (fixed position) -->
-                <div class="sidebar-container">
-                    <!-- Highlights Sidebar (appears on hover) -->
-                    <div class="highlights-sidebar" id="highlights-sidebar">
-                        <div class="highlights-header">
-                            <h4 class="highlights-title">Details</h4>
-                            <button class="highlights-close" aria-label="Close">&times;</button>
-                        </div>
-                        <div id="highlights-content" class="highlights-content">
-                            <!-- Populated dynamically on hover -->
-                        </div>
-                    </div>
-
-                    <!-- References Sidebar -->
-                    <div class="references-sidebar">
-                        <h4 class="references-title">References</h4>
-                        <div id="references-list" class="references-list">
-                            <!-- Populated by JavaScript -->
-                        </div>
+                        <div class="stat-row"><span class="stat-label">Cost per Watt</span><span class="stat-value" id="terrestrial-cpw-mobile">$14.80/W</span></div>
+                        <div class="stat-row"><span class="stat-label">LCOE</span><span class="stat-value" id="terrestrial-lcoe-mobile">$398/MWh</span></div>
+                        <div class="stat-row"><span class="stat-label">Capex</span><span class="stat-value" id="terrestrial-capex-cpw-mobile">$13.80/W</span></div>
+                        <div class="stat-row"><span class="stat-label">Energy</span><span class="stat-value" id="terrestrial-energy-mobile">37.2 TWh</span></div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- Fixed Left Sidebar: Cost Comparison -->
+        <div class="comparison-sidebar">
+            <!-- Orbital Column -->
+            <div class="comparison-column-fixed orbital">
+                <div class="column-header">
+                    <div class="column-indicator orbital-indicator"></div>
+                    <div class="column-title-group">
+                        <h3>Orbital Solar</h3>
+                        <p class="column-total" id="orbital-total">$31.2B</p>
+                    </div>
+                </div>
+                
+                <div class="bar-chart">
+                    <div class="bar-item">
+                        <div class="bar-label">Satellite</div>
+                        <div class="bar-container">
+                            <div class="bar orbital-bar" id="orbital-hardware-bar"></div>
+                        </div>
+                        <div class="bar-value" id="orbital-hardware-value">$9.0B</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Launch</div>
+                        <div class="bar-container">
+                            <div class="bar orbital-bar" id="orbital-launch-bar"></div>
+                        </div>
+                        <div class="bar-value" id="orbital-launch-value">$22.2B</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Ops (1%)</div>
+                        <div class="bar-container">
+                            <div class="bar orbital-bar" id="orbital-om-bar"></div>
+                        </div>
+                        <div class="bar-value" id="orbital-om-value">$3.1B</div>
+                    </div>
+                </div>
+                
+                <div class="stats-table">
+                    <div class="stat-row">
+                        <span class="stat-label">Cost per Watt</span>
+                        <span class="stat-value" id="orbital-cpw">$31.20/W</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">LCOE</span>
+                        <span class="stat-value" id="orbital-lcoe">$891/MWh</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Mass to LEO</span>
+                        <span class="stat-value" id="orbital-mass">22.2M kg</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Energy</span>
+                        <span class="stat-value" id="orbital-energy">35.0 TWh</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terrestrial Column -->
+            <div class="comparison-column-fixed terrestrial">
+                <div class="column-header">
+                    <div class="column-indicator terrestrial-indicator"></div>
+                    <div class="column-title-group">
+                        <h3>Terrestrial</h3>
+                        <p class="column-total" id="terrestrial-total">$14.8B</p>
+                    </div>
+                </div>
+                
+                <div class="bar-chart">
+                    <div class="bar-item">
+                        <div class="bar-label">Power Gen</div>
+                        <div class="bar-container">
+                            <div class="bar terrestrial-bar" id="terrestrial-powergen-bar"></div>
+                        </div>
+                        <div class="bar-value" id="terrestrial-powergen-value">$1.3B</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Electrical</div>
+                        <div class="bar-container">
+                            <div class="bar terrestrial-bar" id="terrestrial-electrical-bar"></div>
+                        </div>
+                        <div class="bar-value" id="terrestrial-electrical-value">$5.3B</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Mechanical</div>
+                        <div class="bar-container">
+                            <div class="bar terrestrial-bar" id="terrestrial-mechanical-bar"></div>
+                        </div>
+                        <div class="bar-value" id="terrestrial-mechanical-value">$3.0B</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Civil/Shell</div>
+                        <div class="bar-container">
+                            <div class="bar terrestrial-bar" id="terrestrial-civil-bar"></div>
+                        </div>
+                        <div class="bar-value" id="terrestrial-civil-value">$2.5B</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Fuel</div>
+                        <div class="bar-container">
+                            <div class="bar terrestrial-bar" id="terrestrial-fuel-bar"></div>
+                        </div>
+                        <div class="bar-value" id="terrestrial-fuel-value">$1.0B</div>
+                    </div>
+                </div>
+                
+                <div class="stats-table">
+                    <div class="stat-row">
+                        <span class="stat-label">Cost per Watt</span>
+                        <span class="stat-value" id="terrestrial-cpw">$14.80/W</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">LCOE</span>
+                        <span class="stat-value" id="terrestrial-lcoe">$398/MWh</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Capex</span>
+                        <span class="stat-value" id="terrestrial-capex-cpw">$13.80/W</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Energy</span>
+                        <span class="stat-value" id="terrestrial-energy">37.2 TWh</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Container (fixed position, right side) -->
+        <div class="sidebar-container">
+            <!-- Highlights Sidebar (appears on hover) -->
+            <div class="highlights-sidebar" id="highlights-sidebar">
+                <div class="highlights-header">
+                    <h4 class="highlights-title">Details</h4>
+                    <button class="highlights-close" aria-label="Close">&times;</button>
+                </div>
+                <div id="highlights-content" class="highlights-content">
+                    <!-- Populated dynamically on hover -->
+                </div>
+            </div>
+
+            <!-- References Sidebar -->
+            <div class="references-sidebar">
+                <h4 class="references-title">References</h4>
+                <div id="references-list" class="references-list">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
 
         <!-- Engineering Parameters -->
         <section class="paper-section parameters-section">
@@ -272,18 +334,18 @@
                         <h4>Orbital Solar</h4>
                     </div>
 
-                    <div class="slider-container">
+                    <div class="slider-container" data-highlight="launch-cost">
                         <div class="slider-header">
-                            <span class="slider-label">Launch Cost to LEO</span>
+                            <a href="https://chatgpt.com/share/693a57e4-ae14-8005-92d7-39b4d9699678" target="_blank" class="slider-label slider-label-link">Launch Cost to LEO<sup class="ref-sup">4</sup></a>
                             <span class="slider-value" id="launch-cost-value">$1,000/kg</span>
                         </div>
                         <div class="slider-track-container">
-                            <input type="range" id="launch-cost-slider" min="100" max="2940" step="10" value="1000">
+                            <input type="range" id="launch-cost-slider" min="20" max="2940" step="10" value="1000">
                             <div class="slider-track"></div>
                             <div class="slider-fill orbital-fill" id="launch-cost-fill"></div>
                         </div>
                         <div class="slider-ticks">
-                            <span class="tick" data-value="100">Starship goal</span>
+                            <span class="tick" data-value="20">$20 (floor)</span>
                             <span class="tick" data-value="1000">Starship</span>
                             <span class="tick" data-value="2940">Falcon 9</span>
                         </div>
@@ -291,7 +353,7 @@
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <span class="slider-label">Satellite Hardware Cost</span>
+                            <a href="https://chatgpt.com/share/69391474-4b24-8005-bb93-ebd4340c65d8" target="_blank" class="slider-label slider-label-link">Satellite Hardware Cost<sup class="ref-sup">3</sup></a>
                             <span class="slider-value" id="sat-cost-value">$22/W</span>
                         </div>
                         <div class="slider-track-container">
@@ -308,7 +370,7 @@
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <span class="slider-label">Specific Power</span>
+                            <a href="https://chatgpt.com/share/69391474-4b24-8005-bb93-ebd4340c65d8" target="_blank" class="slider-label slider-label-link">Specific Power<sup class="ref-sup">3</sup></a>
                             <span class="slider-value" id="specific-power-value">36.5 W/kg</span>
                         </div>
                         <div class="slider-track-container">
@@ -330,20 +392,20 @@
                             <span class="slider-value" id="sat-size-value">27 kW</span>
                         </div>
                         <div class="slider-track-container">
-                            <input type="range" id="sat-size-slider" min="5" max="80" step="1" value="27">
+                            <input type="range" id="sat-size-slider" min="5" max="130" step="1" value="27">
                             <div class="slider-track"></div>
                             <div class="slider-fill orbital-fill" id="sat-size-fill"></div>
                         </div>
                         <div class="slider-ticks">
                             <span class="tick" data-value="7">V1</span>
-                            <span class="tick" data-value="27">V2 Mini</span>
-                            <span class="tick" data-value="60">V3</span>
+                            <span class="tick" data-value="30">V3.1</span>
+                            <span class="tick" data-value="130">V3.2</span>
                         </div>
                     </div>
 
                     <div class="slider-container">
                         <div class="slider-header">
-                            <span class="slider-label">Orbit Sunlight Fraction</span>
+                            <a href="https://chatgpt.com/share/693a7a0d-dc38-8005-8244-94cb70a5d1f2" target="_blank" class="slider-label slider-label-link">Orbit Sunlight Fraction<sup class="ref-sup">6</sup></a>
                             <span class="slider-value" id="sun-fraction-value">98%</span>
                         </div>
                         <div class="slider-track-container">
@@ -372,6 +434,23 @@
                             <span class="tick" data-value="0">None</span>
                             <span class="tick" data-value="2.5">Typical</span>
                             <span class="tick" data-value="5">High</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container" data-highlight="gpu-failure">
+                        <div class="slider-header">
+                            <a href="https://gemini.google.com/share/cd476ab11eeb" target="_blank" class="slider-label slider-label-link">GPU Failure Rate<sup class="ref-sup">5</sup></a>
+                            <span class="slider-value" id="gpu-failure-value">9.0%/yr</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="gpu-failure-slider" min="0" max="10" step="0.5" value="9">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="gpu-failure-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="0">0%</span>
+                            <span class="tick" data-value="1.5">CPU (1.5%)</span>
+                            <span class="tick" data-value="9">Meta (9%)</span>
                         </div>
                     </div>
 
@@ -495,38 +574,6 @@
                 </div>
             </div>
 
-            <!-- Datacenter Infrastructure Cost Range Detail -->
-            <div class="dc-cost-detail-panel">
-                <div class="dc-cost-detail-header">
-                    <span class="dc-cost-detail-title">Datacenter Infrastructure Cost Ranges by Market</span>
-                </div>
-                <table class="dc-cost-table">
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>Low ($/W)</th>
-                            <th>Rep. ($/W)</th>
-                            <th>High ($/W)</th>
-                            <th>%</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Electrical Systems</td><td>$4.50</td><td>$5.63</td><td>$7.50</td><td>45%</td></tr>
-                        <tr><td>Mechanical Systems</td><td>$1.90</td><td>$2.50</td><td>$3.50</td><td>20%</td></tr>
-                        <tr><td>Shell & Core</td><td>$1.60</td><td>$2.13</td><td>$2.80</td><td>17%</td></tr>
-                        <tr><td>Architectural / Fit-out</td><td>$0.80</td><td>$1.00</td><td>$1.40</td><td>8%</td></tr>
-                        <tr><td>Site & Civil</td><td>$0.40</td><td>$0.62</td><td>$0.90</td><td>5%</td></tr>
-                        <tr><td>General Conditions / Fees</td><td>$0.50</td><td>$0.62</td><td>$0.90</td><td>5%</td></tr>
-                        <tr class="total-row"><td><strong>Total</strong></td><td><strong>$9.70</strong></td><td><strong>$12.50</strong></td><td><strong>$17.00</strong></td><td>100%</td></tr>
-                    </tbody>
-                </table>
-                <div class="dc-cost-notes">
-                    <p><strong>Low ($9.70-$10.50/W):</strong> San Antonio, Atlanta, Kansas City. Standard air cooling, N+1 redundancy, lower labor.</p>
-                    <p><strong>Rep. ($11.50-$13.50/W):</strong> NoVA, Dallas, Chicago, Phoenix. Hybrid cooling ready, robust security.</p>
-                    <p><strong>High ($14-$17+/W):</strong> Silicon Valley, NYC, Zurich, Tokyo. Full liquid cooling, >50kW/rack, unionized labor.</p>
-                    <p class="dc-cost-disclaimer">Does not include IT hardware or gas turbine plant CapEx.</p>
-                </div>
-            </div>
         </section>
 
         <!-- Engineering Outputs -->
@@ -558,8 +605,12 @@
                             <span class="eng-stat-value" id="eng-orbital-mass">22.2M kg</span>
                         </div>
                         <div class="eng-stat-row">
-                            <span class="eng-stat-label">Solar Array Area</span>
-                            <span class="eng-stat-value" id="eng-orbital-array-area">2.3 km²</span>
+                            <span class="eng-stat-label">Fleet Array Area</span>
+                            <span class="eng-stat-value" id="eng-orbital-fleet-array">2.3 km²</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Single Sat Array</span>
+                            <span class="eng-stat-value" id="eng-orbital-sat-array">116 m²</span>
                         </div>
                         <div class="eng-stat-row">
                             <span class="eng-stat-label">Starship Launches</span>

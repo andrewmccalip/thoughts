@@ -7,7 +7,7 @@
     },
     {
         "id": 2,
-        "title": "Gas Turbine Capex",
+        "title": "Gas Turbine Capex & Gas Pricing",
         "url": "https://gemini.google.com/share/b44c01d3863b",
         "year": "2025"
     },
@@ -19,8 +19,20 @@
     },
     {
         "id": 4,
-        "title": "Datacenter & Power Gen Analysis",
-        "url": "https://gemini.google.com/share/56191222774f",
-        "year": "2024"
+        "title": "Starship Launch Cost Estimate",
+        "url": "https://chatgpt.com/share/693a57e4-ae14-8005-92d7-39b4d9699678",
+        "year": "2025"
+    },
+    {
+        "id": 5,
+        "title": "GPU Failure Rates",
+        "url": "https://gemini.google.com/share/cd476ab11eeb",
+        "year": "2025"
+    },
+    {
+        "id": 6,
+        "title": "Orbital Sunlight Fractions",
+        "url": "https://chatgpt.com/share/693a7a0d-dc38-8005-8244-94cb70a5d1f2",
+        "year": "2025"
     }
 ]

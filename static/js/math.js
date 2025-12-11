@@ -36,9 +36,7 @@ const CostModel = (function() {
         CF_PER_BCF: 1e9,                    // Cubic feet per billion cubic feet
         
         // Cost fractions - Orbital
-        ORBITAL_OVERHEAD_FRAC: 0.05,
-        ORBITAL_MAINTENANCE_FRAC: 0.03,
-        ORBITAL_COMMS_FRAC: 0.02,
+        ORBITAL_OPS_FRAC: 0.01,       // Ops (comms, infra) - 1%
         
         // Cost fractions - NatGas
         NATGAS_OVERHEAD_FRAC: 0.04,
@@ -70,6 +68,7 @@ const CostModel = (function() {
         satellitePowerKW: 27,         // V2 Mini: 27 kW nameplate
         sunFraction: 0.98,            // Terminator orbit default
         cellDegradation: 2.5,         // % per year silicon cell degradation
+        gpuFailureRate: 9,            // % per year GPU failure rate in space (Meta: 9%)
         nreCost: 500,                 // NRE cost in millions ($500M default)
         
         // Terrestrial parameters - On-Site Gas Generation (xAI/Hyperscale style)
@@ -209,17 +208,17 @@ const CostModel = (function() {
         // Base cost before overhead/maintenance/comms
         const baseCost = hardwareCost + launchCost;
         
-        // O&M cost (apply only to hardware to avoid charging launch mass)
-        const overheadCost = hardwareCost * constants.ORBITAL_OVERHEAD_FRAC;
-        const maintenanceCost = hardwareCost * constants.ORBITAL_MAINTENANCE_FRAC;
-        const commsCost = hardwareCost * constants.ORBITAL_COMMS_FRAC;
-        const omCost = overheadCost + maintenanceCost + commsCost;
+        // Ops cost (comms, infra) - 1% of hardware
+        const opsCost = hardwareCost * constants.ORBITAL_OPS_FRAC;
+        
+        // GPU failure replacement cost (% of hardware per year × years)
+        const gpuReplacementCost = hardwareCost * (state.gpuFailureRate / 100) * state.years;
         
         // NRE cost (non-recurring engineering)
         const nreCost = state.nreCost * 1e6;  // Convert from millions
         
-        // Total system cost (including NRE)
-        const totalCost = baseCost + omCost + nreCost;
+        // Total system cost (including NRE, ops, GPU replacement)
+        const totalCost = baseCost + opsCost + gpuReplacementCost + nreCost;
         
         // ========================================
         // ENERGY OUTPUT
@@ -251,22 +250,24 @@ const CostModel = (function() {
         // Degradation margin: how much extra capacity we're launching
         const degradationMargin = (actualInitialPowerW / derived.TARGET_POWER_W - 1) * 100;
         
+        // Single satellite array area
+        const singleSatArrayM2 = arrayPerSatelliteM2;
+        
         return {
             totalMassKg,
             hardwareCost,
             launchCost,
-            omCost,
+            opsCost,
+            gpuReplacementCost,
             nreCost,
             baseCost,
-            overheadCost,
-            maintenanceCost,
-            commsCost,
             totalCost,
             energyMWh,
             costPerW,
             lcoe,
             satelliteCount,
             arrayAreaKm2,
+            singleSatArrayM2,
             starshipLaunches,
             loxGallons,
             methaneGallons,

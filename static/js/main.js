@@ -24,6 +24,26 @@
                 <p><strong>High $14-$17+/W</strong><br>
                 Silicon Valley, NYC, Zurich, Tokyo. Full liquid cooling, >50kW/rack.</p>
             `
+        },
+        'launch-cost': {
+            content: `
+                <span class="highlight-label">Starship Cost Floor Analysis</span>
+                <p>The <strong>$20/kg</strong> lower bound represents a bottom-up BOM + consumables + labor estimate for Starship at full reusability.</p>
+                <p><strong>Key assumptions:</strong></p>
+                <p>• Propellant: ~$500k/launch<br>
+                • Ground ops: ~$200k/launch<br>
+                • Maintenance: ~$300k/launch<br>
+                • 100+ ton payload capacity</p>
+                <p>This is the theoretical in-the-limit pricing assuming mature operations and full vehicle reuse.</p>
+            `
+        },
+        'gpu-failure': {
+            content: `
+                <span class="highlight-label">GPU Failure Rates</span>
+                <p><strong>9%/year</strong> - Meta's reported GPU failure rate in datacenter environments.</p>
+                <p><strong>1.5%/year</strong> - Typical CPU failure rate for comparison.</p>
+                <p>Space environment adds thermal cycling, radiation, and vibration stress that may increase failure rates further.</p>
+            `
         }
     };
     
@@ -226,7 +246,7 @@
         const maxCost = Math.max(
             orbital.hardwareCost,
             orbital.launchCost,
-            orbital.omCost,
+            orbital.opsCost + orbital.gpuReplacementCost,
             terrestrial.powerGenCost,
             terrestrial.electricalCost,
             terrestrial.mechanicalCost,
@@ -234,42 +254,72 @@
             terrestrial.fuelCostTotal
         );
         
-        // Update orbital display
+        // Update orbital display (desktop + mobile)
         updateText('orbital-total', CostModel.formatCost(orbital.totalCost));
+        updateText('orbital-total-mobile', CostModel.formatCost(orbital.totalCost));
         updateText('orbital-hardware-value', CostModel.formatCost(orbital.hardwareCost));
+        updateText('orbital-hardware-value-mobile', CostModel.formatCost(orbital.hardwareCost));
         updateText('orbital-launch-value', CostModel.formatCost(orbital.launchCost));
+        updateText('orbital-launch-value-mobile', CostModel.formatCost(orbital.launchCost));
         updateText('orbital-mass', CostModel.formatMass(orbital.totalMassKg));
+        updateText('orbital-mass-mobile', CostModel.formatMass(orbital.totalMassKg));
         updateText('orbital-cpw', `$${orbital.costPerW.toFixed(2)}/W`);
+        updateText('orbital-cpw-mobile', `$${orbital.costPerW.toFixed(2)}/W`);
         updateText('orbital-energy', CostModel.formatEnergy(orbital.energyMWh));
+        updateText('orbital-energy-mobile', CostModel.formatEnergy(orbital.energyMWh));
         updateText('orbital-lcoe', CostModel.formatLCOE(orbital.lcoe));
-        updateText('orbital-overhead', CostModel.formatCost(orbital.overheadCost));
-        updateText('orbital-maintenance', CostModel.formatCost(orbital.maintenanceCost));
-        updateText('orbital-comms', CostModel.formatCost(orbital.commsCost));
+        updateText('orbital-lcoe-mobile', CostModel.formatLCOE(orbital.lcoe));
+        updateText('orbital-ops', CostModel.formatCost(orbital.opsCost));
+        updateText('orbital-gpu-replace', CostModel.formatCost(orbital.gpuReplacementCost));
         
-        // Update orbital bars
-        document.getElementById('orbital-hardware-bar').style.width = `${(orbital.hardwareCost / maxCost) * 100}%`;
-        document.getElementById('orbital-launch-bar').style.width = `${(orbital.launchCost / maxCost) * 100}%`;
-        document.getElementById('orbital-om-bar').style.width = `${(orbital.omCost / maxCost) * 100}%`;
-        updateText('orbital-om-value', CostModel.formatCost(orbital.omCost));
+        // Update orbital bars (desktop + mobile)
+        const setBarWidth = (id, pct) => {
+            const el = document.getElementById(id);
+            if (el) el.style.width = `${pct}%`;
+        };
+        setBarWidth('orbital-hardware-bar', (orbital.hardwareCost / maxCost) * 100);
+        setBarWidth('orbital-hardware-bar-mobile', (orbital.hardwareCost / maxCost) * 100);
+        setBarWidth('orbital-launch-bar', (orbital.launchCost / maxCost) * 100);
+        setBarWidth('orbital-launch-bar-mobile', (orbital.launchCost / maxCost) * 100);
+        const opsPlusGpu = orbital.opsCost + orbital.gpuReplacementCost;
+        setBarWidth('orbital-om-bar', (opsPlusGpu / maxCost) * 100);
+        setBarWidth('orbital-om-bar-mobile', (opsPlusGpu / maxCost) * 100);
+        updateText('orbital-om-value', CostModel.formatCost(opsPlusGpu));
+        updateText('orbital-om-value-mobile', CostModel.formatCost(opsPlusGpu));
         
-        // Update Terrestrial display (5 buckets from report)
+        // Update Terrestrial display (desktop + mobile)
         updateText('terrestrial-total', CostModel.formatCost(terrestrial.totalCost));
+        updateText('terrestrial-total-mobile', CostModel.formatCost(terrestrial.totalCost));
         updateText('terrestrial-powergen-value', CostModel.formatCost(terrestrial.powerGenCost));
+        updateText('terrestrial-powergen-value-mobile', CostModel.formatCost(terrestrial.powerGenCost));
         updateText('terrestrial-electrical-value', CostModel.formatCost(terrestrial.electricalCost));
+        updateText('terrestrial-electrical-value-mobile', CostModel.formatCost(terrestrial.electricalCost));
         updateText('terrestrial-mechanical-value', CostModel.formatCost(terrestrial.mechanicalCost));
+        updateText('terrestrial-mechanical-value-mobile', CostModel.formatCost(terrestrial.mechanicalCost));
         updateText('terrestrial-civil-value', CostModel.formatCost(terrestrial.civilCost));
+        updateText('terrestrial-civil-value-mobile', CostModel.formatCost(terrestrial.civilCost));
         updateText('terrestrial-fuel-value', CostModel.formatCost(terrestrial.fuelCostTotal));
+        updateText('terrestrial-fuel-value-mobile', CostModel.formatCost(terrestrial.fuelCostTotal));
         updateText('terrestrial-capex-cpw', `$${terrestrial.facilityCapexPerW.toFixed(2)}/W`);
+        updateText('terrestrial-capex-cpw-mobile', `$${terrestrial.facilityCapexPerW.toFixed(2)}/W`);
         updateText('terrestrial-cpw', `$${terrestrial.costPerW.toFixed(2)}/W`);
+        updateText('terrestrial-cpw-mobile', `$${terrestrial.costPerW.toFixed(2)}/W`);
         updateText('terrestrial-energy', CostModel.formatEnergy(terrestrial.energyMWh));
+        updateText('terrestrial-energy-mobile', CostModel.formatEnergy(terrestrial.energyMWh));
         updateText('terrestrial-lcoe', CostModel.formatLCOE(terrestrial.lcoe));
+        updateText('terrestrial-lcoe-mobile', CostModel.formatLCOE(terrestrial.lcoe));
         
-        // Update Terrestrial bars (5 buckets)
-        document.getElementById('terrestrial-powergen-bar').style.width = `${(terrestrial.powerGenCost / maxCost) * 100}%`;
-        document.getElementById('terrestrial-electrical-bar').style.width = `${(terrestrial.electricalCost / maxCost) * 100}%`;
-        document.getElementById('terrestrial-mechanical-bar').style.width = `${(terrestrial.mechanicalCost / maxCost) * 100}%`;
-        document.getElementById('terrestrial-civil-bar').style.width = `${(terrestrial.civilCost / maxCost) * 100}%`;
-        document.getElementById('terrestrial-fuel-bar').style.width = `${(terrestrial.fuelCostTotal / maxCost) * 100}%`;
+        // Update Terrestrial bars (desktop + mobile)
+        setBarWidth('terrestrial-powergen-bar', (terrestrial.powerGenCost / maxCost) * 100);
+        setBarWidth('terrestrial-powergen-bar-mobile', (terrestrial.powerGenCost / maxCost) * 100);
+        setBarWidth('terrestrial-electrical-bar', (terrestrial.electricalCost / maxCost) * 100);
+        setBarWidth('terrestrial-electrical-bar-mobile', (terrestrial.electricalCost / maxCost) * 100);
+        setBarWidth('terrestrial-mechanical-bar', (terrestrial.mechanicalCost / maxCost) * 100);
+        setBarWidth('terrestrial-mechanical-bar-mobile', (terrestrial.mechanicalCost / maxCost) * 100);
+        setBarWidth('terrestrial-civil-bar', (terrestrial.civilCost / maxCost) * 100);
+        setBarWidth('terrestrial-civil-bar-mobile', (terrestrial.civilCost / maxCost) * 100);
+        setBarWidth('terrestrial-fuel-bar', (terrestrial.fuelCostTotal / maxCost) * 100);
+        setBarWidth('terrestrial-fuel-bar-mobile', (terrestrial.fuelCostTotal / maxCost) * 100);
         
         // Update breakeven
         updateText('breakeven-launch', CostModel.formatCostPerKg(breakeven));
@@ -287,7 +337,8 @@
         
         // Update engineering outputs - Orbital
         updateText('eng-orbital-mass', CostModel.formatMass(orbital.totalMassKg));
-        updateText('eng-orbital-array-area', `${orbital.arrayAreaKm2.toFixed(1)} km²`);
+        updateText('eng-orbital-fleet-array', `${orbital.arrayAreaKm2.toFixed(1)} km²`);
+        updateText('eng-orbital-sat-array', `${orbital.singleSatArrayM2.toFixed(0)} m²`);
         updateText('eng-orbital-sat-count', `~${orbital.satelliteCount.toLocaleString()}`);
         updateText('eng-orbital-launches', `~${orbital.starshipLaunches.toLocaleString()}`);
         updateText('eng-orbital-lox', `${(orbital.loxGallons / 1e6).toFixed(0)}M gal`);
@@ -421,8 +472,15 @@
         // Years slider
         setupSlider('years-slider', 'years-fill', 'years-value', 3, 10, 'years', v => `${v} years`);
         
-        // Launch cost slider
-        setupSlider('launch-cost-slider', 'launch-cost-fill', 'launch-cost-value', 100, 2940, 'launchCostPerKg', v => `$${v.toLocaleString()}/kg`);
+        // Launch cost slider (min $20/kg theoretical limit)
+        setupSlider('launch-cost-slider', 'launch-cost-fill', 'launch-cost-value', 20, 2940, 'launchCostPerKg', v => `$${v.toLocaleString()}/kg`);
+        
+        // Show highlight on hover for launch cost
+        const launchCostSlider = document.getElementById('launch-cost-slider');
+        if (launchCostSlider) {
+            launchCostSlider.addEventListener('mouseenter', () => showHighlight('launch-cost'));
+            launchCostSlider.addEventListener('focus', () => showHighlight('launch-cost'));
+        }
         
         // Satellite cost slider (from Starlink BOM analysis)
         setupSlider('sat-cost-slider', 'sat-cost-fill', 'sat-cost-value', 15, 40, 'satelliteCostPerW', v => `$${v}/W`);
@@ -430,14 +488,24 @@
         // Specific power slider (W/kg from Starlink analysis)
         setupSlider('specific-power-slider', 'specific-power-fill', 'specific-power-value', 3, 50, 'specificPowerWPerKg', v => `${v.toFixed(1)} W/kg`);
         
-        // Satellite size slider (kW nameplate)
-        setupSlider('sat-size-slider', 'sat-size-fill', 'sat-size-value', 5, 80, 'satellitePowerKW', v => `${v} kW`);
+        // Satellite size slider (kW nameplate) - up to 130kW for V3.2
+        setupSlider('sat-size-slider', 'sat-size-fill', 'sat-size-value', 5, 130, 'satellitePowerKW', v => `${v} kW`);
         
         // Sun fraction slider
         setupSlider('sun-fraction-slider', 'sun-fraction-fill', 'sun-fraction-value', 0.55, 1.0, 'sunFraction', v => `${Math.round(v * 100)}%`);
         
         // Cell degradation slider
         setupSlider('degradation-slider', 'degradation-fill', 'degradation-value', 0, 5, 'cellDegradation', v => `${v.toFixed(1)}%/yr`);
+        
+        // GPU failure rate slider
+        setupSlider('gpu-failure-slider', 'gpu-failure-fill', 'gpu-failure-value', 0, 10, 'gpuFailureRate', v => `${v.toFixed(1)}%/yr`);
+        
+        // Show highlight on hover for GPU failure
+        const gpuFailureSlider = document.getElementById('gpu-failure-slider');
+        if (gpuFailureSlider) {
+            gpuFailureSlider.addEventListener('mouseenter', () => showHighlight('gpu-failure'));
+            gpuFailureSlider.addEventListener('focus', () => showHighlight('gpu-failure'));
+        }
         
         // NRE cost slider
         setupSlider('nre-slider', 'nre-fill', 'nre-value', 0, 2000, 'nreCost', v => v >= 1000 ? `$${(v/1000).toFixed(1)}B` : `$${v}M`);
