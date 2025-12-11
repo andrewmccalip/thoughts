@@ -316,41 +316,49 @@
         updateText('eng-ngcc-fuel-cost', `$${terrestrial.fuelCostPerMWh.toFixed(0)}/MWh`);
         updateText('eng-ngcc-energy', CostModel.formatEnergy(terrestrial.energyMWh));
 
-        // Thermal analysis outputs
+        // Thermal analysis outputs - Bifacial Model
         updateText('thermal-available-area', `${thermal.availableAreaKm2.toFixed(2)} km²`);
         updateText('thermal-effective-emissivity', `${thermal.effectiveEmissivity.toFixed(2)}`);
-        updateText('thermal-radiator-temp', `${thermal.radiatorTempC.toFixed(1)} °C`);
-        updateText('thermal-incident', `${(thermal.incidentSolarW / 1e6).toFixed(0)} MW`);
-        updateText('thermal-waste-heat', `${(thermal.wasteHeatW / 1e6).toFixed(0)} MW`);
-        updateText('thermal-electrical-heat', `${(thermal.electricalHeatW / 1e6).toFixed(0)} MW`);
-        updateText('thermal-heat-load', `${(thermal.heatLoadW / 1e6).toFixed(0)} MW`);
-        updateText('thermal-capacity', `${(thermal.capacityW / 1e6).toFixed(0)} MW`);
+        updateText('thermal-total-emissivity', `${thermal.totalEmissivity.toFixed(2)}`);
+        updateText('thermal-beta-angle', `${thermal.betaAngle}°`);
+        updateText('thermal-view-factor', `${thermal.vfEarth.toFixed(3)}`);
         
-        // Margin - pass if positive (capacity > load)
+        // Heat loads
+        updateText('thermal-q-solar', `${(thermal.qSolarW / 1e6).toFixed(0)} MW`);
+        updateText('thermal-q-earth-ir', `${(thermal.qEarthIRW / 1e6).toFixed(1)} MW`);
+        updateText('thermal-q-albedo', `${(thermal.qAlbedoW / 1e6).toFixed(1)} MW`);
+        updateText('thermal-q-heatloop', `${(thermal.qHeatLoopW / 1e6).toFixed(0)} MW`);
+        updateText('thermal-total-heat-in', `${(thermal.totalHeatInW / 1e6).toFixed(0)} MW`);
+        updateText('thermal-power-generated', `${(thermal.powerGeneratedW / 1e6).toFixed(0)} MW`);
+        
+        // Equilibrium temperature - main result
+        const eqTempEl = document.getElementById('thermal-eq-temp');
+        if (eqTempEl) {
+            eqTempEl.textContent = `${thermal.eqTempC.toFixed(1)} °C`;
+            const tempOk = thermal.eqTempC <= thermal.radiatorTempC;
+            eqTempEl.classList.toggle('status-pass', tempOk);
+            eqTempEl.classList.toggle('status-fail', !tempOk);
+        }
+        
+        updateText('thermal-compute-temp', `${thermal.computeTempC.toFixed(1)} °C`);
+        updateText('thermal-radiator-target', `${thermal.radiatorTempC.toFixed(1)} °C`);
+        updateText('thermal-capacity', `${(thermal.radiativeCapacityW / 1e6).toFixed(0)} MW`);
+        
+        // Margin - pass if equilibrium temp below radiator limit
         const marginEl = document.getElementById('thermal-margin');
         const marginBadgeEl = document.getElementById('thermal-margin-badge');
         if (marginEl) {
-            marginEl.textContent = `${thermal.marginPct.toFixed(1)}%`;
-            marginEl.classList.toggle('status-pass', thermal.marginPct >= 0);
-            marginEl.classList.toggle('status-fail', thermal.marginPct < 0);
+            marginEl.textContent = `${thermal.tempMarginC.toFixed(1)} °C`;
+            marginEl.classList.toggle('status-pass', thermal.areaSufficient);
+            marginEl.classList.toggle('status-fail', !thermal.areaSufficient);
         }
         if (marginBadgeEl) {
-            const pass = thermal.marginPct >= 0;
-            marginBadgeEl.textContent = pass ? 'PASS' : 'FAIL';
-            marginBadgeEl.classList.toggle('status-pass', pass);
-            marginBadgeEl.classList.toggle('status-fail', !pass);
+            marginBadgeEl.textContent = thermal.areaSufficient ? 'PASS' : 'FAIL';
+            marginBadgeEl.classList.toggle('status-pass', thermal.areaSufficient);
+            marginBadgeEl.classList.toggle('status-fail', !thermal.areaSufficient);
         }
         
-        // Required temp - fail if above max die temp (physically impossible)
-        const reqTempEl = document.getElementById('thermal-required-temp');
-        if (reqTempEl) {
-            reqTempEl.textContent = `${thermal.requiredTempC.toFixed(1)} °C`;
-            const tempOk = thermal.requiredTempC <= state.maxDieTempC;
-            reqTempEl.classList.toggle('status-pass', tempOk);
-            reqTempEl.classList.toggle('status-fail', !tempOk);
-        }
-        
-        // Required area - fail if significantly more than available
+        // Required area - fail if more than available
         const reqAreaEl = document.getElementById('thermal-required-area');
         if (reqAreaEl) {
             reqAreaEl.textContent = `${thermal.areaRequiredKm2.toFixed(2)} km²`;
@@ -358,6 +366,21 @@
             reqAreaEl.classList.toggle('status-pass', areaOk);
             reqAreaEl.classList.toggle('status-fail', !areaOk);
         }
+        
+        // Update thermal diagram values
+        updateThermalDiagram(thermal);
+    }
+    
+    function updateThermalDiagram(thermal) {
+        // Update diagram heat flow values
+        updateText('diagram-q-solar', `${(thermal.qSolarW / 1e6).toFixed(0)} MW`);
+        updateText('diagram-q-earth-ir', `${(thermal.qEarthIRW / 1e6).toFixed(1)} MW`);
+        updateText('diagram-q-albedo', `${(thermal.qAlbedoW / 1e6).toFixed(1)} MW`);
+        updateText('diagram-q-heatloop', `${(thermal.qHeatLoopW / 1e6).toFixed(0)} MW`);
+        updateText('diagram-q-rad-pv', `${(thermal.radiativeCapacityW / 2e6).toFixed(0)} MW`);
+        updateText('diagram-q-rad-back', `${(thermal.radiativeCapacityW / 2e6).toFixed(0)} MW`);
+        updateText('diagram-eq-temp', `${thermal.eqTempC.toFixed(0)}°C`);
+        updateText('diagram-power-out', `${(thermal.powerGeneratedW / 1e6).toFixed(0)} MW`);
     }
 
     // ==========================================
@@ -495,13 +518,15 @@
         // PUE slider
         setupSlider('pue-slider', 'pue-fill', 'pue-value', 1.1, 1.5, 'pue', v => v.toFixed(2));
 
-        // Thermal sliders
-        setupSlider('emissivity-front-slider', 'emissivity-front-fill', 'emissivity-front-value', 0.6, 0.98, 'emissivityFront', v => v.toFixed(2));
-        setupSlider('emissivity-back-slider', 'emissivity-back-fill', 'emissivity-back-value', 0.6, 0.98, 'emissivityBack', v => v.toFixed(2));
-        setupSlider('sun-view-slider', 'sun-view-fill', 'sun-view-value', 0.02, 0.15, 'sunViewFactor', v => v.toFixed(2));
-        setupSlider('albedo-slider', 'albedo-fill', 'albedo-value', 0.0, 0.5, 'albedoViewFactor', v => v.toFixed(2));
-        setupSlider('die-temp-slider', 'die-temp-fill', 'die-temp-value', 60, 90, 'maxDieTempC', v => `${v.toFixed(0)} °C`);
+        // Thermal sliders - Bifacial Model
+        setupSlider('solar-absorptivity-slider', 'solar-absorptivity-fill', 'solar-absorptivity-value', 0.80, 0.98, 'solarAbsorptivity', v => v.toFixed(2));
+        setupSlider('emissivity-pv-slider', 'emissivity-pv-fill', 'emissivity-pv-value', 0.70, 0.95, 'emissivityPV', v => v.toFixed(2));
+        setupSlider('emissivity-rad-slider', 'emissivity-rad-fill', 'emissivity-rad-value', 0.80, 0.98, 'emissivityRad', v => v.toFixed(2));
+        setupSlider('pv-efficiency-slider', 'pv-efficiency-fill', 'pv-efficiency-value', 0.20, 0.24, 'pvEfficiency', v => `${(v * 100).toFixed(0)}%`);
+        setupSlider('beta-angle-slider', 'beta-angle-fill', 'beta-angle-value', 60, 90, 'betaAngle', v => `${v}°`);
+        setupSlider('die-temp-slider', 'die-temp-fill', 'die-temp-value', 70, 100, 'maxDieTempC', v => `${v.toFixed(0)} °C`);
         setupSlider('temp-drop-slider', 'temp-drop-fill', 'temp-drop-value', 5, 25, 'tempDropC', v => `${v.toFixed(0)} °C`);
+        
         
         // DC Infrastructure slider with breakdown
         // Percentages from report: Electrical 45%, Mechanical 20%, Shell 17%, Fit-out 8%, Site 5%, Fees 5%

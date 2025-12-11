@@ -918,99 +918,206 @@
                     The design space is bounded. Emissivity maxes out around 0.95 for practical surfaces. Running hotter improves radiative rejection (T⁴ scaling), but GPU junction limits constrain this. The interactive model below lets you explore these tradeoffs.
                 </p>
 
+                <!-- Thermal Balance Diagram -->
+                <div class="thermal-diagram-container">
+                    <div class="figure-label">Thermal Balance · Bifacial Panel Model</div>
+                    <div class="thermal-diagram">
+                        <!-- Sun -->
+                        <div class="thermal-sun">
+                            <div class="sun-icon">☀️</div>
+                            <span class="sun-label">Sun</span>
+                        </div>
+                        
+                        <!-- Heat flow arrows - inputs -->
+                        <div class="heat-flow heat-flow-solar">
+                            <div class="heat-arrow heat-arrow-down"></div>
+                            <span class="heat-label">Q<sub>solar</sub></span>
+                            <span class="heat-value" id="diagram-q-solar">0 MW</span>
+                        </div>
+                        
+                        <!-- Bifacial Panel -->
+                        <div class="bifacial-panel">
+                            <div class="panel-side panel-side-a">
+                                <span class="side-label">Side A</span>
+                                <span class="side-desc">PV (α=0.92, ε=0.85)</span>
+                            </div>
+                            <div class="panel-core">
+                                <span class="core-temp" id="diagram-eq-temp">0°C</span>
+                                <span class="core-label">T<sub>eq</sub></span>
+                            </div>
+                            <div class="panel-side panel-side-b">
+                                <span class="side-label">Side B</span>
+                                <span class="side-desc">Radiator (ε=0.90)</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Heat flow arrows - radiation out -->
+                        <div class="heat-flow heat-flow-rad-a">
+                            <div class="heat-arrow heat-arrow-up-left"></div>
+                            <span class="heat-label">Q<sub>rad,A</sub></span>
+                            <span class="heat-value" id="diagram-q-rad-pv">0 MW</span>
+                        </div>
+                        <div class="heat-flow heat-flow-rad-b">
+                            <div class="heat-arrow heat-arrow-up-right"></div>
+                            <span class="heat-label">Q<sub>rad,B</sub></span>
+                            <span class="heat-value" id="diagram-q-rad-back">0 MW</span>
+                        </div>
+                        
+                        <!-- Earth contributions -->
+                        <div class="thermal-earth">
+                            <div class="earth-icon">🌍</div>
+                            <span class="earth-label">Earth</span>
+                        </div>
+                        
+                        <div class="heat-flow heat-flow-earth-ir">
+                            <div class="heat-arrow heat-arrow-up"></div>
+                            <span class="heat-label">Q<sub>IR</sub></span>
+                            <span class="heat-value" id="diagram-q-earth-ir">0 MW</span>
+                        </div>
+                        
+                        <div class="heat-flow heat-flow-albedo">
+                            <div class="heat-arrow heat-arrow-up-diag"></div>
+                            <span class="heat-label">Q<sub>albedo</sub></span>
+                            <span class="heat-value" id="diagram-q-albedo">0 MW</span>
+                        </div>
+                        
+                        <!-- Power output to GPUs -->
+                        <div class="power-output">
+                            <div class="power-arrow"></div>
+                            <span class="power-label">P<sub>elec</sub> → GPUs</span>
+                            <span class="power-value" id="diagram-power-out">0 MW</span>
+                        </div>
+                        
+                        <!-- Heat loop return -->
+                        <div class="heat-loop-return">
+                            <div class="heat-loop-arrow"></div>
+                            <span class="heat-loop-label">Q<sub>heatloop</sub> ←</span>
+                            <span class="heat-loop-value" id="diagram-q-heatloop">0 MW</span>
+                        </div>
+                        
+                        <!-- Deep space sink -->
+                        <div class="space-sink">
+                            <span class="sink-label">Deep Space (3K)</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Energy Balance Equation -->
+                    <div class="energy-equation">
+                        <span class="eq-text">Energy Balance: </span>
+                        <span class="eq-formula">Q<sub>solar</sub> + Q<sub>IR</sub> + Q<sub>albedo</sub> + Q<sub>heatloop</sub> = Q<sub>rad,A</sub> + Q<sub>rad,B</sub></span>
+                    </div>
+                </div>
+
                 <!-- Thermal Analysis Panel -->
                 <div class="paper-section engineering-outputs-section" style="padding-top: 1rem;">
-                    <div class="figure-label">Thermal Analysis · Radiator Sizing</div>
+                    <div class="figure-label">Thermal Analysis · Bifacial Panel Parameters</div>
                     <div class="engineering-outputs-grid">
                         <!-- Thermal Inputs -->
                         <div class="engineering-output-column orbital orbital-params">
                             <div class="engineering-column-header">
                                 <div class="column-indicator orbital-indicator"></div>
-                                <h3>Radiator Inputs</h3>
+                                <h3>Surface Properties</h3>
                             </div>
 
                             <div class="slider-container">
                                 <div class="slider-header">
-                                    <span class="slider-label">Sun-Side Emissivity</span>
-                                    <span class="slider-value" id="emissivity-front-value">0.80</span>
+                                    <span class="slider-label">Solar Absorptivity (α<sub>pv</sub>)</span>
+                                    <span class="slider-value" id="solar-absorptivity-value">0.92</span>
                                 </div>
                                 <div class="slider-track-container">
-                                    <input type="range" id="emissivity-front-slider" min="0.6" max="0.98" step="0.01" value="0.8">
+                                    <input type="range" id="solar-absorptivity-slider" min="0.80" max="0.98" step="0.01" value="0.92">
                                     <div class="slider-track"></div>
-                                    <div class="slider-fill orbital-fill" id="emissivity-front-fill"></div>
+                                    <div class="slider-fill orbital-fill" id="solar-absorptivity-fill"></div>
                                 </div>
                                 <div class="slider-ticks">
-                                    <span class="tick" data-value="0.6">0.60</span>
-                                    <span class="tick" data-value="0.8">0.80</span>
-                                    <span class="tick" data-value="0.95">0.95</span>
-                                </div>
-                            </div>
-
-                            <div class="slider-container">
-                                <div class="slider-header">
-                                    <span class="slider-label">Radiator-Side Emissivity</span>
-                                    <span class="slider-value" id="emissivity-back-value">0.90</span>
-                                </div>
-                                <div class="slider-track-container">
-                                    <input type="range" id="emissivity-back-slider" min="0.6" max="0.98" step="0.01" value="0.9">
-                                    <div class="slider-track"></div>
-                                    <div class="slider-fill orbital-fill" id="emissivity-back-fill"></div>
-                                </div>
-                                <div class="slider-ticks">
-                                    <span class="tick" data-value="0.6">0.60</span>
-                                    <span class="tick" data-value="0.9">0.90</span>
+                                    <span class="tick" data-value="0.80">0.80</span>
+                                    <span class="tick" data-value="0.92">0.92</span>
                                     <span class="tick" data-value="0.98">0.98</span>
                                 </div>
                             </div>
 
                             <div class="slider-container">
                                 <div class="slider-header">
-                                    <span class="slider-label">Sun Disk View Factor</span>
-                                    <span class="slider-value" id="sun-view-value">0.08</span>
+                                    <span class="slider-label">PV Side Emissivity (ε<sub>pv</sub>)</span>
+                                    <span class="slider-value" id="emissivity-pv-value">0.85</span>
                                 </div>
                                 <div class="slider-track-container">
-                                    <input type="range" id="sun-view-slider" min="0.02" max="0.15" step="0.01" value="0.08">
+                                    <input type="range" id="emissivity-pv-slider" min="0.70" max="0.95" step="0.01" value="0.85">
                                     <div class="slider-track"></div>
-                                    <div class="slider-fill orbital-fill" id="sun-view-fill"></div>
+                                    <div class="slider-fill orbital-fill" id="emissivity-pv-fill"></div>
                                 </div>
                                 <div class="slider-ticks">
-                                    <span class="tick" data-value="0.02">0.02</span>
-                                    <span class="tick" data-value="0.08">0.08</span>
-                                    <span class="tick" data-value="0.15">0.15</span>
+                                    <span class="tick" data-value="0.70">0.70</span>
+                                    <span class="tick" data-value="0.85">0.85</span>
+                                    <span class="tick" data-value="0.95">0.95</span>
                                 </div>
                             </div>
 
                             <div class="slider-container">
                                 <div class="slider-header">
-                                    <span class="slider-label">Earth Albedo View Factor</span>
-                                    <span class="slider-value" id="albedo-value">0.20</span>
+                                    <span class="slider-label">Radiator Emissivity (ε<sub>rad</sub>)</span>
+                                    <span class="slider-value" id="emissivity-rad-value">0.90</span>
                                 </div>
                                 <div class="slider-track-container">
-                                    <input type="range" id="albedo-slider" min="0.0" max="0.5" step="0.01" value="0.2">
+                                    <input type="range" id="emissivity-rad-slider" min="0.80" max="0.98" step="0.01" value="0.90">
                                     <div class="slider-track"></div>
-                                    <div class="slider-fill orbital-fill" id="albedo-fill"></div>
+                                    <div class="slider-fill orbital-fill" id="emissivity-rad-fill"></div>
                                 </div>
                                 <div class="slider-ticks">
-                                    <span class="tick" data-value="0.0">0.0</span>
-                                    <span class="tick" data-value="0.2">0.2</span>
-                                    <span class="tick" data-value="0.4">0.4</span>
+                                    <span class="tick" data-value="0.80">0.80</span>
+                                    <span class="tick" data-value="0.90">0.90</span>
+                                    <span class="tick" data-value="0.98">0.98</span>
                                 </div>
                             </div>
 
                             <div class="slider-container">
                                 <div class="slider-header">
-                                    <span class="slider-label">Max Die Temp</span>
-                                    <span class="slider-value" id="die-temp-value">75 °C</span>
+                                    <span class="slider-label">PV Efficiency (η)</span>
+                                    <span class="slider-value" id="pv-efficiency-value">22%</span>
                                 </div>
                                 <div class="slider-track-container">
-                                    <input type="range" id="die-temp-slider" min="60" max="90" step="1" value="75">
+                                    <input type="range" id="pv-efficiency-slider" min="0.20" max="0.24" step="0.01" value="0.22">
+                                    <div class="slider-track"></div>
+                                    <div class="slider-fill orbital-fill" id="pv-efficiency-fill"></div>
+                                </div>
+                                <div class="slider-ticks">
+                                    <span class="tick" data-value="0.20">20%</span>
+                                    <span class="tick" data-value="0.22">22%</span>
+                                    <span class="tick" data-value="0.24">24%</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-header">
+                                    <span class="slider-label">Orbit Beta Angle (β)</span>
+                                    <span class="slider-value" id="beta-angle-value">90°</span>
+                                </div>
+                                <div class="slider-track-container">
+                                    <input type="range" id="beta-angle-slider" min="60" max="90" step="1" value="90">
+                                    <div class="slider-track"></div>
+                                    <div class="slider-fill orbital-fill" id="beta-angle-fill"></div>
+                                </div>
+                                <div class="slider-ticks">
+                                    <span class="tick" data-value="60">60° (Hot)</span>
+                                    <span class="tick" data-value="75">75°</span>
+                                    <span class="tick" data-value="90">90° (Cold)</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-header">
+                                    <span class="slider-label">Max Die Temperature</span>
+                                    <span class="slider-value" id="die-temp-value">85 °C</span>
+                                </div>
+                                <div class="slider-track-container">
+                                    <input type="range" id="die-temp-slider" min="70" max="100" step="1" value="85">
                                     <div class="slider-track"></div>
                                     <div class="slider-fill orbital-fill" id="die-temp-fill"></div>
                                 </div>
                                 <div class="slider-ticks">
-                                    <span class="tick" data-value="60">60°C</span>
-                                    <span class="tick" data-value="75">75°C</span>
-                                    <span class="tick" data-value="90">90°C</span>
+                                    <span class="tick" data-value="70">70°C</span>
+                                    <span class="tick" data-value="85">85°C</span>
+                                    <span class="tick" data-value="100">100°C</span>
                                 </div>
                             </div>
 
@@ -1041,49 +1148,80 @@
                             </div>
 
                             <div class="engineering-stats">
-                                <div class="eng-stat-row">
-                                    <span class="eng-stat-label">Radiator Area (back of arrays)</span>
+                                <div class="eng-stat-row eng-stat-header">
+                                    <span class="eng-stat-label">Geometry</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="A = N_sat × A_array_per_sat">
+                                    <span class="eng-stat-label">Panel Area (both sides)</span>
                                     <span class="eng-stat-value" id="thermal-available-area">0.00 km²</span>
                                 </div>
-                                <div class="eng-stat-row">
-                                    <span class="eng-stat-label">Effective Emissivity</span>
-                                    <span class="eng-stat-value" id="thermal-effective-emissivity">0.00</span>
+                                <div class="eng-stat-row has-formula" data-formula="β = orbit inclination angle&#10;90° = terminator (coldest)&#10;60° = seasonal limit (hottest)">
+                                    <span class="eng-stat-label">Beta Angle</span>
+                                    <span class="eng-stat-value" id="thermal-beta-angle">90°</span>
                                 </div>
-                                <div class="eng-stat-row">
-                                    <span class="eng-stat-label">Radiator Surface Temp</span>
-                                    <span class="eng-stat-value" id="thermal-radiator-temp">0.0 °C</span>
+                                <div class="eng-stat-row has-formula" data-formula="VF_earth = 0.08 + (90 - β) × 0.002&#10;View factor increases as β decreases">
+                                    <span class="eng-stat-label">Earth View Factor</span>
+                                    <span class="eng-stat-value" id="thermal-view-factor">0.080</span>
                                 </div>
-                                <div class="eng-stat-row">
-                                    <span class="eng-stat-label">Incident Solar Power</span>
-                                    <span class="eng-stat-value" id="thermal-incident">0 MW</span>
+                                <div class="eng-stat-row has-formula" data-formula="ε_total = ε_pv + ε_rad&#10;Both sides radiate to space">
+                                    <span class="eng-stat-label">Total Emissivity (ε<sub>pv</sub>+ε<sub>rad</sub>)</span>
+                                    <span class="eng-stat-value" id="thermal-total-emissivity">1.75</span>
                                 </div>
-                                <div class="eng-stat-row">
-                                    <span class="eng-stat-label">Panel Waste Heat</span>
-                                    <span class="eng-stat-value" id="thermal-waste-heat">0 MW</span>
+                                
+                                <div class="eng-stat-row eng-stat-header">
+                                    <span class="eng-stat-label">Heat Inputs</span>
                                 </div>
-                                <div class="eng-stat-row">
-                                    <span class="eng-stat-label">Electrical Heat (compute)</span>
-                                    <span class="eng-stat-value" id="thermal-electrical-heat">0 MW</span>
+                                <div class="eng-stat-row has-formula" data-formula="Q_solar = G × α_pv × A - P_elec&#10;&#10;G = 1361 W/m² (solar constant)&#10;α_pv = solar absorptivity&#10;P_elec subtracted if exported">
+                                    <span class="eng-stat-label">Q<sub>solar</sub> (absorbed - exported)</span>
+                                    <span class="eng-stat-value" id="thermal-q-solar">0 MW</span>
                                 </div>
-                                <div class="eng-stat-row">
-                                    <span class="eng-stat-label">Heat Load</span>
-                                    <span class="eng-stat-value" id="thermal-heat-load">0 MW</span>
+                                <div class="eng-stat-row has-formula" data-formula="Q_IR = E_earth × VF × (ε_pv + ε_rad) × A&#10;&#10;E_earth = 237 W/m²&#10;VF = Earth view factor&#10;Both sides absorb Earth IR">
+                                    <span class="eng-stat-label">Q<sub>Earth IR</sub></span>
+                                    <span class="eng-stat-value" id="thermal-q-earth-ir">0 MW</span>
                                 </div>
-                                <div class="eng-stat-row">
-                                    <span class="eng-stat-label">Radiative Capacity</span>
+                                <div class="eng-stat-row has-formula" data-formula="Q_albedo = G × ρ × VF × cos(β) × α_pv × A&#10;&#10;ρ = 0.30 (Earth albedo)&#10;cos(β) = albedo scaling&#10;Zero at β=90°, max at β=60°">
+                                    <span class="eng-stat-label">Q<sub>albedo</sub></span>
+                                    <span class="eng-stat-value" id="thermal-q-albedo">0 MW</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="Q_heatloop = P_elec&#10;&#10;Electricity sent to remote GPUs&#10;returns as heat through cooling loop&#10;GPUs: 100% electrical → heat">
+                                    <span class="eng-stat-label">Q<sub>heatloop</sub> (GPU return)</span>
+                                    <span class="eng-stat-value" id="thermal-q-heatloop">0 MW</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="Q_total = Q_solar + Q_IR + Q_albedo + Q_heatloop&#10;&#10;Sum of all heat inputs&#10;including GPU waste heat return">
+                                    <span class="eng-stat-label">Total Heat In</span>
+                                    <span class="eng-stat-value" id="thermal-total-heat-in">0 MW</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="P_elec = G × η × A&#10;&#10;G = 1361 W/m²&#10;η = PV efficiency&#10;Sent to GPUs, returns as Q_heatloop">
+                                    <span class="eng-stat-label">Power Generated (P<sub>elec</sub>)</span>
+                                    <span class="eng-stat-value" id="thermal-power-generated">0 MW</span>
+                                </div>
+                                
+                                <div class="eng-stat-row eng-stat-header">
+                                    <span class="eng-stat-label">Equilibrium Results</span>
+                                </div>
+                                <div class="eng-stat-row eng-stat-highlight has-formula" data-formula="T_eq = (Q_in / (σ × A × ε_total) + T_space⁴)^0.25&#10;&#10;σ = 5.67×10⁻⁸ W/m²K⁴&#10;T_space = 3K&#10;&#10;Stefan-Boltzmann equilibrium">
+                                    <span class="eng-stat-label">Equilibrium Temperature</span>
+                                    <span class="eng-stat-value" id="thermal-eq-temp">0.0 °C</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="Same formula, but P_elec&#10;stays onboard as heat&#10;&#10;Q_in includes full solar&#10;absorption (no export)">
+                                    <span class="eng-stat-label">Temp if Compute Onboard</span>
+                                    <span class="eng-stat-value" id="thermal-compute-temp">0.0 °C</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="T_target = T_die_max - ΔT&#10;&#10;T_die_max = GPU junction limit&#10;ΔT = thermal interface drop">
+                                    <span class="eng-stat-label">Target Radiator Temp</span>
+                                    <span class="eng-stat-value" id="thermal-radiator-target">75.0 °C</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="Q_rad = σ × A × ε_total × (T⁴ - T_space⁴)&#10;&#10;Radiative power at equilibrium&#10;Should equal Q_total (balanced)">
+                                    <span class="eng-stat-label">Radiative Capacity @ T<sub>eq</sub></span>
                                     <span class="eng-stat-value" id="thermal-capacity">0 MW</span>
                                 </div>
-                                <div class="eng-stat-row">
-                                    <span class="eng-stat-label">Margin (capacity vs. load)</span>
-                                    <span class="eng-stat-value" id="thermal-margin">0%</span>
+                                <div class="eng-stat-row eng-stat-highlight has-formula" data-formula="Margin = T_target - T_eq&#10;&#10;PASS if T_eq < T_target&#10;(equilibrium below die limit)">
+                                    <span class="eng-stat-label">Temperature Margin</span>
+                                    <span class="eng-stat-value" id="thermal-margin">0 °C</span>
                                     <span class="status-badge" id="thermal-margin-badge">FAIL</span>
                                 </div>
-                                <div class="eng-stat-row">
-                                    <span class="eng-stat-label">Temp Needed (with current area)</span>
-                                    <span class="eng-stat-value" id="thermal-required-temp">0.0 °C</span>
-                                </div>
-                                <div class="eng-stat-row">
-                                    <span class="eng-stat-label">Area Needed (at current temp)</span>
+                                <div class="eng-stat-row has-formula" data-formula="A_req = Q_in / (σ × ε_total × ΔT⁴)&#10;&#10;ΔT⁴ = T_target⁴ - T_space⁴&#10;Area to achieve target temp">
+                                    <span class="eng-stat-label">Area Needed (at target temp)</span>
                                     <span class="eng-stat-value" id="thermal-required-area">0.00 km²</span>
                                 </div>
                             </div>

@@ -44,7 +44,10 @@ const CostModel = (function() {
         NATGAS_COMMS_FRAC: 0.01,
 
         // Space environment
-        SOLAR_IRRADIANCE_W_M2: 1361            // LEO solar constant
+        SOLAR_IRRADIANCE_W_M2: 1361,           // LEO solar constant (AM0)
+        EARTH_IR_FLUX_W_M2: 237,               // Earth IR emission (global average)
+        EARTH_ALBEDO_FACTOR: 0.30,             // Average Earth reflectivity
+        T_SPACE_K: 3                            // Deep space sink temperature
     };
 
     // ==========================================
@@ -55,13 +58,14 @@ const CostModel = (function() {
         // Shared parameters
         years: 5,
         targetGW: 1,                    // Target capacity in GW (default 1 GW)
-        // Thermal analysis parameters
-        // Thermal surface properties
-        emissivityFront: 0.80,      // Sun-facing panel emissivity
-        emissivityBack: 0.90,       // Space-facing/radiator side emissivity
-        albedoViewFactor: 0.2,      // Fraction of view to Earth albedo (reduces effective radiation)
-        sunViewFactor: 0.08,        // Fraction of sun-facing view that "sees" the hot sun disk
-        maxDieTempC: 75,            // Max die temperature (°C)
+        // Thermal analysis parameters - Bifacial Panel Model
+        // Side A = PV (sun-facing), Side B = Radiator (space-facing)
+        solarAbsorptivity: 0.92,    // Solar absorptivity of PV side (alpha_pv)
+        emissivityPV: 0.85,         // IR emissivity of PV side (glass)
+        emissivityRad: 0.90,        // IR emissivity of Radiator side (white paint/OSR)
+        pvEfficiency: 0.22,         // Electrical conversion efficiency (22%)
+        betaAngle: 90,              // Orbit beta angle (deg): 90=terminator, 60=seasonal limit
+        maxDieTempC: 85,            // Max die temperature (°C) - GPU junction limit
         tempDropC: 10,              // Temperature drop from die to radiator surface (°C)
         
         // Orbital parameters (V2 Mini defaults from Starlink analysis)
@@ -419,84 +423,141 @@ const CostModel = (function() {
     }
 
     // ==========================================
-    // THERMAL ANALYSIS
+    // THERMAL ANALYSIS - Bifacial Panel Model
+    // Based on verified equilibrium temperature calculation
     // ==========================================
 
     function calculateThermal() {
         // Stefan-Boltzmann constant (W/m²/K⁴)
-        const SIGMA = 5.670374419e-8;
+        const SIGMA = 5.67e-8;
 
-        // Use orbital array area as available radiator area (one panel face)
+        // Use orbital array area (both sides available for thermal exchange)
         const orbital = calculateOrbital();
-        const availableAreaM2 = orbital.arrayAreaKm2 * 1e6;
+        const areaM2 = orbital.arrayAreaKm2 * 1e6;
 
-        // Surface properties
-        const frontEmissivity = Math.max(0, state.emissivityFront);
-        const backEmissivity = Math.max(0, state.emissivityBack);
-        const sunViewFactor = Math.min(Math.max(state.sunViewFactor, 0), 1); // 0–1
+        // Surface properties from state
+        const alphaPV = state.solarAbsorptivity;      // Solar absorptivity of PV side
+        const epsilonPV = state.emissivityPV;         // IR emissivity of PV side
+        const epsilonRad = state.emissivityRad;       // IR emissivity of radiator side
+        const pvEfficiency = state.pvEfficiency;      // Electrical conversion efficiency
+        const betaAngle = state.betaAngle;            // Orbit beta angle (degrees)
 
-        // Effective space-facing emissivity with albedo knockdown
-        const effectiveFrontEmissivity = Math.max(0, frontEmissivity * (1 - state.albedoViewFactor));
-        const effectiveBackEmissivity = Math.max(0, backEmissivity * (1 - state.albedoViewFactor));
+        // --- A. VIEW FACTOR APPROXIMATION ---
+        // As Beta decreases from 90, the sun-tracking plate tilts to see more Earth.
+        // At Beta=90 (vertical plate, terminator orbit), VF is small (grazing view).
+        // At Beta=60 (seasonal limit), VF increases.
+        const vfEarth = 0.08 + (90 - betaAngle) * 0.002;
 
-        // Radiator (hot side) temperature in Kelvin
-        const radiatorTempK = (state.maxDieTempC - state.tempDropC) + 273.15;
-        const spaceTempK = 3; // Radiating to ~3 K
+        // --- B. HEAT LOADS (INPUTS) ---
 
-        // Solar irradiance absorbed by the panels (worst-case: all incident)
-        const incidentSolarW = constants.SOLAR_IRRADIANCE_W_M2 * availableAreaM2;
+        // 1. Direct Solar Load (Side A only)
+        // Assumes sun-tracking, so Cos(theta) = 1
+        // Solar absorption minus electrical conversion (electricity leaves the panel)
+        const powerGenerated = constants.SOLAR_IRRADIANCE_W_M2 * pvEfficiency * areaM2;
+        const qSolar = constants.SOLAR_IRRADIANCE_W_M2 * alphaPV * areaM2 - powerGenerated;
 
-        // Electrical output from arrays (initial capacity)
-        const electricalHeatW = orbital.actualInitialPowerW;
+        // 2. Earth IR Load (Both sides see Earth partially)
+        // Both sides have a partial view of Earth
+        const qEarthIR = (constants.EARTH_IR_FLUX_W_M2 * vfEarth) * (epsilonPV + epsilonRad) * areaM2;
 
-        // Thermal waste heat from panel inefficiency (incident minus electrical output)
-        const wasteHeatW = Math.max(0, incidentSolarW - electricalHeatW);
+        // 3. Albedo Load (Reflected sunlight from Earth)
+        // Albedo is highest when Beta is low (flying over sunlit earth)
+        // At Beta 90, Albedo is near zero
+        const albedoScaling = Math.cos(betaAngle * Math.PI / 180); // 0 at 90 deg, 0.5 at 60 deg
+        const qAlbedo = (constants.SOLAR_IRRADIANCE_W_M2 * constants.EARTH_ALBEDO_FACTOR * vfEarth * albedoScaling) * alphaPV * areaM2;
 
-        // Total heat to reject: electrical output ultimately becomes heat in the payload
-        // plus direct panel waste heat. This avoids implicitly assuming we radiate
-        // the entire incident solar load twice.
-        const heatLoadW = wasteHeatW + electricalHeatW;
+        // 4. Heat Loop Return (from remote GPUs)
+        // All electrical power is sent to GPUs, then returns as heat through cooling loop
+        // GPUs convert 100% of electrical input to heat
+        const qHeatLoop = powerGenerated;
 
-        // Two-sided radiative capacity. The sun-facing side mostly sees deep space;
-        // a small view factor to the sun is excluded from its radiating solid angle.
-        const deltaT4 = Math.pow(radiatorTempK, 4) - Math.pow(spaceTempK, 4);
-        const frontRadiative = effectiveFrontEmissivity * (1 - sunViewFactor) * availableAreaM2 * deltaT4;
-        const backRadiative = effectiveBackEmissivity * availableAreaM2 * deltaT4;
-        const capacityW = SIGMA * (frontRadiative + backRadiative);
+        // Total heat input: solar absorption + Earth IR + albedo + heat returning from GPUs
+        const totalHeatIn = qSolar + qEarthIR + qAlbedo + qHeatLoop;
 
-        // Temperature required (with current area) to reject full heatLoad
-        const requiredTempK = Math.pow(
-            (heatLoadW / (SIGMA * (frontRadiative / deltaT4 + backRadiative / deltaT4))) + Math.pow(spaceTempK, 4),
+        // --- C. HEAT REJECTION (OUTPUTS) ---
+        // Q_out = sigma * Area * (eps_front + eps_back) * (T^4 - T_space^4)
+        const totalEmissivity = epsilonPV + epsilonRad;
+        const spaceTempK = constants.T_SPACE_K;
+
+        // Solve for equilibrium temperature (Stefan-Boltzmann rearrangement)
+        // T = (Q_in / (sigma * A * eps_total) + T_space^4) ^ 0.25
+        const eqTempK = Math.pow(
+            (totalHeatIn / (SIGMA * areaM2 * totalEmissivity)) + Math.pow(spaceTempK, 4),
             0.25
         );
-        const requiredTempC = requiredTempK - 273.15;
+        const eqTempC = eqTempK - 273.15;
 
-        // Area required if current radiator temp is fixed
-        const areaPerSideFactor = effectiveFrontEmissivity * (1 - sunViewFactor) + effectiveBackEmissivity;
-        const areaRequiredM2 = heatLoadW / (SIGMA * areaPerSideFactor * deltaT4);
+        // Radiative capacity at equilibrium temperature
+        const radiativeCapacityW = SIGMA * areaM2 * totalEmissivity * (Math.pow(eqTempK, 4) - Math.pow(spaceTempK, 4));
 
-        const areaSufficient = capacityW >= heatLoadW;
-        const marginPct = (capacityW / heatLoadW - 1) * 100;
+        // --- D. COMPUTE THERMAL ANALYSIS ---
+        // For compute scenario: what temp would we need if power stays onboard?
+        // (adds back the electrical power as heat instead of exporting it)
+        const computeHeatIn = qSolar + qEarthIR + qAlbedo + powerGenerated;
+        const computeTempK = Math.pow(
+            (computeHeatIn / (SIGMA * areaM2 * totalEmissivity)) + Math.pow(spaceTempK, 4),
+            0.25
+        );
+        const computeTempC = computeTempK - 273.15;
 
-        const effectiveEmissivity = (effectiveFrontEmissivity * (1 - sunViewFactor) + effectiveBackEmissivity) / 2;
+        // Margin calculation: is equilibrium temp below die limit?
+        const radiatorTempC = state.maxDieTempC - state.tempDropC;
+        const tempMarginC = radiatorTempC - eqTempC;
+        const areaSufficient = eqTempC <= radiatorTempC;
+        const marginPct = (tempMarginC / radiatorTempC) * 100;
+
+        // Area required to achieve target radiator temperature
+        const targetTempK = radiatorTempC + 273.15;
+        const deltaT4 = Math.pow(targetTempK, 4) - Math.pow(spaceTempK, 4);
+        const areaRequiredM2 = totalHeatIn / (SIGMA * totalEmissivity * deltaT4);
+
+        // Effective average emissivity
+        const effectiveEmissivity = totalEmissivity / 2;
 
         return {
-            availableAreaM2,
-            availableAreaKm2: availableAreaM2 / 1e6,
-            effectiveEmissivity,
-            radiatorTempK,
-            radiatorTempC: radiatorTempK - 273.15,
-            requiredTempK,
-            requiredTempC,
-            capacityW,
-            heatLoadW,
-            incidentSolarW,
-            wasteHeatW,
-            electricalHeatW,
+            // Input parameters
+            betaAngle,
+            vfEarth,
+            
+            // Areas
+            availableAreaM2: areaM2,
+            availableAreaKm2: areaM2 / 1e6,
             areaRequiredM2,
             areaRequiredKm2: areaRequiredM2 / 1e6,
+            
+            // Heat loads (inputs)
+            qSolarW: qSolar,
+            qEarthIRW: qEarthIR,
+            qAlbedoW: qAlbedo,
+            qHeatLoopW: qHeatLoop,
+            totalHeatInW: totalHeatIn,
+            powerGeneratedW: powerGenerated,
+            
+            // Thermal outputs
+            eqTempK,
+            eqTempC,
+            computeTempC,          // Temp if power stays onboard
+            radiatorTempC,         // Target radiator temp (die - drop)
+            tempMarginC,
+            
+            // Capacity
+            radiativeCapacityW,
+            effectiveEmissivity,
+            totalEmissivity,
+            
+            // Status
             areaSufficient,
-            marginPct
+            marginPct,
+            
+            // Legacy compatibility
+            radiatorTempK: targetTempK,
+            capacityW: radiativeCapacityW,
+            heatLoadW: totalHeatIn,
+            incidentSolarW: constants.SOLAR_IRRADIANCE_W_M2 * areaM2,
+            wasteHeatW: qSolar,
+            electricalHeatW: powerGenerated,
+            requiredTempK: eqTempK,
+            requiredTempC: eqTempC
         };
     }
     
