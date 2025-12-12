@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.7">
+    <title>Economics of Orbital vs Terrestrial DataCenters</title>
+    <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "uklfizg8dn");
+</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}], throwOnError: false});"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <article class="paper">
+        <!-- Header -->
+        <header class="paper-header">
+            <a href="/" class="back-link">← Andrew McCalip</a>
+            <h1 class="paper-title">
+                Economics of Orbital vs<br>
+                Terrestrial DataCenters
+            </h1>
+            <p class="paper-subtitle">
+                It might not be rational
+            </p>
+            <p class="paper-subtitle" style="margin-top: 0.5rem;">
+                But
+            </p>
+            <p class="paper-subtitle" style="margin-top: 0.5rem;">
+                It might be physically possible
+            </p>
+        </header>
+
+        <!-- Introduction -->
+        <section class="paper-section intro-section">
+            <p class="drop-cap">
+                Before we get nerd sniped by the shiny engineering details, ask the only question that matters. 
+                Why compute in orbit? Why should a watt or a flop 250 miles up be more valuable than one on the 
+                surface? What advantage justifies moving something as mundane as matrix multiplication into LEO?
+            </p>
+            <p>
+                That "why" is almost missing from the public conversation. People jump straight to hardware and 
+                hand-wave the business case, as if the economics are self-evident. They aren't. A lot of the 
+                energy here is FOMO and aesthetic futurism, not a grounded value proposition.
+            </p>
+            <p>
+                If you can't articulate the "why," everything downstream becomes speculative. 
+                <strong>Real engineering starts with value, not hardware.</strong>
+            </p>
+            <p class="essay-note">
+                <strong>Disclaimer</strong>
+                This analysis is vibe-coded from public information only. No proprietary data. These are Andrew McCalip's personal views and do not represent any company or organization.
+            </p>
+        </section>
+
+        <!-- Mobile Comparison Grid (shows only on smaller screens) -->
+        <section class="paper-section comparison-mobile">
+            <div class="comparison-grid-mobile">
+                <!-- Orbital Column -->
+                <div class="comparison-column orbital">
+                    <div class="column-header">
+                        <div class="column-indicator orbital-indicator"></div>
+                        <div class="column-title-group">
+                            <h3>Orbital Solar</h3>
+                            <p class="column-total" id="orbital-total-mobile">$31.2B</p>
+                        </div>
+                    </div>
+                    <div class="bar-chart">
+                        <div class="bar-item">
+                            <div class="bar-label">Satellite</div>
+                            <div class="bar-container"><div class="bar orbital-bar" id="orbital-hardware-bar-mobile"></div></div>
+                            <div class="bar-value" id="orbital-hardware-value-mobile">$9.0B</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Launch</div>
+                            <div class="bar-container"><div class="bar orbital-bar" id="orbital-launch-bar-mobile"></div></div>
+                            <div class="bar-value" id="orbital-launch-value-mobile">$22.2B</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Ops (1%)</div>
+                            <div class="bar-container"><div class="bar orbital-bar" id="orbital-om-bar-mobile"></div></div>
+                            <div class="bar-value" id="orbital-om-value-mobile">$3.1B</div>
+                        </div>
+                    </div>
+                    <div class="stats-table">
+                        <div class="stat-row"><span class="stat-label">Cost per Watt</span><span class="stat-value" id="orbital-cpw-mobile">$31.20/W</span></div>
+                        <div class="stat-row"><span class="stat-label">LCOE</span><span class="stat-value" id="orbital-lcoe-mobile">$891/MWh</span></div>
+                        <div class="stat-row"><span class="stat-label">Mass to LEO</span><span class="stat-value" id="orbital-mass-mobile">22.2M kg</span></div>
+                        <div class="stat-row"><span class="stat-label">Energy</span><span class="stat-value" id="orbital-energy-mobile">35.0 TWh</span></div>
+                    </div>
+                </div>
+                <!-- Terrestrial Column -->
+                <div class="comparison-column terrestrial">
+                    <div class="column-header">
+                        <div class="column-indicator terrestrial-indicator"></div>
+                        <div class="column-title-group">
+                            <h3>Terrestrial</h3>
+                            <p class="column-total" id="terrestrial-total-mobile">$14.8B</p>
+                        </div>
+                    </div>
+                    <div class="bar-chart">
+                        <div class="bar-item">
+                            <div class="bar-label">Power Gen</div>
+                            <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-powergen-bar-mobile"></div></div>
+                            <div class="bar-value" id="terrestrial-powergen-value-mobile">$1.3B</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Electrical</div>
+                            <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-electrical-bar-mobile"></div></div>
+                            <div class="bar-value" id="terrestrial-electrical-value-mobile">$5.3B</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Mechanical</div>
+                            <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-mechanical-bar-mobile"></div></div>
+                            <div class="bar-value" id="terrestrial-mechanical-value-mobile">$3.0B</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Civil/Shell</div>
+                            <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-civil-bar-mobile"></div></div>
+                            <div class="bar-value" id="terrestrial-civil-value-mobile">$2.5B</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Fuel</div>
+                            <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-fuel-bar-mobile"></div></div>
+                            <div class="bar-value" id="terrestrial-fuel-value-mobile">$1.0B</div>
+                        </div>
+                    </div>
+                    <div class="stats-table">
+                        <div class="stat-row"><span class="stat-label">Cost per Watt</span><span class="stat-value" id="terrestrial-cpw-mobile">$14.80/W</span></div>
+                        <div class="stat-row"><span class="stat-label">LCOE</span><span class="stat-value" id="terrestrial-lcoe-mobile">$398/MWh</span></div>
+                        <div class="stat-row"><span class="stat-label">Capex</span><span class="stat-value" id="terrestrial-capex-cpw-mobile">$13.80/W</span></div>
+                        <div class="stat-row"><span class="stat-label">Energy</span><span class="stat-value" id="terrestrial-energy-mobile">37.2 TWh</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fixed Left Sidebar: Cost Comparison -->
+        <div class="comparison-sidebar">
+            <!-- Orbital Column -->
+            <div class="comparison-column-fixed orbital">
+                <div class="column-header">
+                    <div class="column-indicator orbital-indicator"></div>
+                    <div class="column-title-group">
+                        <h3>Orbital Solar</h3>
+                        <p class="column-total" id="orbital-total">$31.2B</p>
+                    </div>
+                </div>
+                
+                <div class="bar-chart">
+                    <div class="bar-item">
+                        <div class="bar-label">Satellite</div>
+                        <div class="bar-container">
+                            <div class="bar orbital-bar" id="orbital-hardware-bar"></div>
+                        </div>
+                        <div class="bar-value" id="orbital-hardware-value">$9.0B</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Launch</div>
+                        <div class="bar-container">
+                            <div class="bar orbital-bar" id="orbital-launch-bar"></div>
+                        </div>
+                        <div class="bar-value" id="orbital-launch-value">$22.2B</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Ops (1%)</div>
+                        <div class="bar-container">
+                            <div class="bar orbital-bar" id="orbital-om-bar"></div>
+                        </div>
+                        <div class="bar-value" id="orbital-om-value">$3.1B</div>
+                    </div>
+                </div>
+                
+                <div class="stats-table">
+                    <div class="stat-row">
+                        <span class="stat-label">Cost per Watt</span>
+                        <span class="stat-value" id="orbital-cpw">$31.20/W</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">LCOE</span>
+                        <span class="stat-value" id="orbital-lcoe">$891/MWh</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Mass to LEO</span>
+                        <span class="stat-value" id="orbital-mass">22.2M kg</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Energy</span>
+                        <span class="stat-value" id="orbital-energy">35.0 TWh</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terrestrial Column -->
+            <div class="comparison-column-fixed terrestrial">
+                <div class="column-header">
+                    <div class="column-indicator terrestrial-indicator"></div>
+                    <div class="column-title-group">
+                        <h3>Terrestrial</h3>
+                        <p class="column-total" id="terrestrial-total">$14.8B</p>
+                    </div>
+                </div>
+                
+                <div class="bar-chart">
+                    <div class="bar-item">
+                        <div class="bar-label">Power Gen</div>
+                        <div class="bar-container">
+                            <div class="bar terrestrial-bar" id="terrestrial-powergen-bar"></div>
+                        </div>
+                        <div class="bar-value" id="terrestrial-powergen-value">$1.3B</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Electrical</div>
+                        <div class="bar-container">
+                            <div class="bar terrestrial-bar" id="terrestrial-electrical-bar"></div>
+                        </div>
+                        <div class="bar-value" id="terrestrial-electrical-value">$5.3B</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Mechanical</div>
+                        <div class="bar-container">
+                            <div class="bar terrestrial-bar" id="terrestrial-mechanical-bar"></div>
+                        </div>
+                        <div class="bar-value" id="terrestrial-mechanical-value">$3.0B</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Civil/Shell</div>
+                        <div class="bar-container">
+                            <div class="bar terrestrial-bar" id="terrestrial-civil-bar"></div>
+                        </div>
+                        <div class="bar-value" id="terrestrial-civil-value">$2.5B</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Fuel</div>
+                        <div class="bar-container">
+                            <div class="bar terrestrial-bar" id="terrestrial-fuel-bar"></div>
+                        </div>
+                        <div class="bar-value" id="terrestrial-fuel-value">$1.0B</div>
+                    </div>
+                </div>
+                
+                <div class="stats-table">
+                    <div class="stat-row">
+                        <span class="stat-label">Cost per Watt</span>
+                        <span class="stat-value" id="terrestrial-cpw">$14.80/W</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">LCOE</span>
+                        <span class="stat-value" id="terrestrial-lcoe">$398/MWh</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Capex</span>
+                        <span class="stat-value" id="terrestrial-capex-cpw">$13.80/W</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Energy</span>
+                        <span class="stat-value" id="terrestrial-energy">37.2 TWh</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Container (fixed position, right side) -->
+        <div class="sidebar-container">
+            <!-- Highlights Sidebar (appears on hover) -->
+            <div class="highlights-sidebar" id="highlights-sidebar">
+                <div class="highlights-header">
+                    <h4 class="highlights-title">Details</h4>
+                    <button class="highlights-close" aria-label="Close">&times;</button>
+                </div>
+                <div id="highlights-content" class="highlights-content">
+                    <!-- Populated dynamically on hover -->
+                </div>
+            </div>
+
+            <!-- References Sidebar -->
+            <div class="references-sidebar">
+                <h4 class="references-title">References</h4>
+                <div id="references-list" class="references-list">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Engineering Parameters -->
+        <section class="paper-section parameters-section">
+            <div class="figure-label">Engineering · System Parameters</div>
+            
+            <!-- Shared Parameters (Full Width) -->
+            <div class="param-group shared-params">
+                <div class="shared-params-grid">
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Target Capacity</span>
+                            <span class="slider-value" id="capacity-value">1 GW</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="capacity-slider" min="1" max="1000" step="1" value="1">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill" id="capacity-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="1">1 GW</span>
+                            <span class="tick" data-value="500">500 GW</span>
+                            <span class="tick" data-value="1000">1000 GW</span>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Analysis Period</span>
+                            <span class="slider-value" id="years-value">5 years</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="years-slider" min="3" max="10" step="1" value="5">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill" id="years-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="3">3y</span>
+                            <span class="tick" data-value="5">5y</span>
+                            <span class="tick" data-value="7">7y</span>
+                            <span class="tick" data-value="10">10y</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="param-columns">
+                <!-- Orbital Parameters -->
+                <div class="param-column orbital-params">
+                    <div class="param-column-header">
+                        <div class="column-indicator orbital-indicator"></div>
+                        <h4>Orbital Solar</h4>
+                    </div>
+
+                    <div class="slider-container" data-highlight="launch-cost">
+                        <div class="slider-header">
+                            <a href="https://chatgpt.com/share/693a57e4-ae14-8005-92d7-39b4d9699678" target="_blank" class="slider-label slider-label-link">Launch Cost to LEO<sup class="ref-sup">4</sup></a>
+                            <span class="slider-value" id="launch-cost-value">$1,000/kg</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="launch-cost-slider" min="20" max="2940" step="10" value="1000">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="launch-cost-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="20">$20 (floor)</span>
+                            <span class="tick" data-value="1000">Starship</span>
+                            <span class="tick" data-value="2940">Falcon 9</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <a href="https://chatgpt.com/share/69391474-4b24-8005-bb93-ebd4340c65d8" target="_blank" class="slider-label slider-label-link">Satellite Hardware Cost<sup class="ref-sup">3</sup></a>
+                            <span class="slider-value" id="sat-cost-value">$22/W</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="sat-cost-slider" min="5" max="40" step="1" value="22">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="sat-cost-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="5">$5/W</span>
+                            <span class="tick" data-value="22">V2 Mini ($22)</span>
+                            <span class="tick" data-value="40">V1 ($32)</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <a href="https://chatgpt.com/share/69391474-4b24-8005-bb93-ebd4340c65d8" target="_blank" class="slider-label slider-label-link">Specific Power<sup class="ref-sup">3</sup></a>
+                            <span class="slider-value" id="specific-power-value">36.5 W/kg</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="specific-power-slider" min="3" max="75" step="0.5" value="36.5">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="specific-power-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="3">ISS</span>
+                            <span class="tick" data-value="24.7">V1</span>
+                            <span class="tick" data-value="36.5">V2 Mini</span>
+                            <span class="tick" data-value="75">75 W/kg</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Satellite Size</span>
+                            <span class="slider-value" id="sat-size-value">27 kW</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="sat-size-slider" min="5" max="130" step="1" value="27">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="sat-size-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="7">V1</span>
+                            <span class="tick" data-value="27">V2 Mini</span>
+                            <span class="tick" data-value="40">V3</span>
+                            <span class="tick" data-value="130">130 kW</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <a href="https://chatgpt.com/share/693a7a0d-dc38-8005-8244-94cb70a5d1f2" target="_blank" class="slider-label slider-label-link">Orbit Sunlight Fraction <sup class="ref-sup">6</sup></a>
+                            <span class="slider-value" id="sun-fraction-value">98%</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="sun-fraction-slider" min="0.55" max="1.0" step="0.01" value="0.98">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="sun-fraction-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="0.60">LEO (~60%)</span>
+                            <span class="tick" data-value="0.80">SSO (~80%)</span>
+                            <span class="tick" data-value="0.98">Terminator (~98%)</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <a href="https://gemini.google.com/share/d84edc09c455" target="_blank" class="slider-label slider-label-link">Cell Degradation<sup class="ref-sup">7</sup></a>
+                            <span class="slider-value" id="degradation-value">2.5%/yr</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="degradation-slider" min="0" max="12" step="0.5" value="2.5">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="degradation-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="1">1% (shielded)</span>
+                            <span class="tick" data-value="6">6% (unshielded)</span>
+                            <span class="tick" data-value="12">12% (polar)</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <a href="https://gemini.google.com/share/cd476ab11eeb" target="_blank" class="slider-label slider-label-link">GPU Failure Rate<sup class="ref-sup">5</sup></a>
+                            <span class="slider-value" id="gpu-failure-value">9.0%/yr</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="gpu-failure-slider" min="0" max="10" step="0.5" value="9">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="gpu-failure-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="0">0%</span>
+                            <span class="tick" data-value="1.5">CPU (1.5%)</span>
+                            <span class="tick" data-value="9">Meta (9%)</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">NRE (Development)</span>
+                            <span class="slider-value" id="nre-value">$1B</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="nre-slider" min="0" max="10000" step="100" value="1000">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="nre-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="0">$0</span>
+                            <span class="tick" data-value="1000">$1B</span>
+                            <span class="tick" data-value="10000">$10B</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terrestrial Parameters - 5 Buckets from Report -->
+                <div class="param-column terrestrial-params">
+                    <div class="param-column-header">
+                        <div class="column-indicator terrestrial-indicator"></div>
+                        <h4>Terrestrial (On-Site CCGT)</h4>
+                    </div>
+
+                    <div class="slider-container dc-infrastructure-slider">
+                        <div class="slider-header">
+                            <a href="https://gemini.google.com/share/941986fab378" target="_blank" class="slider-label slider-label-link">Datacenter Infrastructure<sup class="ref-sup">1</sup></a>
+                            <span class="slider-value" id="facility-value">$12.50/W</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="facility-slider" min="10" max="17" step="0.25" value="12.5">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill terrestrial-fill" id="facility-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="10">$10 (Low)</span>
+                            <span class="tick" data-value="12.5">$12.50 (Rep)</span>
+                            <span class="tick" data-value="17">$17 (High)</span>
+                        </div>
+                        <div class="dc-breakdown">
+                            <div class="dc-breakdown-item"><span class="dc-cat">Electrical</span><span class="dc-pct">45%</span><span class="dc-val" id="dc-electrical">$5.63/W</span></div>
+                            <div class="dc-breakdown-item"><span class="dc-cat">Mechanical</span><span class="dc-pct">20%</span><span class="dc-val" id="dc-mechanical">$2.50/W</span></div>
+                            <div class="dc-breakdown-item"><span class="dc-cat">Shell & Core</span><span class="dc-pct">17%</span><span class="dc-val" id="dc-shell">$2.13/W</span></div>
+                            <div class="dc-breakdown-item"><span class="dc-cat">Fit-Out</span><span class="dc-pct">8%</span><span class="dc-val" id="dc-fitout">$1.00/W</span></div>
+                            <div class="dc-breakdown-item"><span class="dc-cat">Site/Civil</span><span class="dc-pct">5%</span><span class="dc-val" id="dc-site">$0.62/W</span></div>
+                            <div class="dc-breakdown-item"><span class="dc-cat">Gen. Cond./Fees</span><span class="dc-pct">5%</span><span class="dc-val" id="dc-fees">$0.62/W</span></div>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <a href="https://gemini.google.com/share/b44c01d3863b" target="_blank" class="slider-label slider-label-link">Gas Turbine Capex<sup class="ref-sup">2</sup></a>
+                            <span class="slider-value" id="gas-turbine-value">$1.45/W</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="gas-turbine-slider" min="1.45" max="2.30" step="0.05" value="1.45">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill terrestrial-fill" id="gas-turbine-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="1.45">$1.45 (Efficient)</span>
+                            <span class="tick" data-value="1.80">$1.80 (Typical)</span>
+                            <span class="tick" data-value="2.30">$2.30 (Complex)</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Turbine Heat Rate</span>
+                            <span class="slider-value" id="heat-rate-value">6,200 BTU/kWh</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="heat-rate-slider" min="6000" max="9000" step="100" value="6200">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill terrestrial-fill" id="heat-rate-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="6000">Best (~58%)</span>
+                            <span class="tick" data-value="7500">Average (~45%)</span>
+                            <span class="tick" data-value="9000">Older (~38%)</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <a href="https://gemini.google.com/share/b44c01d3863b" target="_blank" class="slider-label slider-label-link">Gas Price<sup class="ref-sup">2</sup></a>
+                            <span class="slider-value" id="gas-price-value">$4.30/MMBtu</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="gas-price-slider" min="2" max="15" step="0.1" value="4.3">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill terrestrial-fill" id="gas-price-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="2">Permian</span>
+                            <span class="tick" data-value="5">Typical</span>
+                            <span class="tick" data-value="15">Constrained</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Power Usage Effectiveness (PUE)</span>
+                            <span class="slider-value" id="pue-value">1.20</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="pue-slider" min="1.1" max="1.5" step="0.05" value="1.2">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill terrestrial-fill" id="pue-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="1.1">Best (1.1)</span>
+                            <span class="tick" data-value="1.3">Typical (1.3)</span>
+                            <span class="tick" data-value="1.5">Older (1.5)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Engineering Outputs -->
+        <section class="paper-section engineering-outputs-section">
+            <div class="engineering-outputs-header">
+                <div class="figure-label">Engineering · System Outputs</div>
+                <a href="/preferences" class="preferences-link">⚙️ Edit Constants</a>
+            </div>
+            
+            <div class="engineering-outputs-grid">
+                <!-- Orbital Engineering Outputs -->
+                <div class="engineering-output-column orbital">
+                    <div class="engineering-column-header">
+                        <div class="column-indicator orbital-indicator"></div>
+                        <h3>Orbital Solar</h3>
+                    </div>
+                    
+                    <div class="engineering-stats">
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Satellite Count</span>
+                            <span class="eng-stat-value" id="eng-orbital-sat-count">~37,000</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Degradation Margin</span>
+                            <span class="eng-stat-value" id="eng-orbital-degradation">+6.5%</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Total Mass to LEO</span>
+                            <span class="eng-stat-value" id="eng-orbital-mass">22.2M kg</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Fleet Array Area</span>
+                            <span class="eng-stat-value" id="eng-orbital-fleet-array">2.3 km²</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Single Sat Array</span>
+                            <span class="eng-stat-value" id="eng-orbital-sat-array">116 m²</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Starship Launches</span>
+                            <span class="eng-stat-value" id="eng-orbital-launches">~222</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">LOX Required</span>
+                            <span class="eng-stat-value" id="eng-orbital-lox">175M gal</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Methane Required</span>
+                            <span class="eng-stat-value" id="eng-orbital-methane">168M gal</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Energy Output</span>
+                            <span class="eng-stat-value" id="eng-orbital-energy">35.0 MWhr</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terrestrial Engineering Outputs (On-Site CCGT) -->
+                <div class="engineering-output-column terrestrial">
+                    <div class="engineering-column-header">
+                        <div class="column-indicator terrestrial-indicator"></div>
+                        <h3>Terrestrial</h3>
+                    </div>
+                    
+                    <div class="engineering-stats">
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">H-Class Turbines</span>
+                            <span class="eng-stat-value" id="eng-ngcc-turbines">3 units</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Generation (IT×PUE)</span>
+                            <span class="eng-stat-value" id="eng-ngcc-generation">1.2 GW</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Heat Rate</span>
+                            <span class="eng-stat-value" id="eng-ngcc-heat-rate">6,200 BTU/kWh</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Fuel Cost</span>
+                            <span class="eng-stat-value" id="eng-ngcc-fuel-cost">$27/MWh</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Capacity Factor</span>
+                            <span class="eng-stat-value" id="eng-ngcc-capacity-factor">85%</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Gas Consumption</span>
+                            <span class="eng-stat-value" id="eng-ngcc-gas-consumption">279 BCF</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Energy Output</span>
+                            <span class="eng-stat-value" id="eng-ngcc-energy">37.2 MWhr</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thermal Analysis -->
+        </section>
+
+        <!-- Model Assumptions (moved after Engineering Outputs) -->
+        <section class="paper-section assumptions-section">
+            <div class="assumptions-header">
+                <h2 class="section-heading">Model Assumptions</h2>
+            </div>
+            
+            <div class="assumptions-list">
+                <!-- Global -->
+                <div class="assumption-subsection">
+                    <div class="assumption-subsection-header">
+                        <div class="subsection-indicator global-indicator"></div>
+                        <h4>Global</h4>
+                    </div>
+                    <div class="assumption-content">
+                        <ul class="assumption-bullets">
+                            <li>Target capacity: <strong id="assumption-capacity">1 GW</strong> nameplate electrical</li>
+                            <li>Analysis period: <strong id="assumption-years">5 years</strong></li>
+                            <li>All figures in 2025 USD; excludes financing, taxes, incentives, and FMV</li>
+                            <li>Full availability assumed (no downtime derates), no insurance/logistics overheads</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Orbital Solar -->
+                <div class="assumption-subsection">
+                    <div class="assumption-subsection-header">
+                        <div class="subsection-indicator orbital-indicator"></div>
+                        <h4>Orbital Solar (Starlink-class)</h4>
+                    </div>
+                    <div class="assumption-content">
+                        <ul class="assumption-bullets">
+                            <li>Single bus class (Starlink V2 Mini heritage) scaled linearly to target power</li>
+                            <li>All mass delivered to LEO; no station-keeping propellant, no on-orbit servicing/logistics</li>
+                            <li>Launch pricing applied to total delivered mass; no cadence/manifest constraints modeled</li>
+                            <li>Thermal: only solar array area used as radiator; no dedicated radiator mass assumed</li>
+                            <li>Radiation/shielding impacts on mass ignored; no degradation of structures beyond panel aging</li>
+                            <li>No disposal, de-orbit, or regulatory compliance costs included</li>
+                            <li>Ops overhead and NRE treated as flat cost adders; no learning-curve discounts</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Terrestrial -->
+                <div class="assumption-subsection">
+                    <div class="assumption-subsection-header">
+                        <div class="subsection-indicator terrestrial-indicator"></div>
+                        <h4>Terrestrial (On-Site CCGT)</h4>
+                    </div>
+                    <div class="assumption-content">
+                        <ul class="assumption-bullets">
+                            <li>On-site H-Class CCGT at the fence line; grid interconnect/transmission not costed</li>
+                            <li>Capex buckets embed site prep/land; permitting, taxes, and financing excluded</li>
+                            <li>Fuel price held flat; no carbon price, hedging, or escalation modeled</li>
+                            <li>Water/cooling availability assumed; no scarcity or discharge penalties</li>
+                            <li>Fixed PUE and capacity factor; no forced-outage or maintenance derates applied</li>
+                            <li>No efficiency gains or technology learning assumed over time for terrestrial plant</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Full Essay -->
+        <section class="paper-section essay-section">
+            <h2 class="essay-title-main">It might be physically possible</h2>
+            
+            <div class="essay-content">
+                <p class="drop-cap">
+                    I love space. I live and breathe it. I'm lucky enough to brush the heavens with my own metal and code. I love AI and I subscribe to maximum, unbounded scale. I want to make the biggest bets. I grew up half-afraid we'd never get another Apollo or Manhattan. I want the BigThing.
+                </p>
+                
+                <p>
+                    Why I'm annoyed is that everyone has been trying to armchair the economics of a multivariable physics problem, and doing a terrible job at it. Radiation is not hard. Cost of goods is not hard. Come on guys, let's raise the quality of the discourse. Run the numbers.
+                </p>
+                
+                <p>
+                    Before we do the classic engineer thing and get nerd sniped by all the shiny technical problems, it's worth asking the only question that matters: why put compute in orbit at all? Why should a watt or a flop be more valuable 250 miles up than on the surface? What economic or strategic advantage justifies the effort required to run something as ordinary as matrix multiplication in low Earth orbit?
+                </p>
+                
+                <p>
+                    That "why" is almost missing from the public conversation. The discourse skips straight to implementation, as if the business case is obvious. It isn't. Most of the excitement is driven by FOMO, aesthetic futurism, and a shallow reading of orbital mechanics rather than a clear value proposition. If you can't answer the "why," everything downstream becomes speculation. Real engineering starts with value, not hardware.
+                </p>
+                
+                <h3>Personal Positioning</h3>
+                
+                <p>
+                    I'm not here to dunk on anyone building real hardware. Space is hard, and shipping flight systems is a credibility filter. I'm annoyed at everyone else. The conversation is full of confident claims built on one cherry-picked fact and zero arithmetic. This is a multivariable physics problem with closed-form constraints. If you're not doing the math, you're not contributing, you're adding noise.
+                </p>
+                
+                <h3>Core Thesis</h3>
+                
+                <p>
+                    The target I care about is simple: can you make space-based, commodity compute cost-competitive with the cheapest terrestrial alternative? That's the whole claim. Not "space is big." Not "the sun is huge." Not "launch will be cheap." Can you deliver useful watts and reject the waste heat at a price that beats a boring tilt-wall datacenter tied into a 200–500 MW substation, or a Crusoe-style build parked on top of stranded natural gas?
+                </p>
+                
+                <p>
+                    If you can't beat that, the rest is just aesthetics. GPUs are pretty darn happy living on the ground. They like cheap electrons, mature supply chains, and technicians who can swap a dead server in five minutes. Orbit doesn't get points for being cool. Orbit has to win on cost, or it has to admit it's doing something else entirely.
+                </p>
+                
+                <h3>Commodity Reality</h3>
+                
+                <div class="essay-callout emphasis">
+                    <p>
+                        This is a commodity business. A flop in orbit is not a special flop. A watt in orbit is not a special watt. They do not acquire new economic properties at 550 km altitude. They cost what they cost.
+                    </p>
+                </div>
+                
+                <p>
+                    On Earth, you are competing with mature supply chains, cheap land, cheap cooling, dense fiber, and operators who can build a 300 MW facility like it's a prefab kit. That is the baseline. If orbit wants to win for generic workloads, it has to win on price per delivered watt. Everything else is commentary.
+                </p>
+                
+                <h3>Analytical Lens</h3>
+                
+                <p>
+                    So here's what I did. I built a simple, explicit model that reduces the debate to one parameter: cost per watt of usable power for compute. The infographic below lets you change the assumptions directly. If you disagree with the inputs, great. Move the sliders. But at least we'll be arguing over numbers that map to reality.
+                </p>
+                
+                <p>
+                    The model is deliberately boring. No secret sauce. Just publicly available numbers and first-principles physics: solar flux, cell efficiency, radiator performance, launch cost, hardware mass, and a terrestrial benchmark that represents the real alternative: a tilt-wall datacenter sitting on top of cheap power.
+                </p>
+                
+                <h3>Findings and Implications</h3>
+                
+                <p>
+                    Here's the headline result: it's not obviously stupid, and it's not a sure thing. If you run the numbers honestly, the physics doesn't immediately kill it, but the economics are savage. It only gets within striking distance under aggressive assumptions, and the list of organizations positioned to even try that is basically one.
+                </p>
+                
+                <p>
+                    That "basically one" point matters. This isn't about talent. It's about integration. If you have to buy launch, buy buses, buy power hardware, buy deployment, and pay margin at every interface, you never get there. The margin stack and the mass tax eat you alive. Vertical integration isn't a nice-to-have. It's the whole ballgame.
+                </p>
+                
+                <h3>Market and Incentives</h3>
+                
+                <p>
+                    Which is why I trend positive on SpaceX here. If anyone can bully this problem into existence, it's the team that can drive launch cost down, manufacture at absurd cadence, and iterate hardware without waiting for a committee meeting. But "positive" doesn't mean "gullible." If this becomes a serious narrative, it deserves serious accountability: clear assumptions, clear metrics, clear reality checks.
+                </p>
+                
+                <p>
+                    If SpaceX ever goes public, this is exactly the kind of thing shareholders should demand: extreme, barely-achievable goalposts with clean measurement. Tesla did it with the options grant. Do the same here. Pay Elon a king's ransom if he delivers a new industrial primitive: cheap, sustained dollars per kilogram and dollars per watt in orbit, at real cadence, for years.
+                </p>
+                
+                <h3>Broader Interpretation</h3>
+                
+                <p>
+                    On strict near-term unit economics, this might still be a mediocre use of capital. A tilt-wall datacenter in Oregon with cheap power, cheap cooling, and technicians on call is hard to beat. Crusoe can park compute on stranded natural gas and turn molecules into flops with a supply chain that already exists. Space has to pay extra for everything.
+                </p>
+                
+                <p>
+                    But the knock-on effects are why this keeps pulling at people. If you can industrialize power and operations in orbit at meaningful scale, you're not just running GPUs. You're building a new kind of infrastructure that makes it easier for humans to keep spreading out. Compute is just one of the first excuses to pay for the scaffolding. Even if this is a mediocre trade on strict near-term unit economics, the second-order effects could be enormous.
+                </p>
+                
+                <p>
+                    Irrational capital is the bridge between physics and finance. Public markets require legible returns. Government requires predictable programs. VC requires an exit arc. But frontier projects live in the gap where the physics closes and the business case hasn't learned how to. A billionaire can fund that gap. Not as heroism, as mechanism. The right irrationality just keeps the machine running until the learning curve bends and barely feasible becomes inevitable.
+                </p>
+                
+                <p>
+                    I'll go one step further and say the quiet part out loud: we should be actively goading more billionaires into spending on irrational, high-variance projects that might actually advance civilization. I feel genuine secondhand embarrassment watching people torch their fortunes on yachts and status cosplay. No one cares about your Loro Piana. If you've built an empire, the coolest possible use of it is to burn its capital like a torch and light up a corner of the future. Fund the ugly middle. Pay for the iteration loops. Build the cathedrals.
+                </p>
+                
+                <h3>Overall Conclusion</h3>
+                
+                <p>
+                    Even so, irrational ambition doesn't get to ignore physics. The point of this page is to make the constraints explicit, so we can argue about reality instead of vibes. If the numbers close, even barely, then it's worth running hard. If they don't, the honest move is to say so and move on. Either way, I think some version of this has a feeling of inevitability.
+                </p>
+                
+                <p>
+                    So scroll down, play with the sliders, and try to break it. Change launch cost. Change lifetime. Change specific power. Change hardware cost. See what has to be true. The goal here isn't to "win" an argument. It's to drag the conversation back to first principles: assumptions you can point at, and outputs you can sanity-check. Check out the GitHub, run the code, find the errors, and I'll update it live.
+                </p>
+                
+                <p>
+                    After that, we can earn the fun part: thermal diagrams, radiator math, orbit beta angles, failure rates, comms geometry, all the shiny engineering details that make this topic so addicting. It's not obviously stupid, and it's not a sure thing. That's why it's worth doing the math.
+                </p>
+                
+                <div class="essay-callout question">
+                    <p><strong>It might not be rational. But it might be physically possible.</strong></p>
+                </div>
+<BR><BR><BR><BR>
+                <!-- Warning Banner -->
+                <div class="warning-banner">
+                    <div class="warning-header">
+                        <span>⚠</span> STOP <span>⚠</span> STOP <span>⚠</span> STOP <span>⚠</span> STOP <span>⚠</span> STOP <span>⚠</span> STOP <span>⚠</span>
+                    </div>
+                    <div class="warning-content">
+                        <p class="warning-title">YOU ARE NOW ENTERING THE TECHNICAL ENGINEERING SECTION</p>
+                        <p>If you skipped straight here looking for cool thermal diagrams and orbital mechanics—go back and read the economics section.</p>
+                        <p>The economics are the whole point. The technical challenges are interesting footnotes, but they don't matter if the unit economics don't close.</p>
+                        <p class="warning-cta">Seriously. Go back up. The sliders are fun. Play with them.</p>
+                    </div>
+                </div>
+                
+                <h3>Technical Engineering Challenges</h3>
+                
+                <p>
+                    The governing constraint for orbital compute is <strong>thermodynamics</strong>. Terrestrial datacenters leverage convective cooling—dumping waste heat into the atmosphere or water sources, effectively using the planet as an infinite cold reservoir. In the vacuum of space, convection is impossible. Heat rejection relies exclusively on radiation.
+                </p>
+
+                <p>
+                    Every object in space settles to an equilibrium temperature where absorbed power equals radiated power. If heat generation exceeds radiative capacity, the temperature rises until the $T^4$ term in the Stefan-Boltzmann law balances the equation:
+                </p>
+
+                $$\dot{Q}_{\text{rad}} = \varepsilon \sigma A T^4$$
+
+                <p>
+                    The engineering challenge is ensuring this equilibrium temperature remains below the safe operating limits of silicon processors.
+                </p>
+                
+                <h4>Energy Balance and Heat Rejection</h4>
+                
+                <p>
+                    To dimension the radiator surface, we must account for the total thermal load managed by the satellite bus. In this model, based on a Starlink-style bifacial architecture (PV on front, radiator on back), the system must reject the aggregate energy of two distinct paths:
+                </p>
+
+                <ol class="essay-list">
+                    <li><strong>Incident Solar Flux:</strong> The sun delivers $G_{\text{sc}} = 1361\;\text{W/m}^2$ (AM0). With a solar absorptivity $\alpha = 0.92$, the panel absorbs approximately $\sim 1250\;\text{W/m}^2$.</li>
+                    <li><strong>Energy Partitioning:</strong>
+                        <ul>
+                            <li><strong>Electrical Path ($\sim$22%):</strong> High-efficiency cells convert $\sim 300\;\text{W/m}^2$ into electricity. This power drives the compute payload and is converted entirely back into heat by the processors. A liquid cooling loop collects this heat and returns it to the panel structure for rejection.</li>
+                            <li><strong>Thermal Absorption ($\sim$70%):</strong> The remaining $\sim 950\;\text{W/m}^2$ is not converted to electricity but is absorbed immediately as lattice heat (phonon generation) within the panel structure.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Total Heat Load:</strong> The radiator must reject the sum of both the immediate thermal absorption and the returned electrical waste heat—effectively <strong>100% of the absorbed solar flux</strong>.</li>
+                </ol>
+
+                <div class="essay-callout emphasis">
+                    <p>
+                        This imposes a strict area density limit. High-power compute requires large collection areas, which inherently absorb large amounts of solar heat. The radiator must be sized to reject this aggregate load while maintaining an operating temperature below the junction limit.
+                    </p>
+                </div>
+
+                <h4>Operating Temperature Limits</h4>
+                
+                <p>
+                    Modern AI accelerators (H100/B200 class) typically throttle at junction temperatures $T_j > 85\text{–}100\degree\text{C}$. To maintain a junction at 85°C, and accounting for the thermal gradient across cold plates and interface materials ($\Delta T \approx 10\degree\text{C}$), the radiator surface temperature $T_{\text{rad}}$ is constrained to approximately 75°C.
+                </p>
+
+                <p>
+                    The model below calculates the equilibrium temperature for a bifacial array in a terminator orbit ($\beta = 90^\circ$). It accounts for solar flux, Earth IR ($\sim 237\;\text{W/m}^2$), and albedo. If the calculated equilibrium temperature $T_{\text{eq}}$ exceeds the target radiator temperature, the design fails.
+                </p>
+
+                <!-- Thermal Balance Diagram -->
+                <div class="thermal-diagram-container">
+                    <div class="figure-label">Thermal Balance · Bifacial Panel Model</div>
+                    
+                    <!-- Energy Balance Equation - Above Diagram -->
+                    <div class="energy-equation">
+                        <span class="eq-text">Steady-State Energy Balance</span>
+                        <span class="eq-formula">$\dot{Q}_{\text{sol}} + \dot{Q}_{\text{IR}} + \dot{Q}_{\text{alb}} + \dot{Q}_{\text{loop}} = \dot{Q}_{\text{rad,A}} + \dot{Q}_{\text{rad,B}}$</span>
+                    </div>
+                    
+                    <div class="thermal-diagram">
+                        
+                        <!-- SUN at top center -->
+                        <div class="diagram-sun">
+                            <div class="sun-body">☀️</div>
+                            <div class="sun-rays">
+                                <div class="sun-ray"></div>
+                                <div class="sun-ray"></div>
+                                <div class="sun-ray"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- LEFT SIDE: Heat Inputs (+) -->
+                        <div class="diagram-inputs">
+                            <div class="input-header">+ Q̇<sub>in</sub></div>
+                            <div class="input-group">
+                                <div class="input-row">
+                                    <span class="input-label"><i>Q̇</i><sub>sol</sub> <span class="input-source">(☀️)</span></span>
+                                    <span class="input-value" id="diagram-q-solar">0 MW</span>
+                                    <div class="input-arrow"></div>
+                                </div>
+                                <div class="input-row">
+                                    <span class="input-label"><i>Q̇</i><sub>IR</sub> <span class="input-source">(🌍)</span></span>
+                                    <span class="input-value" id="diagram-q-earth-ir">0 MW</span>
+                                    <div class="input-arrow"></div>
+                                </div>
+                                <div class="input-row">
+                                    <span class="input-label"><i>Q̇</i><sub>alb</sub> <span class="input-source">(🌍)</span></span>
+                                    <span class="input-value" id="diagram-q-albedo">0 MW</span>
+                                    <div class="input-arrow"></div>
+                                </div>
+                                <div class="input-row input-heatloop">
+                                    <span class="input-label"><i>Q̇</i><sub>loop</sub> <span class="input-source">(🖥️)</span></span>
+                                    <span class="input-value" id="diagram-q-heatloop">0 MW</span>
+                                    <div class="input-arrow"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- CENTER: Bifacial Panel + Teq -->
+                        <div class="panel-wrapper">
+                            <div class="bifacial-panel">
+                                <div class="panel-side panel-side-a">
+                                    <span class="side-label">Side A</span>
+                                    <span class="side-desc">PV Array</span>
+                                    <span class="side-props"><i>α</i> = 0.92</span>
+                                    <span class="side-props"><i>ε</i><sub>A</sub> = 0.85</span>
+                                </div>
+                                <div class="panel-side panel-side-b">
+                                    <span class="side-label">Side B</span>
+                                    <span class="side-desc">Radiator</span>
+                                    <span class="side-props"><i>ε</i><sub>B</sub> = 0.90</span>
+                                </div>
+                            </div>
+                            <div class="panel-core">
+                                <span class="core-temp" id="diagram-eq-temp">0°C</span>
+                                <span class="core-label"><i>T</i><sub>eq</sub></span>
+                            </div>
+                        </div>
+                        
+                        <!-- RIGHT SIDE: Outputs (-) -->
+                        <div class="diagram-outputs">
+                            <div class="output-header">− Q̇<sub>out</sub></div>
+                            <div class="output-group">
+                                <div class="output-row output-radiation">
+                                    <div class="output-arrow output-arrow-rad"></div>
+                                    <span class="output-label"><i>Q̇</i><sub>rad,A</sub> <span class="output-dest">(→ ∞)</span></span>
+                                    <span class="output-value" id="diagram-q-rad-pv">0 MW</span>
+                                </div>
+                                <div class="output-row output-radiation">
+                                    <div class="output-arrow output-arrow-rad"></div>
+                                    <span class="output-label"><i>Q̇</i><sub>rad,B</sub> <span class="output-dest">(→ ∞)</span></span>
+                                    <span class="output-value" id="diagram-q-rad-back">0 MW</span>
+                                </div>
+                                <div class="output-row output-electrical">
+                                    <div class="output-arrow output-arrow-elec"></div>
+                                    <span class="output-label"><i>P</i><sub>elec</sub> <span class="output-dest">(→ GPU)</span></span>
+                                    <span class="output-value" id="diagram-power-out">0 MW</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <!-- Thermal Analysis Panel -->
+                <div class="paper-section engineering-outputs-section" style="padding-top: 1rem;">
+                    <div class="figure-label">Thermal Analysis · Bifacial Panel Parameters</div>
+                    <div class="engineering-outputs-grid">
+                        <!-- Thermal Inputs -->
+                        <div class="engineering-output-column orbital orbital-params">
+                            <div class="engineering-column-header">
+                                <div class="column-indicator orbital-indicator"></div>
+                                <h3>Surface Properties</h3>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-header">
+                                    <span class="slider-label">Solar Absorptivity (α<sub>pv</sub>)</span>
+                                    <span class="slider-value" id="solar-absorptivity-value">0.92</span>
+                                </div>
+                                <div class="slider-track-container">
+                                    <input type="range" id="solar-absorptivity-slider" min="0.80" max="0.98" step="0.01" value="0.92">
+                                    <div class="slider-track"></div>
+                                    <div class="slider-fill orbital-fill" id="solar-absorptivity-fill"></div>
+                                </div>
+                                <div class="slider-ticks">
+                                    <span class="tick" data-value="0.80">0.80</span>
+                                    <span class="tick" data-value="0.92">0.92</span>
+                                    <span class="tick" data-value="0.98">0.98</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-header">
+                                    <span class="slider-label">PV Side Emissivity (ε<sub>pv</sub>)</span>
+                                    <span class="slider-value" id="emissivity-pv-value">0.85</span>
+                                </div>
+                                <div class="slider-track-container">
+                                    <input type="range" id="emissivity-pv-slider" min="0" max="0.95" step="0.01" value="0.85">
+                                    <div class="slider-track"></div>
+                                    <div class="slider-fill orbital-fill" id="emissivity-pv-fill"></div>
+                                </div>
+                                <div class="slider-ticks">
+                                    <span class="tick" data-value="0">0</span>
+                                    <span class="tick" data-value="0.85">0.85</span>
+                                    <span class="tick" data-value="0.95">0.95</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-header">
+                                    <span class="slider-label">Radiator Emissivity (ε<sub>rad</sub>)</span>
+                                    <span class="slider-value" id="emissivity-rad-value">0.90</span>
+                                </div>
+                                <div class="slider-track-container">
+                                    <input type="range" id="emissivity-rad-slider" min="0" max="0.98" step="0.01" value="0.90">
+                                    <div class="slider-track"></div>
+                                    <div class="slider-fill orbital-fill" id="emissivity-rad-fill"></div>
+                                </div>
+                                <div class="slider-ticks">
+                                    <span class="tick" data-value="0">0</span>
+                                    <span class="tick" data-value="0.90">0.90</span>
+                                    <span class="tick" data-value="0.98">0.98</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-header">
+                                    <span class="slider-label">PV Efficiency (η)</span>
+                                    <span class="slider-value" id="pv-efficiency-value">22%</span>
+                                </div>
+                                <div class="slider-track-container">
+                                    <input type="range" id="pv-efficiency-slider" min="0.20" max="0.24" step="0.01" value="0.22">
+                                    <div class="slider-track"></div>
+                                    <div class="slider-fill orbital-fill" id="pv-efficiency-fill"></div>
+                                </div>
+                                <div class="slider-ticks">
+                                    <span class="tick" data-value="0.20">20%</span>
+                                    <span class="tick" data-value="0.22">22%</span>
+                                    <span class="tick" data-value="0.24">24%</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-header">
+                                    <span class="slider-label">Orbit Beta Angle (β)</span>
+                                    <span class="slider-value" id="beta-angle-value">90°</span>
+                                </div>
+                                <div class="slider-track-container">
+                                    <input type="range" id="beta-angle-slider" min="60" max="90" step="1" value="90">
+                                    <div class="slider-track"></div>
+                                    <div class="slider-fill orbital-fill" id="beta-angle-fill"></div>
+                                </div>
+                                <div class="slider-ticks">
+                                    <span class="tick" data-value="60">60° (Hot)</span>
+                                    <span class="tick" data-value="75">75°</span>
+                                    <span class="tick" data-value="90">90° (Cold)</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-header">
+                                    <span class="slider-label">Max Die Temperature</span>
+                                    <span class="slider-value" id="die-temp-value">85 °C</span>
+                                </div>
+                                <div class="slider-track-container">
+                                    <input type="range" id="die-temp-slider" min="70" max="100" step="1" value="85">
+                                    <div class="slider-track"></div>
+                                    <div class="slider-fill orbital-fill" id="die-temp-fill"></div>
+                                </div>
+                                <div class="slider-ticks">
+                                    <span class="tick" data-value="70">70°C</span>
+                                    <span class="tick" data-value="85">85°C</span>
+                                    <span class="tick" data-value="100">100°C</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-header">
+                                    <span class="slider-label">Temp Drop (die → radiator)</span>
+                                    <span class="slider-value" id="temp-drop-value">10 °C</span>
+                                </div>
+                                <div class="slider-track-container">
+                                    <input type="range" id="temp-drop-slider" min="5" max="25" step="1" value="10">
+                                    <div class="slider-track"></div>
+                                    <div class="slider-fill orbital-fill" id="temp-drop-fill"></div>
+                                </div>
+                                <div class="slider-ticks">
+                                    <span class="tick" data-value="5">5°C</span>
+                                    <span class="tick" data-value="10">10°C</span>
+                                    <span class="tick" data-value="20">20°C</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Thermal Outputs -->
+                        <div class="engineering-output-column orbital">
+                            <div class="engineering-column-header">
+                                <div class="column-indicator orbital-indicator"></div>
+                                <h3>Thermal Outputs</h3>
+                            </div>
+
+                            <div class="engineering-stats">
+                                <div class="eng-stat-row eng-stat-header">
+                                    <span class="eng-stat-label">Geometry & Properties</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="A = N_sat · A_panel&#10;&#10;Total radiating surface area">
+                                    <span class="eng-stat-label"><i>A</i> (panel area)</span>
+                                    <span class="eng-stat-value" id="thermal-available-area">0.00 km²</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="β = orbit beta angle&#10;&#10;90° → terminator (coldest)&#10;60° → seasonal limit (hottest)">
+                                    <span class="eng-stat-label"><i>β</i> (orbit angle)</span>
+                                    <span class="eng-stat-value" id="thermal-beta-angle">90°</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="VF_⊕ = 0.08 + (90 − β)·0.002&#10;&#10;View factor to Earth&#10;Increases as β decreases">
+                                    <span class="eng-stat-label"><i>VF</i><sub>⊕</sub></span>
+                                    <span class="eng-stat-value" id="thermal-view-factor">0.080</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="ε_tot = ε_A + ε_B&#10;&#10;Bifacial: both sides radiate">
+                                    <span class="eng-stat-label"><i>ε</i><sub>tot</sub></span>
+                                    <span class="eng-stat-value" id="thermal-total-emissivity">1.75</span>
+                                </div>
+                                
+                                <div class="eng-stat-row eng-stat-header">
+                                    <span class="eng-stat-label">Heat Fluxes</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="Q̇_sol = G·α·A − P_elec&#10;&#10;G = 1361 W/m² (AM0)&#10;Absorbed solar minus electrical conversion">
+                                    <span class="eng-stat-label"><i>Q̇</i><sub>sol</sub> (solar waste)</span>
+                                    <span class="eng-stat-value" id="thermal-q-solar">0 MW</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="Q̇_IR = E_⊕ · VF · (ε_A + ε_B) · A&#10;&#10;E_⊕ = 237 W/m² (Earth IR)&#10;Both sides absorb">
+                                    <span class="eng-stat-label"><i>Q̇</i><sub>IR</sub> (Earth thermal)</span>
+                                    <span class="eng-stat-value" id="thermal-q-earth-ir">0 MW</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="Q̇_alb = G · ρ · VF · cos(β) · α · A&#10;&#10;ρ = 0.30 (Earth albedo)&#10;Zero at β = 90°">
+                                    <span class="eng-stat-label"><i>Q̇</i><sub>alb</sub> (reflected)</span>
+                                    <span class="eng-stat-value" id="thermal-q-albedo">0 MW</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="Q̇_loop = P_elec&#10;&#10;GPU waste heat returned&#10;via liquid cooling loop">
+                                    <span class="eng-stat-label"><i>Q̇</i><sub>loop</sub> (GPU return)</span>
+                                    <span class="eng-stat-value" id="thermal-q-heatloop">0 MW</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="ΣQ̇_in = Q̇_sol + Q̇_IR + Q̇_alb + Q̇_loop&#10;&#10;Total thermal load to reject">
+                                    <span class="eng-stat-label">Σ<i>Q̇</i><sub>in</sub></span>
+                                    <span class="eng-stat-value" id="thermal-total-heat-in">0 MW</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="P_elec = G · η · A&#10;&#10;η = PV efficiency&#10;Delivered to GPUs">
+                                    <span class="eng-stat-label"><i>P</i><sub>elec</sub> (generated)</span>
+                                    <span class="eng-stat-value" id="thermal-power-generated">0 MW</span>
+                                </div>
+                                
+                                <div class="eng-stat-row eng-stat-header">
+                                    <span class="eng-stat-label">Equilibrium</span>
+                                </div>
+                                <div class="eng-stat-row eng-stat-highlight has-formula" data-formula="T_eq = [ΣQ̇_in / (σ·A·ε_tot) + T_∞⁴]^¼&#10;&#10;σ = 5.67×10⁻⁸ W·m⁻²·K⁻⁴&#10;T_∞ = 3 K (deep space)&#10;&#10;Stefan-Boltzmann Law">
+                                    <span class="eng-stat-label"><i>T</i><sub>eq</sub></span>
+                                    <span class="eng-stat-value" id="thermal-eq-temp">0.0 °C</span>
+                                </div>
+                                <div class="eng-stat-row eng-stat-highlight has-formula" data-formula="ΔT = T_max − T_eq&#10;&#10;PASS: T_eq < T_max&#10;T_max = die limit − interface ΔT">
+                                    <span class="eng-stat-label">Δ<i>T</i> margin</span>
+                                    <span class="eng-stat-value" id="thermal-margin">0 °C</span>
+                                    <span class="status-badge" id="thermal-margin-badge">FAIL</span>
+                                </div>
+                                <div class="eng-stat-row has-formula" data-formula="A_req = ΣQ̇_in / [σ·ε_tot·(T_max⁴ − T_∞⁴)]&#10;&#10;Radiator area needed&#10;to achieve T_max">
+                                    <span class="eng-stat-label"><i>A</i><sub>req</sub></span>
+                                    <span class="eng-stat-value" id="thermal-required-area">0.00 km²</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Mobile References Section -->
+        <section class="paper-section references-mobile-section">
+            <h2 class="section-heading">References</h2>
+            <div id="references-list-mobile" class="references-list-mobile">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="paper-footer">
+            <p><a href="https://twitter.com/AndrewMcCalip" target="_blank" rel="noopener">Follow on Twitter</a></p>
+        </footer>
+    </article>
+
+    <!-- Mobile Sticky Bottom Bar -->
+    <div class="mobile-cost-bar">
+        <div class="mobile-cost-item orbital">
+            <div class="mobile-cost-indicator orbital-indicator"></div>
+            <div class="mobile-cost-content">
+                <span class="mobile-cost-label">Orbital</span>
+                <span class="mobile-cost-value" id="orbital-total-sticky">$31.2B</span>
+            </div>
+        </div>
+        <div class="mobile-cost-item terrestrial">
+            <div class="mobile-cost-indicator terrestrial-indicator"></div>
+            <div class="mobile-cost-content">
+                <span class="mobile-cost-label">Terrestrial</span>
+                <span class="mobile-cost-value" id="terrestrial-total-sticky">$14.8B</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/math.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
+

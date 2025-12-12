@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andrew McCalip</title>
+    <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "uklfizg8dn");
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --bg-card: #111111;
+            --border: #222222;
+            --text: #e5e5e5;
+            --text-muted: #888888;
+            --accent: #3b82f6;
+            --accent-secondary: #f59e0b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Background quote effect */
+        .bg-quote {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 600;
+            font-style: italic;
+            white-space: nowrap;
+            color: transparent;
+            background: linear-gradient(
+                135deg,
+                rgba(59, 130, 246, 0.06) 0%,
+                rgba(245, 158, 11, 0.04) 50%,
+                rgba(59, 130, 246, 0.06) 100%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+            letter-spacing: -0.03em;
+        }
+        
+        .bg-quote-line {
+            display: block;
+            text-align: center;
+            animation: pulse 8s ease-in-out infinite;
+        }
+        
+        .bg-quote-line:nth-child(2) {
+            animation-delay: -4s;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        /* Subtle grid overlay */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            max-width: 640px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Quote Block - Monospace Minimal */
+        .quote-block {
+            position: relative;
+            padding: 0;
+            margin-top: 0.5rem;
+        }
+        
+        .quote-text {
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-size: 0.85rem;
+            font-weight: 400;
+            line-height: 1.9;
+            color: var(--text-muted);
+            letter-spacing: -0.01em;
+        }
+        
+        .quote-text .highlight {
+            color: var(--text);
+            font-weight: 500;
+        }
+        
+        .quote-source {
+            display: inline;
+        }
+        
+        .quote-source a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: var(--accent);
+            text-decoration: none;
+            margin-left: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border: 1px solid var(--accent);
+            border-radius: 3px;
+            transition: all 0.15s;
+        }
+        
+        .quote-source a:hover {
+            background: rgba(59, 130, 246, 0.15);
+        }
+        
+        .essays-section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        
+        .essay-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .essay-card {
+            display: block;
+            background: rgba(17, 17, 17, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+        
+        .essay-card:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+            background: rgba(17, 17, 17, 0.95);
+        }
+        
+        .essay-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .essay-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .essay-indicator.orbital {
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+        }
+        
+        .essay-indicator.manufacturing {
+            background: var(--accent-secondary);
+            box-shadow: 0 0 10px var(--accent-secondary);
+        }
+        
+        .essay-indicator.lk99 {
+            background: #a855f7;
+            box-shadow: 0 0 10px #a855f7;
+        }
+        
+        .essay-indicator.circumnavigation {
+            background: #06b6d4;
+            box-shadow: 0 0 10px #06b6d4;
+        }
+        
+        .essay-indicator.shiftkeys {
+            background: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+        }
+        
+        .essay-indicator.varda {
+            background: #ef4444;
+            box-shadow: 0 0 10px #ef4444;
+        }
+        
+        .essay-indicator.doge {
+            background: #eab308;
+            box-shadow: 0 0 10px #eab308;
+        }
+        
+        .essay-title {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 500;
+        }
+        
+        .essay-description {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            padding-left: 1.5rem;
+        }
+        
+        .essay-tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            background: var(--border);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            margin-left: auto;
+        }
+        
+        .lk99-card {
+            cursor: default;
+        }
+        
+        .lk99-card:hover {
+            transform: none;
+            border-color: #a855f7;
+        }
+        
+        .essay-links {
+            display: flex;
+            gap: 1rem;
+            padding-left: 1.5rem;
+            margin-top: 0.75rem;
+        }
+        
+        .essay-sublink {
+            font-size: 0.8rem;
+            color: #a855f7;
+            text-decoration: none;
+            padding: 0.25rem 0.6rem;
+            border: 1px solid #a855f733;
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+        
+        .essay-sublink:hover {
+            background: #a855f722;
+            border-color: #a855f7;
+        }
+        
+        footer {
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        
+        .footer-links a {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--text);
+        }
+        
+        /* Mobile zoom out */
+        @media (max-width: 768px) {
+            body {
+                zoom: 0.7;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background effects -->
+    <div class="bg-grid"></div>
+    <div class="bg-quote" aria-hidden="true">
+        <span class="bg-quote-line">making</span>
+        <span class="bg-quote-line">the thing</span>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>Andrew McCalip</h1>
+            <div class="quote-block">
+                <p class="quote-text">"McCalip preferred not to dwell, and instead chose to focus on what he had set out to do: <span class="highlight">making the thing</span>" <span class="quote-source"><a href="https://www.wired.com/story/inside-the-diy-race-to-replicate-lk-99/" target="_blank">wired</a></span></p>
+            </div>
+        </header>
+        
+        <section class="essays-section">
+            <p class="section-label">Essays & Analyses</p>
+            
+            <div class="essay-list">
+                <a href="/space-datacenters" class="essay-card">
+                    <div class="essay-header">
+                        <div class="essay-indicator orbital"></div>
+                        <span class="essay-title">Space Datacenters</span>
+                        <span class="essay-tag">Interactive</span>
+                    </div>
+                    <p class="essay-description">
+                        A first-principles cost analysis comparing orbital solar power satellites 
+                        to terrestrial natural gas for 1 GW datacenter capacity.
+                    </p>
+                </a>
+                
+                <a href="https://x.com/andrewmccalip/status/1861019810920063145" target="_blank" class="essay-card">
+                    <div class="essay-header">
+                        <div class="essay-indicator manufacturing"></div>
+                        <span class="essay-title">Manufacturing Manifesto</span>
+                        <span class="essay-tag">Thread</span>
+                    </div>
+                    <p class="essay-description">
+                        On rebuilding American manufacturing capability through vertical integration.
+                    </p>
+                </a>
+                
+                <a href="https://www.projectbob.xyz" target="_blank" class="essay-card">
+                    <div class="essay-header">
+                        <div class="essay-indicator circumnavigation"></div>
+                        <span class="essay-title">Project Bob: Circumnavigation or Bust</span>
+                        <span class="essay-tag">Live</span>
+                    </div>
+                    <p class="essay-description">
+                        A 14ft autonomous drone boat attempting to circumnavigate the globe via Starlink. 
+                        25,000 miles, 250 days, endless ocean memes.
+                    </p>
+                </a>
+                
+                <a href="https://www.youtube.com/watch?v=BWxl921rMgM" target="_blank" class="essay-card">
+                    <div class="essay-header">
+                        <div class="essay-indicator varda"></div>
+                        <span class="essay-title">Varda Orbital Reentry</span>
+                        <span class="essay-tag">Video</span>
+                    </div>
+                    <p class="essay-description">
+                        The most incredible video I've ever shot.
+                    </p>
+                </a>
+                
+                <div class="essay-card lk99-card">
+                    <div class="essay-header">
+                        <div class="essay-indicator lk99"></div>
+                        <span class="essay-title">LK-99: Meissner Effect or Bust</span>
+                        <span class="essay-tag">2023</span>
+                    </div>
+                    <p class="essay-description">
+                        First US replication attempt of the Korean LK-99 room-temperature 
+                        superconductor. 
+                    </p>
+                    <div class="essay-links">
+                        <a href="https://x.com/andrewmccalip/status/1689476909208600576" target="_blank" class="essay-sublink">Final Results ↗</a>
+                    </div>
+                </div>
+                
+                <a href="https://shiftkeys.ai" target="_blank" class="essay-card">
+                    <div class="essay-header">
+                        <div class="essay-indicator shiftkeys"></div>
+                        <span class="essay-title">Shiftkeys.ai</span>
+                        <span class="essay-tag">Product</span>
+                    </div>
+                    <p class="essay-description">
+                        OS-level AI assistant. Hit both shift keys, use AI anywhere.
+                    </p>
+                </a>
+                
+                <a href="https://doge-fin.com" target="_blank" class="essay-card">
+                    <div class="essay-header">
+                        <div class="essay-indicator doge"></div>
+                        <span class="essay-title">Doge Fin</span>
+                        <span class="essay-tag">Art</span>
+                    </div>
+                    <p class="essay-description">
+                        An engineer's attempt at modern art—making memes IRL.
+                    </p>
+                </a>
+            </div>
+        </section>
+        
+        <footer>
+            <div class="footer-links">
+                <a href="https://twitter.com/andrewmccalip" target="_blank">Twitter</a>
+                <a href="https://github.com/andrewmccalip" target="_blank">GitHub</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
