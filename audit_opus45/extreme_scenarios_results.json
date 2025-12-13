@@ -1,0 +1,186 @@
+{
+  "scenarios": [
+    {
+      "name": "Worst Case Terrestrial (High Gas + Carbon Tax)",
+      "orbital_cost": 64846367234.52055,
+      "terrestrial_cost": 17563894400.0,
+      "ratio": 3.6920267087531884,
+      "orbital_lcoe": 1480.5106674548072,
+      "terrestrial_lcoe": 471.76724147193124,
+      "winner": "TERRESTRIAL"
+    },
+    {
+      "name": "Best Case Orbital - Near-Term (2027)",
+      "orbital_cost": 26042449300.0,
+      "terrestrial_cost": 15431062160.0,
+      "ratio": 1.687664078465484,
+      "orbital_lcoe": 594.5764680365297,
+      "terrestrial_lcoe": 414.47924147193123,
+      "winner": "TERRESTRIAL"
+    },
+    {
+      "name": "Best Case Orbital - Mid-Term (2030)",
+      "orbital_cost": 13918964654.545454,
+      "terrestrial_cost": 15431062160.0,
+      "ratio": 0.9020094994255051,
+      "orbital_lcoe": 317.7845811540058,
+      "terrestrial_lcoe": 414.47924147193123,
+      "winner": "ORBITAL \u2713"
+    },
+    {
+      "name": "Theoretical Floor Orbital",
+      "orbital_cost": 6239753550.0,
+      "terrestrial_cost": 15431062160.0,
+      "ratio": 0.40436319193726844,
+      "orbital_lcoe": 142.46012671232876,
+      "terrestrial_lcoe": 414.47924147193123,
+      "winner": "ORBITAL \u2713"
+    },
+    {
+      "name": "Worst Case Orbital",
+      "orbital_cost": 501575723200.0,
+      "terrestrial_cost": 15431062160.0,
+      "ratio": 32.50429024258431,
+      "orbital_lcoe": 11451.500529680365,
+      "terrestrial_lcoe": 414.47924147193123,
+      "winner": "TERRESTRIAL"
+    },
+    {
+      "name": "10 GW Scale",
+      "orbital_cost": 218330295118.9041,
+      "terrestrial_cost": 154310621600.0,
+      "ratio": 1.4148753524229476,
+      "orbital_lcoe": 498.4709934221555,
+      "terrestrial_lcoe": 414.47924147193123,
+      "winner": "TERRESTRIAL"
+    },
+    {
+      "name": "10 Year Analysis",
+      "orbital_cost": 80172745529.31506,
+      "terrestrial_cost": 16622124320.0,
+      "ratio": 4.823255077742979,
+      "orbital_lcoe": 915.2139900606743,
+      "terrestrial_lcoe": 223.23562073596563,
+      "winner": "TERRESTRIAL"
+    },
+    {
+      "name": "Crossover Scenario",
+      "orbital_cost": 9188559100.0,
+      "terrestrial_cost": 17009912000.0,
+      "ratio": 0.5401885147906703,
+      "orbital_lcoe": 209.78445433789955,
+      "terrestrial_lcoe": 456.88724147193125,
+      "winner": "ORBITAL \u2713"
+    }
+  ],
+  "breakeven_combos": [
+    {
+      "specific_power": 36.5,
+      "hw_cost": 5,
+      "launch_cost": 200,
+      "ratio": 0.9532066494445455
+    },
+    {
+      "specific_power": 36.5,
+      "hw_cost": 8,
+      "launch_cost": 20,
+      "ratio": 0.9148669812558393
+    },
+    {
+      "specific_power": 36.5,
+      "hw_cost": 8,
+      "launch_cost": 50,
+      "ratio": 0.9720050858589782
+    },
+    {
+      "specific_power": 36.5,
+      "hw_cost": 8,
+      "launch_cost": 100,
+      "ratio": 1.0672352601975428
+    },
+    {
+      "specific_power": 45,
+      "hw_cost": 8,
+      "launch_cost": 20,
+      "ratio": 0.9076718125280366
+    },
+    {
+      "specific_power": 45,
+      "hw_cost": 8,
+      "launch_cost": 50,
+      "ratio": 0.9540171640394715
+    },
+    {
+      "specific_power": 45,
+      "hw_cost": 8,
+      "launch_cost": 100,
+      "ratio": 1.0312594165585294
+    },
+    {
+      "specific_power": 55,
+      "hw_cost": 8,
+      "launch_cost": 20,
+      "ratio": 0.9020541941630142
+    },
+    {
+      "specific_power": 55,
+      "hw_cost": 8,
+      "launch_cost": 50,
+      "ratio": 0.9399731181269154
+    },
+    {
+      "specific_power": 55,
+      "hw_cost": 8,
+      "launch_cost": 100,
+      "ratio": 1.0031713247334175
+    },
+    {
+      "specific_power": 65,
+      "hw_cost": 8,
+      "launch_cost": 50,
+      "ratio": 0.9302503171105305
+    },
+    {
+      "specific_power": 65,
+      "hw_cost": 8,
+      "launch_cost": 100,
+      "ratio": 0.9837257227006475
+    },
+    {
+      "specific_power": 65,
+      "hw_cost": 8,
+      "launch_cost": 200,
+      "ratio": 1.0906765338808815
+    },
+    {
+      "specific_power": 75,
+      "hw_cost": 5,
+      "launch_cost": 500,
+      "ratio": 1.0357394672046347
+    },
+    {
+      "specific_power": 75,
+      "hw_cost": 8,
+      "launch_cost": 50,
+      "ratio": 0.9231202630318482
+    },
+    {
+      "specific_power": 75,
+      "hw_cost": 8,
+      "launch_cost": 100,
+      "ratio": 0.969465614543283
+    },
+    {
+      "specific_power": 75,
+      "hw_cost": 8,
+      "launch_cost": 200,
+      "ratio": 1.0621563175661526
+    },
+    {
+      "specific_power": 75,
+      "hw_cost": 10,
+      "launch_cost": 20,
+      "ratio": 1.0983056917450718
+    }
+  ]
+}
