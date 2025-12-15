@@ -1,0 +1,25 @@
+# First Principles Math Audit - Python Dependencies
+# ===================================================
+#
+# This file lists all Python packages required to run the audit scripts.
+# All scripts are compatible with Python 3.8+.
+#
+# Installation: pip install -r requirements.txt
+
+# Core scientific computing
+numpy>=1.21.0        # For advanced mathematical operations (if needed)
+math                # Built-in Python math module (no installation required)
+
+# JSON handling
+json                # Built-in Python module (no installation required)
+
+# Type hints (optional, for development)
+typing              # Built-in Python 3.5+ (no installation required)
+
+# Data structures
+dataclasses         # Built-in Python 3.7+ (no installation required)
+
+# Notes:
+# - All audit scripts use only Python standard library modules
+# - No external dependencies required for basic functionality
+# - Scripts are designed to be self-contained and reproducible

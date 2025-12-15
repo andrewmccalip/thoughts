@@ -1,0 +1,109 @@
+{
+  "audit_info": {
+    "date": "2025-12-14",
+    "type": "Hardware Specifications Verification",
+    "model_version": "math.js current"
+  },
+  "summary": {
+    "total_parameters": 8,
+    "within_tolerance": 8,
+    "high_confidence": 8,
+    "medium_confidence": 0,
+    "low_confidence": 0
+  },
+  "propellant_verification": {
+    "lox_mass_kg": 3399840.0,
+    "ch4_mass_kg": 1200450.0,
+    "total_propellant_kg": 4600290.0
+  },
+  "results": [
+    {
+      "component": "Starlink V2 Mini",
+      "parameter": "Mass (kg)",
+      "model_value": 740,
+      "reference_value": 740,
+      "deviation": 0,
+      "deviation_pct": 0.0,
+      "within_tolerance": true,
+      "confidence": "VERY HIGH",
+      "notes": "Dry mass excluding propellant. Model matches exactly."
+    },
+    {
+      "component": "Starlink V2 Mini",
+      "parameter": "Power (kW)",
+      "model_value": 27,
+      "reference_value": 27,
+      "deviation": 0,
+      "deviation_pct": 0.0,
+      "within_tolerance": true,
+      "confidence": "VERY HIGH",
+      "notes": "Nameplate solar power output. Model matches reference."
+    },
+    {
+      "component": "Starlink V2 Mini",
+      "parameter": "Array Area (m\u00b2)",
+      "model_value": 116,
+      "reference_value": 116,
+      "deviation": 0,
+      "deviation_pct": 0.0,
+      "within_tolerance": true,
+      "confidence": "VERY HIGH",
+      "notes": "Solar array area. Model matches exactly."
+    },
+    {
+      "component": "Starlink V2 Mini",
+      "parameter": "Specific Power (W/kg)",
+      "model_value": 36.486486486486484,
+      "reference_value": 36.49,
+      "deviation": -0.0035135135135178075,
+      "deviation_pct": 0.009628702421260092,
+      "within_tolerance": true,
+      "confidence": "VERY HIGH",
+      "notes": "Specific power = 36.5 W/kg. Critical for fleet sizing."
+    },
+    {
+      "component": "Starship",
+      "parameter": "LEO Payload (kg)",
+      "model_value": 100000,
+      "reference_value": 100000,
+      "deviation": 0,
+      "deviation_pct": 0.0,
+      "within_tolerance": true,
+      "confidence": "VERY HIGH",
+      "notes": "Maximum payload to LEO. Model uses conservative value."
+    },
+    {
+      "component": "Starship",
+      "parameter": "LOX per Launch (gal)",
+      "model_value": 787000,
+      "reference_value": 787000,
+      "deviation": 0,
+      "deviation_pct": 0.0,
+      "within_tolerance": true,
+      "confidence": "VERY HIGH",
+      "notes": "LOX per full launch. 787k gal = 3,400 metric tons."
+    },
+    {
+      "component": "Starship",
+      "parameter": "CH4 per Launch (gal)",
+      "model_value": 755000,
+      "reference_value": 755000,
+      "deviation": 0,
+      "deviation_pct": 0.0,
+      "within_tolerance": true,
+      "confidence": "VERY HIGH",
+      "notes": "Methane per full launch. 755k gal = 1,200 metric tons."
+    },
+    {
+      "component": "GE 7HA.03",
+      "parameter": "CCGT Power (MW)",
+      "model_value": 430,
+      "reference_value": 430,
+      "deviation": 0,
+      "deviation_pct": 0.0,
+      "within_tolerance": true,
+      "confidence": "VERY HIGH",
+      "notes": "Single turbine output in CCGT configuration. Model matches."
+    }
+  ]
+}

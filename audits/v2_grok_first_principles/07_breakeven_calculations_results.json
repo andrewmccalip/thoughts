@@ -1,0 +1,53 @@
+{
+  "audit_info": {
+    "date": "2025-12-14",
+    "type": "Breakeven Calculations Verification",
+    "model_version": "math.js current"
+  },
+  "summary": {
+    "verification_checks_total": 4,
+    "verification_checks_passed": 4,
+    "consistency_issues_count": 0
+  },
+  "verification_results": [
+    {
+      "test_name": "Default Parameters",
+      "expected_breakeven": -335.2218195334503,
+      "actual_breakeven": -335.2218195334503,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "High Hardware Cost",
+      "expected_breakeven": -718.4694940308617,
+      "actual_breakeven": -718.4694940308617,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Low Gas Price",
+      "expected_breakeven": -354.2610027617764,
+      "actual_breakeven": -354.2610027617764,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "High Specific Power",
+      "expected_breakeven": -459.2079719636305,
+      "actual_breakeven": -459.2079719636305,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    }
+  ],
+  "consistency_issues": [],
+  "detailed_calculation": {
+    "breakeven_launch_cost": -335.2218195334503,
+    "terrestrial_cost": 0,
+    "orbital_cost": 0,
+    "total_mass": 0
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "audit_info": {
+    "date": "2025-12-14",
+    "type": "Thermal Calculations Verification",
+    "model_version": "math.js current"
+  },
+  "summary": {
+    "verification_checks_total": 12,
+    "verification_checks_passed": 12,
+    "consistency_issues_count": 0
+  },
+  "verification_results": [
+    {
+      "test_name": "Default Parameters",
+      "parameter": "eqTempC",
+      "expected_value": 64.211757641183,
+      "actual_value": 64.211757641183,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Default Parameters",
+      "parameter": "tempMarginC",
+      "expected_value": 10.788242358817001,
+      "actual_value": 10.788242358817001,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Default Parameters",
+      "parameter": "areaSufficient",
+      "expected_value": 1.0,
+      "actual_value": 1.0,
+      "error": 0,
+      "error_pct": 0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Hot Orbit (Beta 60\u00b0)",
+      "parameter": "eqTempC",
+      "expected_value": 67.52110624349388,
+      "actual_value": 67.52110624349388,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Hot Orbit (Beta 60\u00b0)",
+      "parameter": "tempMarginC",
+      "expected_value": 7.478893756506125,
+      "actual_value": 7.478893756506125,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Hot Orbit (Beta 60\u00b0)",
+      "parameter": "areaSufficient",
+      "expected_value": 1.0,
+      "actual_value": 1.0,
+      "error": 0,
+      "error_pct": 0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Low Emissivity",
+      "parameter": "eqTempC",
+      "expected_value": 113.79341210982443,
+      "actual_value": 113.79341210982443,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Low Emissivity",
+      "parameter": "tempMarginC",
+      "expected_value": -38.79341210982443,
+      "actual_value": -38.79341210982443,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Low Emissivity",
+      "parameter": "areaSufficient",
+      "expected_value": 0.0,
+      "actual_value": 0.0,
+      "error": 0,
+      "error_pct": 0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "High Absorptivity",
+      "parameter": "eqTempC",
+      "expected_value": 69.44709439918307,
+      "actual_value": 69.44709439918307,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "High Absorptivity",
+      "parameter": "tempMarginC",
+      "expected_value": 5.552905600816928,
+      "actual_value": 5.552905600816928,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "High Absorptivity",
+      "parameter": "areaSufficient",
+      "expected_value": 1.0,
+      "actual_value": 1.0,
+      "error": 0,
+      "error_pct": 0,
+      "within_tolerance": true
+    }
+  ],
+  "consistency_issues": [],
+  "detailed_calculation": {
+    "betaAngle": 90,
+    "vfEarth": 0.08,
+    "availableAreaM2": 5247260.0,
+    "availableAreaKm2": 5.24726,
+    "areaRequiredM2": 4626476.794679391,
+    "areaRequiredKm2": 4.626476794679391,
+    "qSolarW": 4999064602.000001,
+    "qEarthIRW": 174104086.8,
+    "qAlbedoW": 9.655408091116334e-09,
+    "qHeatLoopW": 1571134589.2,
+    "totalHeatInW": 6744303278.000001,
+    "powerGeneratedW": 1571134589.2,
+    "qRadAW": 3275804449.3142858,
+    "qRadBW": 3468498828.6857147,
+    "radiativeCapacityW": 6744303278.0,
+    "eqTempK": 337.361757641183,
+    "eqTempC": 64.211757641183,
+    "computeTempC": 64.211757641183,
+    "radiatorTempC": 75,
+    "tempMarginC": 10.788242358817001,
+    "effectiveEmissivity": 0.875,
+    "totalEmissivity": 1.75,
+    "areaSufficient": true,
+    "marginPct": 14.384323145089335,
+    "radiatorTempK": 348.15,
+    "capacityW": 6744303278.0,
+    "heatLoadW": 6744303278.000001,
+    "_orbital": {
+      "arrayAreaKm2": 5.24726,
+      "satelliteCount": 45235,
+      "requiredPowerW": 1221337589.064686
+    },
+    "_qAbsorbedTotal": 6570199191.200001,
+    "_albedoScaling": 6.123233995736766e-17,
+    "_deltaT4Eq": 12953388762.912575,
+    "_sigma": 5.67e-08
+  }
+}

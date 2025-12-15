@@ -1,0 +1,114 @@
+{
+  "audit_info": {
+    "date": "2025-12-14",
+    "type": "Orbital Calculations Verification",
+    "model_version": "math.js current"
+  },
+  "summary": {
+    "verification_checks_total": 7,
+    "verification_checks_passed": 7,
+    "consistency_issues_count": 0
+  },
+  "verification_results": [
+    {
+      "test_name": "Default Parameters",
+      "parameter": "totalCost",
+      "expected_value": 43378998425,
+      "actual_value": 43378998424.65753,
+      "error": -0.34246826171875,
+      "error_pct": 7.894794120497263e-10,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Default Parameters",
+      "parameter": "costPerW",
+      "expected_value": 43.38,
+      "actual_value": 43.37899842465753,
+      "error": -0.0010015753424710283,
+      "error_pct": 0.002308841268951195,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Default Parameters",
+      "parameter": "satelliteCount",
+      "expected_value": 45235,
+      "actual_value": 45235,
+      "error": 0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Default Parameters",
+      "parameter": "totalMassKg",
+      "expected_value": 33461507,
+      "actual_value": 33461506.84931507,
+      "error": -0.1506849303841591,
+      "error_pct": 4.5032320386574067e-07,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "No Degradation",
+      "parameter": "satelliteCount",
+      "expected_value": 37793,
+      "actual_value": 37793,
+      "error": 0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "High Launch Cost",
+      "parameter": "launchCost",
+      "expected_value": 66923013699,
+      "actual_value": 66923013698.63014,
+      "error": -0.3698577880859375,
+      "error_pct": 5.526615847717929e-10,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Low Sun Fraction",
+      "parameter": "satelliteCount",
+      "expected_value": 55413,
+      "actual_value": 55413,
+      "error": 0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    }
+  ],
+  "consistency_issues": [],
+  "detailed_calculation": {
+    "totalMassKg": 33461506.84931507,
+    "satelliteCount": 45235,
+    "singleSatArrayM2": 116.0,
+    "arrayAreaKm2": 5.24726,
+    "hardwareCost": 24426900000,
+    "launchCost": 16730753424.657536,
+    "opsCost": 1221345000.0,
+    "nreCost": 1000000000.0,
+    "baseCost": 41157653424.65753,
+    "totalCost": 43378998424.65753,
+    "costPerW": 43.37899842465753,
+    "energyMWh": 43800000,
+    "lcoe": 990.3880918871582,
+    "starshipLaunches": 335,
+    "loxGallons": 263645000,
+    "methaneGallons": 252925000,
+    "avgCapacityFactor": 0.8354841220000001,
+    "avgGpuFactor": 0.8354841220000001,
+    "avgSolarFactor": 0.9512344531249999,
+    "degradationMargin": 22.13449999999999,
+    "gpuMarginPct": 19.69108372833923,
+    "solarMarginPct": 5.126553891608454,
+    "actualInitialPowerW": 1221345000,
+    "requiredInitialPowerW": 1221337589.064686,
+    "_derived": {
+      "TARGET_POWER_MW": 1000,
+      "TARGET_POWER_W": 1000000000.0,
+      "TARGET_POWER_KW": 1000000
+    },
+    "_totalHours": 43800,
+    "_solarRetention": 0.975,
+    "_gpuRetention": 0.91,
+    "_sunlightAdjustedFactor": 0.8187744395600001,
+    "_massPerSatKg": 739.7260273972603
+  }
+}

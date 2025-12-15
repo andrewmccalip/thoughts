@@ -1,0 +1,233 @@
+{
+  "audit_info": {
+    "date": "2025-12-14",
+    "type": "Unit Conversions Verification",
+    "model_version": "math.js current"
+  },
+  "summary": {
+    "basic_tests_total": 17,
+    "basic_tests_passed": 17,
+    "model_tests_total": 7,
+    "model_tests_passed": 7
+  },
+  "basic_conversion_tests": [
+    {
+      "test_name": "GW to MW",
+      "input_value": 1.0,
+      "expected_output": 1000.0,
+      "actual_output": 1000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "MW to kW",
+      "input_value": 1.0,
+      "expected_output": 1000.0,
+      "actual_output": 1000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "kW to W",
+      "input_value": 1.0,
+      "expected_output": 1000.0,
+      "actual_output": 1000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "kg to metric tons",
+      "input_value": 1000.0,
+      "expected_output": 1.0,
+      "actual_output": 1.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "metric tons to kg",
+      "input_value": 1.0,
+      "expected_output": 1000.0,
+      "actual_output": 1000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "m\u00b2 to km\u00b2",
+      "input_value": 1000000.0,
+      "expected_output": 1.0,
+      "actual_output": 1.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "km\u00b2 to m\u00b2",
+      "input_value": 1.0,
+      "expected_output": 1000000.0,
+      "actual_output": 1000000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "years to hours",
+      "input_value": 1.0,
+      "expected_output": 8760.0,
+      "actual_output": 8760.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "years to days",
+      "input_value": 1.0,
+      "expected_output": 365.0,
+      "actual_output": 365.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "Celsius to Kelvin (water freezing)",
+      "input_value": 0.0,
+      "expected_output": 273.15,
+      "actual_output": 273.15,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "Celsius to Kelvin (water boiling)",
+      "input_value": 100.0,
+      "expected_output": 373.15,
+      "actual_output": 373.15,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "Kelvin to Celsius (absolute zero)",
+      "input_value": 0.0,
+      "expected_output": -273.15,
+      "actual_output": -273.15,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "MWh to kWh",
+      "input_value": 1.0,
+      "expected_output": 1000.0,
+      "actual_output": 1000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "kWh to Wh",
+      "input_value": 1.0,
+      "expected_output": 1000.0,
+      "actual_output": 1000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "Wh to Joules",
+      "input_value": 1.0,
+      "expected_output": 3600.0,
+      "actual_output": 3600.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "MMBtu to BTU",
+      "input_value": 1.0,
+      "expected_output": 1000000.0,
+      "actual_output": 1000000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "BCF to cubic feet",
+      "input_value": 1.0,
+      "expected_output": 1000000000.0,
+      "actual_output": 1000000000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    }
+  ],
+  "model_conversion_tests": [
+    {
+      "test_name": "getDerived: GW to MW",
+      "input_value": 1.0,
+      "expected_output": 1000.0,
+      "actual_output": 1000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "getDerived: MW to W",
+      "input_value": 1000.0,
+      "expected_output": 1000000000.0,
+      "actual_output": 1000000000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "getDerived: MW to kW",
+      "input_value": 1000.0,
+      "expected_output": 1000000.0,
+      "actual_output": 1000000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "Thermal: km\u00b2 to m\u00b2",
+      "input_value": 1.0,
+      "expected_output": 1000000.0,
+      "actual_output": 1000000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "Thermal: m\u00b2 to km\u00b2",
+      "input_value": 1000000.0,
+      "expected_output": 1.0,
+      "actual_output": 1.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "Thermal: \u00b0C to K (room temp)",
+      "input_value": 20.0,
+      "expected_output": 293.15,
+      "actual_output": 293.15,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    },
+    {
+      "test_name": "Thermal: K to \u00b0C (space temp)",
+      "input_value": 3.0,
+      "expected_output": -270.15,
+      "actual_output": -270.15,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "passed": true
+    }
+  ]
+}

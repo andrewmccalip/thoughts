@@ -1,0 +1,109 @@
+{
+  "audit_info": {
+    "date": "2025-12-14",
+    "type": "Terrestrial Calculations Verification",
+    "model_version": "math.js current"
+  },
+  "summary": {
+    "verification_checks_total": 7,
+    "verification_checks_passed": 7,
+    "consistency_issues_count": 0
+  },
+  "verification_results": [
+    {
+      "test_name": "Default Parameters",
+      "parameter": "totalCost",
+      "expected_value": 15431062160.0,
+      "actual_value": 15431062160.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Default Parameters",
+      "parameter": "costPerW",
+      "expected_value": 15.43106216,
+      "actual_value": 15.43106216,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Default Parameters",
+      "parameter": "gasConsumptionBCF",
+      "expected_value": 277.0,
+      "actual_value": 276.9912,
+      "error": -0.008800000000007913,
+      "error_pct": 0.0031768953068620626,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Default Parameters",
+      "parameter": "turbineCount",
+      "expected_value": 3,
+      "actual_value": 3,
+      "error": 0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "High PUE",
+      "parameter": "totalCost",
+      "expected_value": 16163827700.0,
+      "actual_value": 16163827700.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "High Gas Price",
+      "parameter": "fuelCostTotal",
+      "expected_value": 2769912000.0,
+      "actual_value": 2769912000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    },
+    {
+      "test_name": "Low Capacity Factor",
+      "parameter": "energyMWh",
+      "expected_value": 21900000.0,
+      "actual_value": 21900000.0,
+      "error": 0.0,
+      "error_pct": 0.0,
+      "within_tolerance": true
+    }
+  ],
+  "consistency_issues": [],
+  "detailed_calculation": {
+    "powerGenCost": 1740000000.0,
+    "powerGenCostPerW": 1.74,
+    "electricalCost": 5250000000.0,
+    "mechanicalCost": 3000000000.0,
+    "civilCost": 2500000000.0,
+    "networkCost": 1750000000.0,
+    "infraCapex": 14240000000.0,
+    "facilityCapexPerW": 14.24,
+    "fuelCostPerMWh": 26.66,
+    "fuelCostTotal": 1191062160.0,
+    "fuelCostPerWYear": 0.28024992,
+    "totalCost": 15431062160.0,
+    "costPerW": 15.43106216,
+    "lcoe": 414.47924147193123,
+    "energyMWh": 37230000.0,
+    "generationMWh": 44676000.0,
+    "totalHours": 43800,
+    "gasConsumptionBCF": 276.9912,
+    "turbineCount": 3,
+    "totalGenerationMW": 1200.0,
+    "capacityFactor": 0.85,
+    "pue": 1.2,
+    "_derived": {
+      "TARGET_POWER_MW": 1000,
+      "TARGET_POWER_W": 1000000000.0,
+      "TARGET_POWER_KW": 1000000
+    },
+    "_generationKWh": 44676000000.0,
+    "_totalBTU": 276991200000000.0
+  }
+}

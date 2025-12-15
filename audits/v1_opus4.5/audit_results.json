@@ -1,0 +1,1014 @@
+{
+  "constant_validations": [
+    {
+      "name": "SOLAR_IRRADIANCE_W_M2",
+      "model_value": 1361,
+      "reference_value": 1361,
+      "reference_source": "NASA Solar Constant (AM0)",
+      "reference_range": [
+        1360,
+        1362
+      ],
+      "unit": "W/m\u00b2",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "AM0 (Air Mass Zero) solar constant is well-established at 1361 W/m\u00b2. \u2713 CORRECT"
+    },
+    {
+      "name": "EARTH_IR_FLUX_W_M2",
+      "model_value": 237,
+      "reference_value": 237,
+      "reference_source": "NASA Earth Energy Budget",
+      "reference_range": [
+        235,
+        240
+      ],
+      "unit": "W/m\u00b2",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "Earth's outgoing longwave radiation averages ~237 W/m\u00b2. \u2713 CORRECT"
+    },
+    {
+      "name": "EARTH_ALBEDO_FACTOR",
+      "model_value": 0.3,
+      "reference_value": 0.3,
+      "reference_source": "NASA Earth Science",
+      "reference_range": [
+        0.29,
+        0.31
+      ],
+      "unit": "dimensionless",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "Global average albedo ~0.30. \u2713 CORRECT"
+    },
+    {
+      "name": "T_SPACE_K",
+      "model_value": 3,
+      "reference_value": 3,
+      "reference_source": "CMB Temperature",
+      "reference_range": [
+        2.7,
+        4
+      ],
+      "unit": "K",
+      "is_valid": true,
+      "deviation_pct": 10,
+      "notes": "Deep space sink ~2.7K (CMB), using 3K is conservative. \u2713 ACCEPTABLE"
+    },
+    {
+      "name": "STARSHIP_PAYLOAD_KG",
+      "model_value": 100000,
+      "reference_value": 100000,
+      "reference_source": "SpaceX Starship Specifications",
+      "reference_range": [
+        100000,
+        150000
+      ],
+      "unit": "kg",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "SpaceX quotes 100-150t to LEO. Using 100t is conservative. \u2713 CORRECT"
+    },
+    {
+      "name": "NGCC_HEAT_RATE_BTU_KWH",
+      "model_value": 6370,
+      "reference_value": 6400,
+      "reference_source": "EIA 2023 Average NGCC Heat Rate",
+      "reference_range": [
+        6000,
+        7500
+      ],
+      "unit": "BTU/kWh",
+      "is_valid": true,
+      "deviation_pct": 0.46875,
+      "notes": "Modern H-class CCGT achieves 6000-6500 BTU/kWh. Using 6370 is realistic. \u2713 CORRECT"
+    },
+    {
+      "name": "GE_7HA_POWER_MW",
+      "model_value": 430,
+      "reference_value": 430,
+      "reference_source": "GE Gas Power 7HA.03 Specifications",
+      "reference_range": [
+        380,
+        480
+      ],
+      "unit": "MW",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "GE 7HA.03 gas turbine rated at 430 MW simple cycle, up to 600 MW combined. \u2713 CORRECT"
+    },
+    {
+      "name": "BTU_PER_CF",
+      "model_value": 1000,
+      "reference_value": 1020,
+      "reference_source": "EIA Natural Gas Energy Content",
+      "reference_range": [
+        1000,
+        1050
+      ],
+      "unit": "BTU/cf",
+      "is_valid": true,
+      "deviation_pct": 2.0,
+      "notes": "Pipeline quality natural gas ~1020 BTU/cf. Using 1000 is slightly conservative. \u2713 ACCEPTABLE"
+    },
+    {
+      "name": "STARLINK_MASS_KG",
+      "model_value": 740,
+      "reference_value": 740,
+      "reference_source": "FCC Filings, SpaceX Presentations",
+      "reference_range": [
+        730,
+        800
+      ],
+      "unit": "kg",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "V2 Mini: 730-800 kg per various sources. 740 kg is well-documented. \u2713 CORRECT"
+    },
+    {
+      "name": "STARLINK_POWER_KW",
+      "model_value": 27,
+      "reference_value": 27,
+      "reference_source": "Starlink Techno-Economic Analysis",
+      "reference_range": [
+        20,
+        30
+      ],
+      "unit": "kW",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "V2 Mini: ~27 kW nameplate from 116 m\u00b2 array at ~230 W/m\u00b2. \u2713 CORRECT"
+    },
+    {
+      "name": "STARLINK_ARRAY_M2",
+      "model_value": 116,
+      "reference_value": 116,
+      "reference_source": "UK Technical Study, Spaceflight Now",
+      "reference_range": [
+        110,
+        120
+      ],
+      "unit": "m\u00b2",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "V2 Mini solar array ~116 m\u00b2 (4x v1.5's 30 m\u00b2). \u2713 CORRECT"
+    }
+  ],
+  "state_validations": [
+    {
+      "name": "launchCostPerKg",
+      "model_value": 1000,
+      "reference_value": 1000,
+      "reference_source": "SpaceX Starship Cost Projections",
+      "reference_range": [
+        100,
+        3000
+      ],
+      "unit": "$/kg",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "$1000/kg is realistic early Starship. Floor is $20-50/kg at mature ops. Current Falcon 9: ~$2940/kg. \u2713 REASONABLE"
+    },
+    {
+      "name": "satelliteCostPerW",
+      "model_value": 22,
+      "reference_value": 22,
+      "reference_source": "Starlink BOM Analysis",
+      "reference_range": [
+        15,
+        35
+      ],
+      "unit": "$/W",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "V2 Mini: $592k / 27kW \u2248 $22/W at $800/kg BOM. \u2713 CORRECT"
+    },
+    {
+      "name": "specificPowerWPerKg",
+      "model_value": 36.5,
+      "reference_value": 36.5,
+      "reference_source": "V2 Mini: 27kW / 740kg",
+      "reference_range": [
+        24,
+        45
+      ],
+      "unit": "W/kg",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "V2 Mini: 36.5 W/kg. V1: 24.7 W/kg. ISS: ~3 W/kg. \u2713 CORRECT"
+    },
+    {
+      "name": "pvEfficiency",
+      "model_value": 0.22,
+      "reference_value": 0.22,
+      "reference_source": "Commercial Triple-Junction GaAs (space-grade)",
+      "reference_range": [
+        0.2,
+        0.32
+      ],
+      "unit": "fraction",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "Space-grade multi-junction cells: 28-32%. Silicon: 18-22%. Using 22% for silicon. \u2713 CONSERVATIVE"
+    },
+    {
+      "name": "solarAbsorptivity",
+      "model_value": 0.92,
+      "reference_value": 0.92,
+      "reference_source": "Solar Cell Surface Properties",
+      "reference_range": [
+        0.85,
+        0.95
+      ],
+      "unit": "fraction",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "Solar cells absorb ~90-95% of incident solar radiation. \u2713 CORRECT"
+    },
+    {
+      "name": "emissivityPV",
+      "model_value": 0.85,
+      "reference_value": 0.85,
+      "reference_source": "Glass/Cover Material IR Emissivity",
+      "reference_range": [
+        0.8,
+        0.9
+      ],
+      "unit": "fraction",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "Glass/glass solar panel emissivity ~0.85. \u2713 CORRECT"
+    },
+    {
+      "name": "emissivityRad",
+      "model_value": 0.9,
+      "reference_value": 0.9,
+      "reference_source": "White Paint/OSR Thermal Coatings",
+      "reference_range": [
+        0.85,
+        0.95
+      ],
+      "unit": "fraction",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "White paint/OSR radiator coatings: 0.85-0.95 emissivity. \u2713 CORRECT"
+    },
+    {
+      "name": "gasPricePerMMBtu",
+      "model_value": 4.3,
+      "reference_value": 4.3,
+      "reference_source": "EIA Henry Hub Natural Gas Price Forecast 2025",
+      "reference_range": [
+        2.0,
+        8.0
+      ],
+      "unit": "$/MMBtu",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "Henry Hub 2024-2025: $2-5/MMBtu. $4.30 is typical forecast. Permian basin gas can be <$2. \u2713 REASONABLE"
+    },
+    {
+      "name": "gasTurbineCapexPerKW",
+      "model_value": 1450,
+      "reference_value": 1450,
+      "reference_source": "EIA Capital Cost Estimates, Sargent & Lundy",
+      "reference_range": [
+        1200,
+        2300
+      ],
+      "unit": "$/kW",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "NGCC capex: $1200-2300/kW depending on complexity. $1450 is low-end modern. \u2713 CORRECT"
+    },
+    {
+      "name": "pue",
+      "model_value": 1.2,
+      "reference_value": 1.2,
+      "reference_source": "Hyperscale Datacenter Benchmarks",
+      "reference_range": [
+        1.1,
+        1.5
+      ],
+      "unit": "dimensionless",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "Best-in-class liquid-cooled: 1.1. Industry average: 1.3-1.5. 1.2 is achievable. \u2713 CORRECT"
+    },
+    {
+      "name": "cellDegradation",
+      "model_value": 2.5,
+      "reference_value": 2.5,
+      "reference_source": "LEO Solar Cell Radiation Degradation Studies",
+      "reference_range": [
+        1.0,
+        6.0
+      ],
+      "unit": "%/year",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "LEO: 2-6%/year depending on shielding and orbit. 2.5% is moderate. \u2713 REASONABLE"
+    },
+    {
+      "name": "gpuFailureRate",
+      "model_value": 9,
+      "reference_value": 9.0,
+      "reference_source": "Meta Infrastructure Analysis (2024)",
+      "reference_range": [
+        1.5,
+        15
+      ],
+      "unit": "%/year",
+      "is_valid": true,
+      "deviation_pct": 0.0,
+      "notes": "Meta reported ~9% GPU failure rate at scale. Space radiation would likely increase this. \u2713 REASONABLE"
+    },
+    {
+      "name": "datacenterInfraTotal",
+      "model_value": 12.5,
+      "reference_value": 13.0,
+      "reference_source": "Industry Reports, JLL, Cushman & Wakefield",
+      "reference_range": [
+        10.0,
+        17.0
+      ],
+      "unit": "$/W",
+      "is_valid": true,
+      "deviation_pct": 3.8461538461538463,
+      "notes": "Total DC capex: $12.50/W. Industry range: $10-17/W. \u2713 CORRECT"
+    }
+  ],
+  "default_orbital": {
+    "totalMassKg": 29390054.79452055,
+    "hardwareCost": 23600214000,
+    "launchCost": 29390054794.52055,
+    "opsCost": 236002140.0,
+    "gpuReplacementCost": 10620096300.0,
+    "nreCost": 1000000000.0,
+    "totalCost": 64846367234.52055,
+    "energyMWh": 43800000,
+    "costPerW": 64.84636723452056,
+    "lcoe": 1480.5106674548072,
+    "satelliteCount": 39731,
+    "arrayAreaKm2": 4.608796,
+    "starshipLaunches": 294,
+    "avgCapacityFactor": 0.9512344531249999,
+    "actualInitialPowerW": 1072737000
+  },
+  "default_terrestrial": {
+    "powerGenCost": 1740000000.0,
+    "electricalCost": 5250000000.0,
+    "mechanicalCost": 3000000000.0,
+    "civilCost": 2500000000.0,
+    "networkCost": 1750000000.0,
+    "infraCapex": 14240000000.0,
+    "facilityCapexPerW": 14.24,
+    "fuelCostPerMWh": 26.66,
+    "fuelCostTotal": 1191062160.0,
+    "totalCost": 15431062160.0,
+    "energyMWh": 37230000.0,
+    "generationMWh": 44676000.0,
+    "costPerW": 15.43106216,
+    "lcoe": 414.47924147193123,
+    "gasConsumptionBCF": 276.9912,
+    "turbineCount": 3,
+    "totalGenerationMW": 1200.0
+  },
+  "default_thermal": {
+    "availableAreaM2": 4608796.0,
+    "vfEarth": 0.08,
+    "qSolarW": 4390799949.200001,
+    "qEarthIRW": 152919851.28,
+    "qAlbedoW": 8.480579614637848e-09,
+    "qHeatLoopW": 1379965698.3200002,
+    "totalHeatInW": 5923685498.800001,
+    "powerGeneratedW": 1379965698.3200002,
+    "eqTempK": 337.361757641183,
+    "eqTempC": 64.211757641183,
+    "radiatorTempC": 75,
+    "tempMarginC": 10.788242358817001,
+    "areaSufficient": true,
+    "totalEmissivity": 1.75
+  },
+  "sensitivity": {
+    "orbital_cost_range": {
+      "launchCostPerKg": [
+        {
+          "value": 20,
+          "totalCost": 36044113535.89041,
+          "lcoe": 822.9249665728404,
+          "costPerW": 36.04411353589041,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        },
+        {
+          "value": 100,
+          "totalCost": 38395317919.45206,
+          "lcoe": 876.6054319509602,
+          "costPerW": 38.395317919452054,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        },
+        {
+          "value": 500,
+          "totalCost": 50151339837.26028,
+          "lcoe": 1145.0077588415588,
+          "costPerW": 50.151339837260274,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        },
+        {
+          "value": 1000,
+          "totalCost": 64846367234.52055,
+          "lcoe": 1480.5106674548072,
+          "costPerW": 64.84636723452056,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        },
+        {
+          "value": 2000,
+          "totalCost": 94236422029.0411,
+          "lcoe": 2151.5164846813036,
+          "costPerW": 94.23642202904111,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        },
+        {
+          "value": 2940,
+          "totalCost": 121863073535.89041,
+          "lcoe": 2782.2619528742102,
+          "costPerW": 121.86307353589041,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        }
+      ],
+      "satelliteCostPerW": [
+        {
+          "value": 5,
+          "totalCost": 38221034894.52055,
+          "lcoe": 872.6263674548071,
+          "costPerW": 38.22103489452056,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        },
+        {
+          "value": 10,
+          "totalCost": 46052014994.52055,
+          "lcoe": 1051.415867454807,
+          "costPerW": 46.052014994520555,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        },
+        {
+          "value": 15,
+          "totalCost": 53882995094.52055,
+          "lcoe": 1230.2053674548072,
+          "costPerW": 53.88299509452055,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        },
+        {
+          "value": 22,
+          "totalCost": 64846367234.52055,
+          "lcoe": 1480.5106674548072,
+          "costPerW": 64.84636723452056,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        },
+        {
+          "value": 30,
+          "totalCost": 77375935394.52055,
+          "lcoe": 1766.5738674548072,
+          "costPerW": 77.37593539452055,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        },
+        {
+          "value": 40,
+          "totalCost": 93037895594.52055,
+          "lcoe": 2124.152867454807,
+          "costPerW": 93.03789559452055,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        }
+      ],
+      "specificPowerWPerKg": [
+        {
+          "value": 3,
+          "totalCost": 393035312440.0,
+          "lcoe": 8973.408959817352,
+          "costPerW": 393.03531244,
+          "satelliteCount": 39731,
+          "totalMassKg": 357579000.0
+        },
+        {
+          "value": 15,
+          "totalCost": 106972112440.0,
+          "lcoe": 2442.285672146119,
+          "costPerW": 106.97211244,
+          "satelliteCount": 39731,
+          "totalMassKg": 71515800.0
+        },
+        {
+          "value": 25,
+          "totalCost": 78365792440.0,
+          "lcoe": 1789.1733433789955,
+          "costPerW": 78.36579244,
+          "satelliteCount": 39731,
+          "totalMassKg": 42909480.0
+        },
+        {
+          "value": 36.5,
+          "totalCost": 64846367234.52055,
+          "lcoe": 1480.5106674548072,
+          "costPerW": 64.84636723452056,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        },
+        {
+          "value": 50,
+          "totalCost": 56911052440.0,
+          "lcoe": 1299.3390968036529,
+          "costPerW": 56.91105244,
+          "satelliteCount": 39731,
+          "totalMassKg": 21454740.0
+        },
+        {
+          "value": 75,
+          "totalCost": 49759472440.0,
+          "lcoe": 1136.0610146118722,
+          "costPerW": 49.75947244,
+          "satelliteCount": 39731,
+          "totalMassKg": 14303160.0
+        }
+      ],
+      "years": [
+        {
+          "value": 3,
+          "totalCost": 59132783745.753426,
+          "lcoe": 2250.105926398532,
+          "costPerW": 59.13278374575343,
+          "satelliteCount": 38754,
+          "totalMassKg": 28667342.465753425
+        },
+        {
+          "value": 5,
+          "totalCost": 64846367234.52055,
+          "lcoe": 1480.5106674548072,
+          "costPerW": 64.84636723452056,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        },
+        {
+          "value": 7,
+          "totalCost": 70794580693.69864,
+          "lcoe": 1154.510448364296,
+          "costPerW": 70.79458069369863,
+          "satelliteCount": 40723,
+          "totalMassKg": 30123863.01369863
+        },
+        {
+          "value": 10,
+          "totalCost": 80172745529.31506,
+          "lcoe": 915.2139900606743,
+          "costPerW": 80.17274552931507,
+          "satelliteCount": 42242,
+          "totalMassKg": 31247506.84931507
+        }
+      ],
+      "sunFraction": [
+        {
+          "value": 0.55,
+          "totalCost": 114761945977.53424,
+          "lcoe": 2620.135752911741,
+          "costPerW": 114.76194597753424,
+          "satelliteCount": 70793,
+          "totalMassKg": 52367424.65753425
+        },
+        {
+          "value": 0.7,
+          "totalCost": 90384271341.91782,
+          "lcoe": 2063.567838856571,
+          "costPerW": 90.38427134191781,
+          "satelliteCount": 55623,
+          "totalMassKg": 41145780.82191781
+        },
+        {
+          "value": 0.85,
+          "totalCost": 74610292816.9863,
+          "lcoe": 1703.4313428535684,
+          "costPerW": 74.6102928169863,
+          "satelliteCount": 45807,
+          "totalMassKg": 33884630.1369863
+        },
+        {
+          "value": 0.98,
+          "totalCost": 64846367234.52055,
+          "lcoe": 1480.5106674548072,
+          "costPerW": 64.84636723452056,
+          "satelliteCount": 39731,
+          "totalMassKg": 29390054.79452055
+        },
+        {
+          "value": 1.0,
+          "totalCost": 63568829242.73973,
+          "lcoe": 1451.3431333958843,
+          "costPerW": 63.56882924273973,
+          "satelliteCount": 38936,
+          "totalMassKg": 28801972.602739725
+        }
+      ]
+    },
+    "terrestrial_cost_range": {
+      "gasPricePerMMBtu": [
+        {
+          "value": 2,
+          "totalCost": 14793982400.0,
+          "lcoe": 397.36724147193127,
+          "costPerW": 14.7939824,
+          "fuelCostTotal": 553982400.0
+        },
+        {
+          "value": 4.3,
+          "totalCost": 15431062160.0,
+          "lcoe": 414.47924147193123,
+          "costPerW": 15.43106216,
+          "fuelCostTotal": 1191062160.0
+        },
+        {
+          "value": 6,
+          "totalCost": 15901947200.0,
+          "lcoe": 427.12724147193126,
+          "costPerW": 15.9019472,
+          "fuelCostTotal": 1661947200.0000002
+        },
+        {
+          "value": 10,
+          "totalCost": 17009912000.0,
+          "lcoe": 456.88724147193125,
+          "costPerW": 17.009912,
+          "fuelCostTotal": 2769912000.0
+        },
+        {
+          "value": 15,
+          "totalCost": 18394868000.0,
+          "lcoe": 494.08724147193124,
+          "costPerW": 18.394868,
+          "fuelCostTotal": 4154868000.0
+        }
+      ],
+      "heatRateBtuKwh": [
+        {
+          "value": 6000,
+          "totalCost": 15392640800.0,
+          "lcoe": 413.44724147193125,
+          "costPerW": 15.3926408,
+          "fuelCostTotal": 1152640800.0
+        },
+        {
+          "value": 6200,
+          "totalCost": 15431062160.0,
+          "lcoe": 414.47924147193123,
+          "costPerW": 15.43106216,
+          "fuelCostTotal": 1191062160.0
+        },
+        {
+          "value": 7000,
+          "totalCost": 15584747600.0,
+          "lcoe": 418.6072414719312,
+          "costPerW": 15.5847476,
+          "fuelCostTotal": 1344747600.0
+        },
+        {
+          "value": 8000,
+          "totalCost": 15776854400.0,
+          "lcoe": 423.76724147193124,
+          "costPerW": 15.7768544,
+          "fuelCostTotal": 1536854400.0
+        },
+        {
+          "value": 9000,
+          "totalCost": 15968961200.0,
+          "lcoe": 428.9272414719312,
+          "costPerW": 15.9689612,
+          "fuelCostTotal": 1728961200.0000002
+        }
+      ],
+      "pue": [
+        {
+          "value": 1.1,
+          "totalCost": 15186806980.0,
+          "lcoe": 407.9185329035724,
+          "costPerW": 15.18680698,
+          "fuelCostTotal": 1091806980.0
+        },
+        {
+          "value": 1.2,
+          "totalCost": 15431062160.0,
+          "lcoe": 414.47924147193123,
+          "costPerW": 15.43106216,
+          "fuelCostTotal": 1191062160.0
+        },
+        {
+          "value": 1.3,
+          "totalCost": 15675317340.0,
+          "lcoe": 421.0399500402901,
+          "costPerW": 15.67531734,
+          "fuelCostTotal": 1290317340.0
+        },
+        {
+          "value": 1.4,
+          "totalCost": 15919572520.0,
+          "lcoe": 427.6006586086489,
+          "costPerW": 15.91957252,
+          "fuelCostTotal": 1389572520.0
+        },
+        {
+          "value": 1.5,
+          "totalCost": 16163827700.0,
+          "lcoe": 434.1613671770078,
+          "costPerW": 16.1638277,
+          "fuelCostTotal": 1488827700.0
+        }
+      ],
+      "years": [
+        {
+          "value": 3,
+          "totalCost": 14954637296.0,
+          "lcoe": 669.470735786552,
+          "costPerW": 14.954637296,
+          "fuelCostTotal": 714637296.0
+        },
+        {
+          "value": 5,
+          "totalCost": 15431062160.0,
+          "lcoe": 414.47924147193123,
+          "costPerW": 15.43106216,
+          "fuelCostTotal": 1191062160.0
+        },
+        {
+          "value": 7,
+          "totalCost": 15907487024.0,
+          "lcoe": 305.1971724799509,
+          "costPerW": 15.907487024,
+          "fuelCostTotal": 1667487024.0
+        },
+        {
+          "value": 10,
+          "totalCost": 16622124320.0,
+          "lcoe": 223.23562073596563,
+          "costPerW": 16.62212432,
+          "fuelCostTotal": 2382124320.0
+        }
+      ]
+    },
+    "thermal_range": {
+      "betaAngle": [
+        {
+          "value": 60,
+          "eqTempC": 67.52110624349393,
+          "tempMarginC": 7.478893756506068,
+          "areaSufficient": true
+        },
+        {
+          "value": 75,
+          "eqTempC": 65.71984110226737,
+          "tempMarginC": 9.280158897732633,
+          "areaSufficient": true
+        },
+        {
+          "value": 90,
+          "eqTempC": 64.211757641183,
+          "tempMarginC": 10.788242358817001,
+          "areaSufficient": true
+        }
+      ],
+      "emissivityPV": [
+        {
+          "value": 0.5,
+          "eqTempC": 83.10530194039814,
+          "tempMarginC": -8.105301940398135,
+          "areaSufficient": false
+        },
+        {
+          "value": 0.85,
+          "eqTempC": 64.211757641183,
+          "tempMarginC": 10.788242358817001,
+          "areaSufficient": true
+        },
+        {
+          "value": 0.95,
+          "eqTempC": 59.680007107259655,
+          "tempMarginC": 15.319992892740345,
+          "areaSufficient": true
+        }
+      ],
+      "emissivityRad": [
+        {
+          "value": 0.5,
+          "eqTempC": 86.29245925982684,
+          "tempMarginC": -11.292459259826842,
+          "areaSufficient": false
+        },
+        {
+          "value": 0.9,
+          "eqTempC": 64.211757641183,
+          "tempMarginC": 10.788242358817001,
+          "areaSufficient": true
+        },
+        {
+          "value": 0.98,
+          "eqTempC": 60.56109352223541,
+          "tempMarginC": 14.43890647776459,
+          "areaSufficient": true
+        }
+      ],
+      "solarAbsorptivity": [
+        {
+          "value": 0.8,
+          "eqTempC": 52.94264447935143,
+          "tempMarginC": 22.05735552064857,
+          "areaSufficient": true
+        },
+        {
+          "value": 0.92,
+          "eqTempC": 64.211757641183,
+          "tempMarginC": 10.788242358817001,
+          "areaSufficient": true
+        },
+        {
+          "value": 0.98,
+          "eqTempC": 69.44709439918307,
+          "tempMarginC": 5.552905600816928,
+          "areaSufficient": true
+        }
+      ]
+    },
+    "breakeven_analysis": {}
+  },
+  "breakeven": [
+    {
+      "name": "Default V2 Mini",
+      "specificPowerWPerKg": 36.5,
+      "satelliteCostPerW": 22,
+      "sunFraction": 0.98,
+      "terrestrialCostPerW": 15.43106216,
+      "breakevenLaunchCostPerKg": 0.30517578125,
+      "isAchievable": false,
+      "currentGap": "N/A"
+    },
+    {
+      "name": "Improved V3",
+      "specificPowerWPerKg": 45,
+      "satelliteCostPerW": 18,
+      "sunFraction": 0.98,
+      "terrestrialCostPerW": 15.43106216,
+      "breakevenLaunchCostPerKg": 0.30517578125,
+      "isAchievable": false,
+      "currentGap": "N/A"
+    },
+    {
+      "name": "Future Best Case",
+      "specificPowerWPerKg": 60,
+      "satelliteCostPerW": 10,
+      "sunFraction": 1.0,
+      "terrestrialCostPerW": 15.43106216,
+      "breakevenLaunchCostPerKg": 0.30517578125,
+      "isAchievable": false,
+      "currentGap": "N/A"
+    },
+    {
+      "name": "Conservative ISS-class",
+      "specificPowerWPerKg": 10,
+      "satelliteCostPerW": 35,
+      "sunFraction": 0.6,
+      "terrestrialCostPerW": 15.43106216,
+      "breakevenLaunchCostPerKg": 0.30517578125,
+      "isAchievable": false,
+      "currentGap": "N/A"
+    }
+  ],
+  "missing_factors": [
+    {
+      "category": "Orbital - Not Modeled",
+      "factor": "Orbital Debris Collision Risk",
+      "impact": "High",
+      "direction": "Increases Cost",
+      "estimate": "+5-20% insurance/risk premium",
+      "notes": "Kessler syndrome risk grows with constellation size. Insurance and mitigation costs not included."
+    },
+    {
+      "category": "Orbital - Not Modeled",
+      "factor": "Space Radiation Effects on GPUs",
+      "impact": "Very High",
+      "direction": "Increases Cost",
+      "estimate": "Could increase GPU failure rate 2-5x",
+      "notes": "LEO radiation flux is ~100x terrestrial. Current 9% failure rate is ground-based. Radiation hardening adds mass."
+    },
+    {
+      "category": "Orbital - Not Modeled",
+      "factor": "Communications Bandwidth to Ground",
+      "impact": "Medium-High",
+      "direction": "Potential Showstopper",
+      "estimate": "May limit certain workloads",
+      "notes": "Batch inference OK, but training requires TB/s data ingress. Optical ISL bandwidth is limited."
+    },
+    {
+      "category": "Orbital - Not Modeled",
+      "factor": "Station-Keeping Propellant Mass",
+      "impact": "Medium",
+      "direction": "Increases Cost",
+      "estimate": "+5-15% mass budget",
+      "notes": "LEO drag requires regular orbit maintenance. Xe propellant mass not included in calculations."
+    },
+    {
+      "category": "Orbital - Not Modeled",
+      "factor": "Attitude Control Power",
+      "impact": "Low-Medium",
+      "direction": "Decreases Available Power",
+      "estimate": "-3-8% of generated power",
+      "notes": "Reaction wheels, CMGs, and control systems consume power. Not deducted from compute budget."
+    },
+    {
+      "category": "Orbital - Not Modeled",
+      "factor": "Battery Mass for Eclipse",
+      "impact": "Medium",
+      "direction": "Increases Mass",
+      "estimate": "+10-30% mass for 60% sun fraction orbits",
+      "notes": "Non-terminator orbits need batteries. 98% sun fraction assumes perfect terminator orbit."
+    },
+    {
+      "category": "Orbital - Not Modeled",
+      "factor": "End-of-Life Disposal/De-orbit",
+      "impact": "Low-Medium",
+      "direction": "Increases Cost",
+      "estimate": "+$1-5M per satellite",
+      "notes": "Regulatory requirements for controlled de-orbit. Propellant reserve or disposal tug costs."
+    },
+    {
+      "category": "Orbital - Not Modeled",
+      "factor": "Ground Station Network",
+      "impact": "Medium",
+      "direction": "Increases Cost",
+      "estimate": "+$500M-2B capex",
+      "notes": "Data downlink/uplink infrastructure not included. Assumes Starlink-like ISL mesh exists."
+    },
+    {
+      "category": "Orbital - Conservative",
+      "factor": "Learning Curve / Manufacturing Scale",
+      "impact": "High",
+      "direction": "Decreases Cost",
+      "estimate": "-20-50% at 10,000+ unit production",
+      "notes": "Model uses current costs. SpaceX satellite production at scale could significantly reduce $/kg."
+    },
+    {
+      "category": "Terrestrial - Not Modeled",
+      "factor": "Grid Interconnection Costs",
+      "impact": "Medium",
+      "direction": "Increases Cost",
+      "estimate": "+$0.50-2.00/W",
+      "notes": "Model assumes on-site gas. Grid-connected would add transmission and interconnection."
+    },
+    {
+      "category": "Terrestrial - Not Modeled",
+      "factor": "Carbon Tax / ESG Premium",
+      "impact": "Medium",
+      "direction": "Increases Cost",
+      "estimate": "+$10-50/MWh potential",
+      "notes": "NGCC produces ~400g CO2/kWh. Future carbon pricing could shift economics."
+    },
+    {
+      "category": "Terrestrial - Not Modeled",
+      "factor": "Permitting and Regulatory Delays",
+      "impact": "Low-Medium",
+      "direction": "Increases Cost",
+      "estimate": "+6-24 months, +5-15% cost",
+      "notes": "Environmental review, air permits, water rights. Varies dramatically by jurisdiction."
+    },
+    {
+      "category": "Terrestrial - Not Modeled",
+      "factor": "Water Availability for Cooling",
+      "impact": "Medium",
+      "direction": "Increases Cost in Water-Scarce Regions",
+      "estimate": "+$0.50-1.50/W for dry cooling",
+      "notes": "Combined cycle needs cooling water. Dry cooling is less efficient and more expensive."
+    },
+    {
+      "category": "Both - Not Modeled",
+      "factor": "Discount Rate / Cost of Capital",
+      "impact": "High",
+      "direction": "Increases NPV of Future Costs",
+      "estimate": "5-15% WACC changes NPV significantly",
+      "notes": "Model treats all costs as undiscounted. Real investment decisions require DCF analysis."
+    },
+    {
+      "category": "Both - Not Modeled",
+      "factor": "Technology Obsolescence Risk",
+      "impact": "High",
+      "direction": "Increases Effective Cost",
+      "estimate": "GPU architecture changes every 2-3 years",
+      "notes": "5-10 year analysis assumes stable compute architecture. Orbital replacement is harder."
+    }
+  ]
+}

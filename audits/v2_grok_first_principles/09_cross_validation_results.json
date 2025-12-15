@@ -1,0 +1,247 @@
+{
+  "audit_info": {
+    "date": "2025-12-14",
+    "type": "Cross-Validation Testing",
+    "model_version": "math.js current"
+  },
+  "summary": {
+    "total_validations": 11,
+    "passed_validations": 10,
+    "failed_validations": 1
+  },
+  "results": [
+    {
+      "test_name": "Default Parameters",
+      "function_name": "calculateOrbital",
+      "max_error": 0,
+      "max_error_pct": 0,
+      "within_tolerance": true,
+      "python_result": {
+        "totalCost": 43378998424.65753,
+        "costPerW": 43.37899842465753,
+        "lcoe": 990.3880918871582,
+        "satelliteCount": 45235,
+        "totalMassKg": 33461506.84931507,
+        "energyMWh": 43800000
+      },
+      "javascript_result": {
+        "totalCost": 43378998424.65753,
+        "costPerW": 43.37899842465753,
+        "lcoe": 990.3880918871582,
+        "satelliteCount": 45235,
+        "totalMassKg": 33461506.84931507,
+        "energyMWh": 43800000
+      }
+    },
+    {
+      "test_name": "Default Parameters",
+      "function_name": "calculateTerrestrial",
+      "max_error": 0,
+      "max_error_pct": 0,
+      "within_tolerance": true,
+      "python_result": {
+        "totalCost": 15431062160.0,
+        "costPerW": 15.43106216,
+        "lcoe": 414.47924147193123,
+        "energyMWh": 37230000.0,
+        "gasConsumptionBCF": 276.9912
+      },
+      "javascript_result": {
+        "totalCost": 15431062160,
+        "costPerW": 15.43106216,
+        "lcoe": 414.47924147193123,
+        "energyMWh": 37230000,
+        "gasConsumptionBCF": 276.9912
+      }
+    },
+    {
+      "test_name": "High Launch Cost",
+      "function_name": "calculateOrbital",
+      "max_error": 0,
+      "max_error_pct": 0,
+      "within_tolerance": true,
+      "python_result": {
+        "totalCost": 93571258698.63014,
+        "costPerW": 93.57125869863015,
+        "lcoe": 2136.330107274661,
+        "satelliteCount": 45235,
+        "totalMassKg": 33461506.84931507,
+        "energyMWh": 43800000
+      },
+      "javascript_result": {
+        "totalCost": 93571258698.63014,
+        "costPerW": 93.57125869863015,
+        "lcoe": 2136.330107274661,
+        "satelliteCount": 45235,
+        "totalMassKg": 33461506.84931507,
+        "energyMWh": 43800000
+      }
+    },
+    {
+      "test_name": "High Launch Cost",
+      "function_name": "calculateTerrestrial",
+      "max_error": 0,
+      "max_error_pct": 0,
+      "within_tolerance": true,
+      "python_result": {
+        "totalCost": 15431062160.0,
+        "costPerW": 15.43106216,
+        "lcoe": 414.47924147193123,
+        "energyMWh": 37230000.0,
+        "gasConsumptionBCF": 276.9912
+      },
+      "javascript_result": {
+        "totalCost": 15431062160,
+        "costPerW": 15.43106216,
+        "lcoe": 414.47924147193123,
+        "energyMWh": 37230000,
+        "gasConsumptionBCF": 276.9912
+      }
+    },
+    {
+      "test_name": "Low Sun Fraction",
+      "function_name": "calculateOrbital",
+      "max_error": 0,
+      "max_error_pct": 0,
+      "within_tolerance": true,
+      "python_result": {
+        "totalCost": 52914390178.08219,
+        "costPerW": 52.91439017808219,
+        "lcoe": 1208.0910999562145,
+        "satelliteCount": 55413,
+        "totalMassKg": 40990438.35616438,
+        "energyMWh": 43800000
+      },
+      "javascript_result": {
+        "totalCost": 52914390178.08219,
+        "costPerW": 52.91439017808219,
+        "lcoe": 1208.0910999562145,
+        "satelliteCount": 55413,
+        "totalMassKg": 40990438.35616438,
+        "energyMWh": 43800000
+      }
+    },
+    {
+      "test_name": "Low Sun Fraction",
+      "function_name": "calculateTerrestrial",
+      "max_error": 0,
+      "max_error_pct": 0,
+      "within_tolerance": true,
+      "python_result": {
+        "totalCost": 15431062160.0,
+        "costPerW": 15.43106216,
+        "lcoe": 414.47924147193123,
+        "energyMWh": 37230000.0,
+        "gasConsumptionBCF": 276.9912
+      },
+      "javascript_result": {
+        "totalCost": 15431062160,
+        "costPerW": 15.43106216,
+        "lcoe": 414.47924147193123,
+        "energyMWh": 37230000,
+        "gasConsumptionBCF": 276.9912
+      }
+    },
+    {
+      "test_name": "High PUE",
+      "function_name": "calculateOrbital",
+      "max_error": 0,
+      "max_error_pct": 0,
+      "within_tolerance": true,
+      "python_result": {
+        "totalCost": 43378998424.65753,
+        "costPerW": 43.37899842465753,
+        "lcoe": 990.3880918871582,
+        "satelliteCount": 45235,
+        "totalMassKg": 33461506.84931507,
+        "energyMWh": 43800000
+      },
+      "javascript_result": {
+        "totalCost": 43378998424.65753,
+        "costPerW": 43.37899842465753,
+        "lcoe": 990.3880918871582,
+        "satelliteCount": 45235,
+        "totalMassKg": 33461506.84931507,
+        "energyMWh": 43800000
+      }
+    },
+    {
+      "test_name": "High PUE",
+      "function_name": "calculateTerrestrial",
+      "max_error": 0,
+      "max_error_pct": 0,
+      "within_tolerance": true,
+      "python_result": {
+        "totalCost": 16163827700.0,
+        "costPerW": 16.1638277,
+        "lcoe": 434.1613671770078,
+        "energyMWh": 37230000.0,
+        "gasConsumptionBCF": 346.239
+      },
+      "javascript_result": {
+        "totalCost": 16163827700,
+        "costPerW": 16.1638277,
+        "lcoe": 434.1613671770078,
+        "energyMWh": 37230000,
+        "gasConsumptionBCF": 346.239
+      }
+    },
+    {
+      "test_name": "Extreme Thermal",
+      "function_name": "calculateOrbital",
+      "max_error": 0,
+      "max_error_pct": 0,
+      "within_tolerance": true,
+      "python_result": {
+        "totalCost": 43378998424.65753,
+        "costPerW": 43.37899842465753,
+        "lcoe": 990.3880918871582,
+        "satelliteCount": 45235,
+        "totalMassKg": 33461506.84931507,
+        "energyMWh": 43800000
+      },
+      "javascript_result": {
+        "totalCost": 43378998424.65753,
+        "costPerW": 43.37899842465753,
+        "lcoe": 990.3880918871582,
+        "satelliteCount": 45235,
+        "totalMassKg": 33461506.84931507,
+        "energyMWh": 43800000
+      }
+    },
+    {
+      "test_name": "Extreme Thermal",
+      "function_name": "calculateTerrestrial",
+      "max_error": 0,
+      "max_error_pct": 0,
+      "within_tolerance": true,
+      "python_result": {
+        "totalCost": 15431062160.0,
+        "costPerW": 15.43106216,
+        "lcoe": 414.47924147193123,
+        "energyMWh": 37230000.0,
+        "gasConsumptionBCF": 276.9912
+      },
+      "javascript_result": {
+        "totalCost": 15431062160,
+        "costPerW": 15.43106216,
+        "lcoe": 414.47924147193123,
+        "energyMWh": 37230000,
+        "gasConsumptionBCF": 276.9912
+      }
+    },
+    {
+      "test_name": "Extreme Thermal",
+      "function_name": "calculateThermal",
+      "max_error": Infinity,
+      "max_error_pct": Infinity,
+      "within_tolerance": false,
+      "python_result": {
+        "eqTempC": 63.80612350755496,
+        "totalHeatInW": 262794951097402.25,
+        "areaM2": 194342962962.96295
+      },
+      "javascript_result": {}
+    }
+  ]
+}

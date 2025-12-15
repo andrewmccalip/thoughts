@@ -1,0 +1,96 @@
+{
+  "audit_info": {
+    "date": "2025-12-14",
+    "type": "Physical Constants Verification",
+    "model_version": "math.js current"
+  },
+  "summary": {
+    "total_constants": 8,
+    "within_tolerance": 6,
+    "high_confidence": 4,
+    "medium_confidence": 3,
+    "low_confidence": 1
+  },
+  "results": [
+    {
+      "constant": "SOLAR_IRRADIANCE_W_M2",
+      "model_value": 1361,
+      "reference_value": 1366.1,
+      "deviation": -5.099999999999909,
+      "deviation_pct": 0.3733255252177666,
+      "within_tolerance": true,
+      "confidence": "HIGH",
+      "notes": "AM0 spectrum at 1 AU. Model uses 1361 W/m\u00b2 (0.37% low)"
+    },
+    {
+      "constant": "EARTH_IR_FLUX_W_M2",
+      "model_value": 237,
+      "reference_value": 239.7,
+      "deviation": -2.6999999999999886,
+      "deviation_pct": 1.126408010012511,
+      "within_tolerance": true,
+      "confidence": "MEDIUM",
+      "notes": "Global average IR emission. Model uses 237 W/m\u00b2 (1.1% low)"
+    },
+    {
+      "constant": "EARTH_ALBEDO",
+      "model_value": 0.3,
+      "reference_value": 0.306,
+      "deviation": -0.006000000000000005,
+      "deviation_pct": 1.960784313725492,
+      "within_tolerance": true,
+      "confidence": "MEDIUM",
+      "notes": "Planetary Bond albedo. Model uses 0.30 (1.3% low)"
+    },
+    {
+      "constant": "T_SPACE_K",
+      "model_value": 3,
+      "reference_value": 2.725,
+      "deviation": 0.2749999999999999,
+      "deviation_pct": 10.091743119266052,
+      "within_tolerance": false,
+      "confidence": "VERY LOW",
+      "notes": "Cosmic Microwave Background temperature. Model uses 3 K (10% high)"
+    },
+    {
+      "constant": "STEFAN_BOLTZMANN",
+      "model_value": 5.67e-08,
+      "reference_value": 5.670367e-08,
+      "deviation": -3.669999999998603e-12,
+      "deviation_pct": 0.006472244212761895,
+      "within_tolerance": false,
+      "confidence": "VERY HIGH",
+      "notes": "\u03c3 = 5.670367\u00d710\u207b\u2078. Model uses 5.67\u00d710\u207b\u2078 (0.006% low)"
+    },
+    {
+      "constant": "HOURS_PER_YEAR",
+      "model_value": 8760,
+      "reference_value": 8760,
+      "deviation": 0,
+      "deviation_pct": 0.0,
+      "within_tolerance": true,
+      "confidence": "VERY HIGH",
+      "notes": "365 days \u00d7 24 hours. Model value exact."
+    },
+    {
+      "constant": "BTU_PER_CF",
+      "model_value": 1000,
+      "reference_value": 1034,
+      "deviation": -34,
+      "deviation_pct": 3.2882011605415857,
+      "within_tolerance": true,
+      "confidence": "MEDIUM",
+      "notes": "Average US natural gas: 1034 BTU/cf. Model uses 1000 BTU/cf (3.1% low)"
+    },
+    {
+      "constant": "CF_PER_BCF",
+      "model_value": 1000000000.0,
+      "reference_value": 1000000000,
+      "deviation": 0.0,
+      "deviation_pct": 0.0,
+      "within_tolerance": true,
+      "confidence": "VERY HIGH",
+      "notes": "1 BCF = 1 \u00d7 10^9 CF by definition. Model value exact."
+    }
+  ]
+}

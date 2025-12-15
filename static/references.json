@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "title": "Datacenter Infrastructure Costs",
+        "url": "https://gemini.google.com/share/941986fab378",
+        "year": "2025"
+    },
+    {
+        "id": 2,
+        "title": "Gas Turbine Capex & Gas Pricing",
+        "url": "https://gemini.google.com/share/b44c01d3863b",
+        "year": "2025"
+    },
+    {
+        "id": 3,
+        "title": "Starlink BOM & Performance",
+        "url": "https://chatgpt.com/share/69391474-4b24-8005-bb93-ebd4340c65d8",
+        "year": "2024"
+    },
+    {
+        "id": 4,
+        "title": "Starship Launch Cost Estimate",
+        "url": "https://chatgpt.com/share/693a57e4-ae14-8005-92d7-39b4d9699678",
+        "year": "2025"
+    },
+    {
+        "id": 5,
+        "title": "GPU Failure Rates",
+        "url": "https://gemini.google.com/share/cd476ab11eeb",
+        "year": "2025"
+    },
+    {
+        "id": 6,
+        "title": "Orbital Sunlight Fractions",
+        "url": "https://chatgpt.com/share/693a7a0d-dc38-8005-8244-94cb70a5d1f2",
+        "year": "2025"
+    },
+    {
+        "id": 7,
+        "title": "Solar Cell Degradation in LEO",
+        "url": "https://gemini.google.com/share/d84edc09c455",
+        "year": "2025"
+    },
+    {
+        "id": 8,
+        "title": "Thermal Analysis Validation (GPT-5.1)",
+        "url": "https://chatgpt.com/share/693b0b6f-f9fc-8005-8bf5-f13242061e0b",
+        "year": "2025"
+    },
+    {
+        "id": 9,
+        "title": "Thermal Analysis Validation (Grok)",
+        "url": "https://grok.com/share/c2hhcmQtMi1jb3B5_57c48b0e-c107-49f3-95bd-6042e14282f9",
+        "year": "2025"
+    },
+    {
+        "id": 10,
+        "title": "LOX Capacity",
+        "url": "https://gemini.google.com/share/39537d7f11ce",
+        "year": "2025"
+    }
+]
