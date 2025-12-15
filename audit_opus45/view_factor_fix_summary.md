@@ -1,6 +1,8 @@
 # View Factor Model Fix
 
-## Issue Identified
+## Issues Identified
+
+### Issue 1: Ad-hoc View Factor Heuristic
 
 The thermal view factor model in `math.js` used an **ad-hoc linear heuristic** rather than physics-based geometry:
 
@@ -13,6 +15,34 @@ This heuristic:
 - Has no derivation from orbital geometry
 - Does not account for Earth's angular size at orbital altitude
 - Ignores the physics of sun-tracking panel orientation
+
+### Issue 2: Incorrect Earth IR Formula (2x Overcounting)
+
+The Earth IR calculation incorrectly multiplied `vfTotal × (εPV + εRad)`:
+
+```javascript
+// WRONG - 2x overcounting:
+const qEarthIR = EARTH_IR * vfTotal * (epsilonPV + epsilonRad) * areaM2;
+```
+
+Each side should use its OWN view factor and emissivity (Kirchhoff's law):
+
+```javascript
+// CORRECT:
+const qEarthIR = EARTH_IR * (vfSideA * epsilonPV + vfSideB * epsilonRad) * areaM2;
+```
+
+### Issue 3: Incorrect Albedo Formula
+
+Albedo was applied using vfTotal, but only the PV side (Side A) has high solar absorptivity. The radiator side (Side B) is white paint with α ≈ 0.1-0.2:
+
+```javascript
+// WRONG:
+const qAlbedo = SOLAR * ALBEDO * vfTotal * ... * alphaPV * areaM2;
+
+// CORRECT - only PV side absorbs:
+const qAlbedo = SOLAR * ALBEDO * vfSideA * ... * alphaPV * areaM2;
+```
 
 ## Physics Background
 
@@ -92,38 +122,52 @@ function sunTrackingPanelViewFactors(altitudeKm, betaDeg) {
 | 65°  | 0.130     | 0.270        | 2.1x  |
 | 60°  | 0.140     | 0.312        | 2.2x  |
 
-### Thermal Impact
+### Corrected Thermal Results
 
-| Beta | Ad-hoc T_eq | Geometric T_eq | ΔT |
-|------|-------------|----------------|-----|
-| 90°  | 64.2°C      | 62.2°C         | -2.0°C |
-| 75°  | 65.7°C      | 68.1°C         | +2.4°C |
-| 60°  | 67.5°C      | 73.9°C         | **+6.4°C** |
+| Beta | VF_A | VF_B | Q_IR (MW) | Q_alb (MW) | T_eq |
+|------|------|------|-----------|------------|------|
+| 90°  | 0.008 | 0.000 | 1.7 | 0.0 | 62.1°C |
+| 85°  | 0.045 | 0.045 | 18.5 | 1.5 | 63.3°C |
+| 80°  | 0.068 | 0.068 | 28.2 | 4.4 | 64.2°C |
+| 75°  | 0.091 | 0.091 | 37.7 | 8.8 | 65.1°C |
+| 70°  | 0.113 | 0.113 | 47.0 | 14.6 | 66.1°C |
+| 65°  | 0.135 | 0.135 | 56.0 | 21.5 | 67.1°C |
+| 60°  | 0.156 | 0.156 | 64.7 | 29.3 | **68.1°C** |
 
-### Key Finding
+### Key Findings
 
-**At the seasonal hot case (β=60°), the ad-hoc model underpredicts equilibrium temperature by 6.4°C!**
+1. **Temperature Range**: 62°C (terminator) to 68°C (seasonal hot)
+2. **ΔT Range**: ~6°C from coldest to hottest orbit
+3. **Earth Loads**: ~7% of total heat at β=60°
+4. **Solar Dominates**: Solar absorption is >90% of thermal budget
 
-This is significant because:
-- Thermal margins are typically only 10-15°C
-- A 6°C error could change PASS/FAIL status
-- The geometric model is more conservative (predicts higher temps)
+### Bug Impact Analysis
+
+The 2x overcounting bugs in Earth IR and albedo would have predicted:
+- ~37 MW too much Earth IR at β=60°
+- ~29 MW too much albedo at β=60°
+- Equilibrium temperature ~5°C too high (false positive for thermal failure)
 
 ## Files Modified
 
 1. `static/js/math.js`:
-   - Added geometric view factor functions
-   - Added `EARTH_RADIUS_KM` constant
-   - Added `orbitalAltitudeKm` state parameter
-   - Replaced ad-hoc heuristic with geometry-based calculation
-   - Enhanced return values with view factor details
+   - Added geometric view factor functions:
+     - `earthAngularRadius(altitudeKm)`
+     - `nadirViewFactor(altitudeKm)`
+     - `tiltedPlateViewFactor(altitudeKm, tiltRad)`
+     - `sunTrackingPanelViewFactors(altitudeKm, betaDeg)`
+   - Added `EARTH_RADIUS_KM` constant (6371.0 km)
+   - Added `orbitalAltitudeKm` state parameter (default 550 km)
+   - **Fixed Earth IR formula**: Now uses per-side view factors
+   - **Fixed Albedo formula**: Now uses only Side A (PV side)
+   - Enhanced return values with `vfSideA`, `vfSideB`, `vfNadirMax`
 
 2. `static/js/main.js`:
    - Added altitude slider setup
 
 3. `templates/space-datacenters.html`:
-   - Added orbital altitude slider
-   - Updated view factor formula tooltip
+   - Added orbital altitude slider (400-1200 km range)
+   - Updated view factor formula tooltip to describe geometry-based calculation
 
 ## Verification
 

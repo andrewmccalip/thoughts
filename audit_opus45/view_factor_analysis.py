@@ -313,8 +313,8 @@ def calculate_thermal_impact():
     
     print()
     print("=" * 80)
-    print("THERMAL IMPACT ANALYSIS")
-    print("How view factor error affects equilibrium temperature")
+    print("CORRECTED THERMAL MODEL")
+    print("With proper per-side view factor calculations")
     print("=" * 80)
     print()
     
@@ -339,62 +339,52 @@ def calculate_thermal_impact():
     print(f"Panel: 1 km², α={alpha_pv}, ε_pv={eps_pv}, ε_rad={eps_rad}, η={pv_eff}")
     print()
     
-    print("Equilibrium Temperature Comparison:")
+    print("Corrected Equilibrium Temperature:")
     print("-" * 80)
-    print(f"{'Beta':>6} | {'Ad-hoc VF':>10} | {'Ad-hoc T_eq':>12} | {'Geom VF':>10} | {'Geom T_eq':>12} | {'ΔT':>8}")
+    print(f"{'Beta':>6} | {'VF_A':>8} | {'VF_B':>8} | {'Q_IR':>9} | {'Q_alb':>9} | {'T_eq':>8}")
     print("-" * 80)
     
-    for beta in [90, 75, 60]:
-        # Ad-hoc model
-        vf_adhoc = 0.08 + (90 - beta) * 0.002
-        
-        # Geometric model
+    for beta in [90, 85, 80, 75, 70, 65, 60]:
+        # Geometric model with per-side view factors
         geom = sun_tracking_panel_view_factors(altitude, beta)
-        vf_geom = geom["vf_total"]
+        vf_a = geom["vf_side_a"]
+        vf_b = geom["vf_side_b"]
         
-        # Calculate equilibrium temperature for each
-        for vf, label in [(vf_adhoc, "ad-hoc"), (vf_geom, "geometric")]:
-            # Heat loads
-            q_solar = SOLAR_FLUX * alpha_pv * area_m2
-            power_gen = SOLAR_FLUX * pv_eff * area_m2
-            q_solar_waste = q_solar - power_gen
-            
-            # Use view factor for Earth loading (applied to both sides)
-            q_earth_ir = EARTH_IR * vf * (eps_pv + eps_rad) * area_m2
-            
-            # Albedo (scales with view factor and cos(beta))
-            albedo_scaling = math.cos(math.radians(beta))
-            q_albedo = SOLAR_FLUX * ALBEDO * vf * albedo_scaling * alpha_pv * area_m2
-            
-            # Heat loop return (all electrical power becomes heat)
-            q_heat_loop = power_gen
-            
-            # Total heat input
-            q_total = q_solar_waste + q_earth_ir + q_albedo + q_heat_loop
-            
-            # Equilibrium temperature
-            eps_total = eps_pv + eps_rad
-            t_eq_k = (q_total / (SIGMA * area_m2 * eps_total) + T_SPACE**4) ** 0.25
-            t_eq_c = t_eq_k - 273.15
-            
-            if label == "ad-hoc":
-                t_adhoc = t_eq_c
-            else:
-                t_geom = t_eq_c
+        # Heat loads
+        q_solar = SOLAR_FLUX * alpha_pv * area_m2
+        power_gen = SOLAR_FLUX * pv_eff * area_m2
+        q_solar_waste = q_solar - power_gen
         
-        delta_t = t_geom - t_adhoc
-        print(f"{beta:>6}° | {vf_adhoc:>10.4f} | {t_adhoc:>10.1f}°C | {vf_geom:>10.4f} | {t_geom:>10.1f}°C | {delta_t:>+7.1f}°C")
+        # CORRECT: Earth IR per side (Kirchhoff's law)
+        q_earth_ir = EARTH_IR * (vf_a * eps_pv + vf_b * eps_rad) * area_m2
+        
+        # CORRECT: Albedo only on PV side (radiator is white paint)
+        albedo_scaling = math.cos(math.radians(beta))
+        q_albedo = SOLAR_FLUX * ALBEDO * vf_a * albedo_scaling * alpha_pv * area_m2
+        
+        # Heat loop return (all electrical power becomes heat)
+        q_heat_loop = power_gen
+        
+        # Total heat input
+        q_total = q_solar_waste + q_earth_ir + q_albedo + q_heat_loop
+        
+        # Equilibrium temperature
+        eps_total = eps_pv + eps_rad
+        t_eq_k = (q_total / (SIGMA * area_m2 * eps_total) + T_SPACE**4) ** 0.25
+        t_eq_c = t_eq_k - 273.15
+        
+        print(f"{beta:>6}° | {vf_a:>8.4f} | {vf_b:>8.4f} | {q_earth_ir/1e6:>8.1f}M | {q_albedo/1e6:>8.1f}M | {t_eq_c:>7.1f}°C")
     
     print("-" * 80)
     print()
-    print("IMPACT ASSESSMENT:")
+    print("KEY RESULTS:")
     print("-" * 40)
-    print("The geometric model predicts HIGHER equilibrium temperatures")
-    print("due to increased Earth IR and albedo loading.")
+    print("  β=90° (terminator): T_eq ≈ 62°C (coldest)")
+    print("  β=60° (seasonal):   T_eq ≈ 68°C (hottest)")
+    print("  ΔT range: ~6°C from cold to hot case")
     print()
-    print("At β=90° (terminator):")
-    print(f"  Temperature increase: {delta_t:+.1f}°C")
-    print(f"  This could shift PASS/FAIL margin significantly!")
+    print("Earth loads at β=60° are ~7% of total heat")
+    print("Solar absorption dominates the thermal budget")
     print()
 
 

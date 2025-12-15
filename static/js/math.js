@@ -548,9 +548,10 @@ const CostModel = (function() {
         // This replaces the ad-hoc heuristic with physics-derived values
         const vfResult = sunTrackingPanelViewFactors(altitudeKm, betaAngle);
         
-        // Use total view factor (both sides combined) for Earth loads
-        // This accounts for Earth IR and albedo hitting both panel surfaces
-        const vfEarth = vfResult.vfTotal;
+        // Separate view factors for each side
+        const vfSideA = vfResult.vfSideA;  // Sun-facing (PV) side
+        const vfSideB = vfResult.vfSideB;  // Anti-sun (radiator) side
+        const vfEarth = vfResult.vfTotal;  // Combined (for display only)
 
         // --- B. HEAT LOADS (INPUTS) ---
 
@@ -565,15 +566,21 @@ const CostModel = (function() {
         // (Electricity returns as heat via the loop, but we separate for clarity)
         const qSolarWaste = qAbsorbedTotal - powerGenerated;
 
-        // 2. Earth IR Load (Both sides see Earth partially)
-        // Both sides have a partial view of Earth
-        const qEarthIR = (constants.EARTH_IR_FLUX_W_M2 * vfEarth) * (epsilonPV + epsilonRad) * areaM2;
+        // 2. Earth IR Load - CORRECT FORMULA
+        // Each side absorbs Earth IR based on its OWN view factor and emissivity
+        // (Kirchhoff's law: absorptivity = emissivity for thermal IR)
+        // qEarthIR = E_earth × (VF_A × ε_A + VF_B × ε_B) × Area
+        const qEarthIR_A = constants.EARTH_IR_FLUX_W_M2 * vfSideA * epsilonPV * areaM2;
+        const qEarthIR_B = constants.EARTH_IR_FLUX_W_M2 * vfSideB * epsilonRad * areaM2;
+        const qEarthIR = qEarthIR_A + qEarthIR_B;
 
         // 3. Albedo Load (Reflected sunlight from Earth)
         // Albedo is highest when Beta is low (flying over sunlit earth)
         // At Beta 90, Albedo is near zero
+        // IMPORTANT: Only Side A (PV side) has high solar absorptivity (α=0.92)
+        // Side B (radiator) is white paint with α≈0.1-0.2 (negligible)
         const albedoScaling = Math.cos(betaAngle * Math.PI / 180); // 0 at 90 deg, 0.5 at 60 deg
-        const qAlbedo = (constants.SOLAR_IRRADIANCE_W_M2 * constants.EARTH_ALBEDO_FACTOR * vfEarth * albedoScaling) * alphaPV * areaM2;
+        const qAlbedo = constants.SOLAR_IRRADIANCE_W_M2 * constants.EARTH_ALBEDO_FACTOR * vfSideA * albedoScaling * alphaPV * areaM2;
 
         // 4. Heat Loop Return (from compute)
         // Electricity is consumed onboard and returned as heat
