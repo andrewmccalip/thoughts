@@ -1562,10 +1562,8 @@ input[type="range"]::-moz-range-thumb {
     font-weight: 600;
     color: var(--ink-light);
     text-transform: uppercase;
-    font-size: 0.65rem;
-    letter-spacing: 0.08em;
-    display: block;
-    margin-bottom: 0.25rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
 }
 
 .essay-note a {
