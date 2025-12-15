@@ -911,6 +911,17 @@ input[type="range"]::-moz-range-thumb {
     padding: 1rem 1.5rem;
 }
 
+.assumption-note {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    margin: 0 0 0.75rem 0;
+    padding: 0.5rem 0.75rem;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 4px;
+    line-height: 1.5;
+}
+
 .assumption-bullets {
     list-style: none;
     margin: 0;
