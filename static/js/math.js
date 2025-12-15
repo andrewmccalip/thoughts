@@ -47,7 +47,10 @@ const CostModel = (function() {
         SOLAR_IRRADIANCE_W_M2: 1361,           // LEO solar constant (AM0)
         EARTH_IR_FLUX_W_M2: 237,               // Earth IR emission (global average)
         EARTH_ALBEDO_FACTOR: 0.30,             // Average Earth reflectivity
-        T_SPACE_K: 3                            // Deep space sink temperature
+        T_SPACE_K: 3,                          // Deep space sink temperature
+        
+        // Orbital geometry (for view factor calculations)
+        EARTH_RADIUS_KM: 6371.0                // Mean Earth radius (km)
     };
 
     // ==========================================
@@ -65,6 +68,7 @@ const CostModel = (function() {
         emissivityRad: 0.90,        // IR emissivity of Radiator side (white paint/OSR)
         pvEfficiency: 0.22,         // Electrical conversion efficiency (22%)
         betaAngle: 90,              // Orbit beta angle (deg): 90=terminator, 60=seasonal limit
+        orbitalAltitudeKm: 550,     // Orbital altitude (km) - Starlink default
         maxDieTempC: 85,            // Max die temperature (°C) - GPU junction limit
         tempDropC: 10,              // Temperature drop from die to radiator surface (°C)
         
@@ -423,6 +427,102 @@ const CostModel = (function() {
     }
 
     // ==========================================
+    // GEOMETRIC VIEW FACTOR CALCULATIONS
+    // Physics-based view factors replacing ad-hoc heuristics
+    // ==========================================
+    
+    /**
+     * Calculate Earth's angular radius as seen from orbital altitude.
+     * θ_earth = arcsin(R_e / (R_e + h))
+     * At 550 km: θ = 67.0°
+     */
+    function earthAngularRadius(altitudeKm) {
+        const rOrbit = constants.EARTH_RADIUS_KM + altitudeKm;
+        return Math.asin(constants.EARTH_RADIUS_KM / rOrbit);
+    }
+    
+    /**
+     * View factor for nadir-facing plate (maximum possible).
+     * VF_nadir = sin²(θ_earth) = (R_e / (R_e + h))²
+     * At 550 km: VF_nadir = 0.847
+     */
+    function nadirViewFactor(altitudeKm) {
+        const theta = earthAngularRadius(altitudeKm);
+        return Math.pow(Math.sin(theta), 2);
+    }
+    
+    /**
+     * View factor for tilted plate at angle γ from nadir.
+     * For a diffuse plate tilted from nadir, VF ≈ VF_nadir × cos(γ)
+     * This is a first-order approximation valid for γ < (90° - θ_earth)
+     */
+    function tiltedPlateViewFactor(altitudeKm, tiltRad) {
+        const theta = earthAngularRadius(altitudeKm);
+        const vfNadir = Math.pow(Math.sin(theta), 2);
+        
+        const cosTilt = Math.cos(tiltRad);
+        
+        // For plates tilted > 90° from nadir, they face away from Earth
+        // but still have small view factor due to Earth's large angular size
+        // Minimum VF is approximately sin²(θ) × (1 - cos²(γ)) / 4 for edge-on
+        if (cosTilt <= 0) {
+            // Edge-on or facing away: use minimum geometric VF
+            // Even edge-on panels see some Earth due to 67° half-angle
+            const minVF = vfNadir * 0.05;  // ~5% of nadir VF as floor
+            return minVF;
+        }
+        
+        return vfNadir * cosTilt;
+    }
+    
+    /**
+     * Calculate orbit-averaged view factors for sun-tracking bifacial panel.
+     * 
+     * For a sun-tracking panel:
+     * - Side A (PV) always faces the sun
+     * - Side B (radiator) always faces anti-sun
+     * 
+     * The view factor depends on beta angle and orbital position.
+     * At β = 90° (terminator): panel is mostly edge-on to Earth
+     * At β = 0° (noon-midnight): panel oscillates nadir/zenith facing
+     */
+    function sunTrackingPanelViewFactors(altitudeKm, betaDeg) {
+        const betaRad = betaDeg * Math.PI / 180;
+        const nPoints = 72;  // Integration points (every 5° around orbit)
+        
+        let vfASum = 0.0;
+        let vfBSum = 0.0;
+        
+        for (let i = 0; i < nPoints; i++) {
+            // True anomaly (position in orbit)
+            const nu = 2 * Math.PI * i / nPoints;
+            
+            // For sun-tracking panel, the angle between panel normal
+            // (sun direction) and nadir varies as:
+            // cos(γ) ≈ cos(β) × cos(ν)
+            // This comes from orbital geometry with sun at angle β to orbit plane
+            const cosGamma = Math.cos(betaRad) * Math.cos(nu);
+            
+            // Side A (sun-facing) view factor
+            const gammaA = Math.acos(Math.max(-1, Math.min(1, cosGamma)));
+            const vfA = tiltedPlateViewFactor(altitudeKm, gammaA);
+            
+            // Side B (anti-sun) is opposite direction
+            const gammaB = Math.PI - gammaA;
+            const vfB = tiltedPlateViewFactor(altitudeKm, gammaB);
+            
+            vfASum += vfA;
+            vfBSum += vfB;
+        }
+        
+        return {
+            vfSideA: vfASum / nPoints,
+            vfSideB: vfBSum / nPoints,
+            vfTotal: (vfASum + vfBSum) / nPoints
+        };
+    }
+
+    // ==========================================
     // THERMAL ANALYSIS - Bifacial Panel Model
     // Based on verified equilibrium temperature calculation
     // ==========================================
@@ -441,12 +541,16 @@ const CostModel = (function() {
         const epsilonRad = state.emissivityRad;       // IR emissivity of radiator side
         const pvEfficiency = state.pvEfficiency;      // Electrical conversion efficiency
         const betaAngle = state.betaAngle;            // Orbit beta angle (degrees)
+        const altitudeKm = state.orbitalAltitudeKm;   // Orbital altitude (km)
 
-        // --- A. VIEW FACTOR APPROXIMATION ---
-        // As Beta decreases from 90, the sun-tracking plate tilts to see more Earth.
-        // At Beta=90 (vertical plate, terminator orbit), VF is small (grazing view).
-        // At Beta=60 (seasonal limit), VF increases.
-        const vfEarth = 0.08 + (90 - betaAngle) * 0.002;
+        // --- A. VIEW FACTOR CALCULATION (Geometry-Based) ---
+        // Compute orbit-averaged view factors for sun-tracking bifacial panel
+        // This replaces the ad-hoc heuristic with physics-derived values
+        const vfResult = sunTrackingPanelViewFactors(altitudeKm, betaAngle);
+        
+        // Use total view factor (both sides combined) for Earth loads
+        // This accounts for Earth IR and albedo hitting both panel surfaces
+        const vfEarth = vfResult.vfTotal;
 
         // --- B. HEAT LOADS (INPUTS) ---
 
@@ -518,10 +622,22 @@ const CostModel = (function() {
         // Effective average emissivity
         const effectiveEmissivity = totalEmissivity / 2;
 
+        // Geometric parameters for display
+        const earthAngRad = earthAngularRadius(altitudeKm);
+        const vfNadirMax = nadirViewFactor(altitudeKm);
+        
         return {
             // Input parameters
             betaAngle,
+            altitudeKm,
             vfEarth,
+            
+            // Detailed view factor breakdown (geometry-based)
+            vfSideA: vfResult.vfSideA,      // Sun-facing side VF to Earth
+            vfSideB: vfResult.vfSideB,      // Anti-sun side VF to Earth
+            vfTotal: vfResult.vfTotal,      // Combined VF (both sides)
+            vfNadirMax,                     // Maximum possible VF (nadir-pointing)
+            earthAngularRadiusDeg: earthAngRad * 180 / Math.PI,
             
             // Areas
             availableAreaM2: areaM2,

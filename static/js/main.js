@@ -540,6 +540,7 @@
         setupSlider('emissivity-rad-slider', 'emissivity-rad-fill', 'emissivity-rad-value', 0, 0.98, 'emissivityRad', v => v.toFixed(2));
         setupSlider('pv-efficiency-slider', 'pv-efficiency-fill', 'pv-efficiency-value', 0.20, 0.24, 'pvEfficiency', v => `${(v * 100).toFixed(0)}%`);
         setupSlider('beta-angle-slider', 'beta-angle-fill', 'beta-angle-value', 60, 90, 'betaAngle', v => `${v}°`);
+        setupSlider('altitude-slider', 'altitude-fill', 'altitude-value', 400, 1200, 'orbitalAltitudeKm', v => `${v} km`);
         setupSlider('die-temp-slider', 'die-temp-fill', 'die-temp-value', 70, 100, 'maxDieTempC', v => `${v.toFixed(0)} °C`);
         setupSlider('temp-drop-slider', 'temp-drop-fill', 'temp-drop-value', 5, 25, 'tempDropC', v => `${v.toFixed(0)} °C`);
         

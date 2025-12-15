@@ -1115,6 +1115,23 @@
 
                             <div class="slider-container">
                                 <div class="slider-header">
+                                    <span class="slider-label">Orbital Altitude (h)</span>
+                                    <span class="slider-value" id="altitude-value">550 km</span>
+                                </div>
+                                <div class="slider-track-container">
+                                    <input type="range" id="altitude-slider" min="400" max="1200" step="50" value="550">
+                                    <div class="slider-track"></div>
+                                    <div class="slider-fill orbital-fill" id="altitude-fill"></div>
+                                </div>
+                                <div class="slider-ticks">
+                                    <span class="tick" data-value="400">400 km</span>
+                                    <span class="tick" data-value="550">550 (Starlink)</span>
+                                    <span class="tick" data-value="1200">1200 km</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-header">
                                     <span class="slider-label">Max Die Temperature</span>
                                     <span class="slider-value" id="die-temp-value">85 °C</span>
                                 </div>
@@ -1168,7 +1185,7 @@
                                     <span class="eng-stat-label"><i>β</i> (orbit angle)</span>
                                     <span class="eng-stat-value" id="thermal-beta-angle">90°</span>
                                 </div>
-                                <div class="eng-stat-row has-formula" data-formula="VF_⊕ = 0.08 + (90 − β)·0.002&#10;&#10;View factor to Earth&#10;Increases as β decreases">
+                                <div class="eng-stat-row has-formula" data-formula="VF_⊕ = orbit-averaged view factor&#10;&#10;Computed from geometry:&#10;• θ_earth = arcsin(Re/(Re+h))&#10;• VF_nadir = sin²(θ_earth)&#10;• Integrates over orbit position&#10;• Accounts for sun-tracking orientation">
                                     <span class="eng-stat-label"><i>VF</i><sub>⊕</sub></span>
                                     <span class="eng-stat-value" id="thermal-view-factor">0.080</span>
                                 </div>
