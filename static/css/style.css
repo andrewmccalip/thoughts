@@ -1471,6 +1471,26 @@ input[type="range"]::-moz-range-thumb {
     text-align: center;
 }
 
+.tldr {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--ink);
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+    border-left: 3px solid var(--orbital);
+    border-radius: 0 6px 6px 0;
+    line-height: 1.6;
+    margin-bottom: 1.75rem;
+}
+
+.tldr strong {
+    font-weight: 600;
+    color: var(--orbital);
+    font-style: normal;
+    letter-spacing: 0.05em;
+}
+
 .essay-note {
     font-family: var(--font-sans);
     font-size: 0.7rem;
