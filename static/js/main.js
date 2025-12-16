@@ -373,21 +373,78 @@
         updateSlider();
     }
 
+    // Logarithmic slider - better for wide ranges where low values need more resolution
+    function setupLogSlider(sliderId, fillId, valueId, min, max, stateKey, formatValue) {
+        const slider = document.getElementById(sliderId);
+        const fill = document.getElementById(fillId);
+        const valueDisplay = document.getElementById(valueId);
+        
+        if (!slider || !fill || !valueDisplay) return;
+        
+        const logMin = Math.log(min);
+        const logMax = Math.log(max);
+        const logRange = logMax - logMin;
+        
+        // Convert actual value to slider position (0-100)
+        function valueToPosition(value) {
+            return ((Math.log(value) - logMin) / logRange) * 100;
+        }
+        
+        // Convert slider position (0-100) to actual value
+        function positionToValue(position) {
+            return Math.exp(logMin + (position / 100) * logRange);
+        }
+        
+        function updateSlider() {
+            const value = CostModel.getState()[stateKey];
+            const percentage = valueToPosition(value);
+            fill.style.width = `${percentage}%`;
+            valueDisplay.textContent = formatValue(value);
+            slider.value = percentage;
+        }
+        
+        slider.addEventListener('input', function() {
+            const actualValue = positionToValue(parseFloat(this.value));
+            CostModel.updateState(stateKey, actualValue);
+            fill.style.width = `${this.value}%`;
+            valueDisplay.textContent = formatValue(actualValue);
+            updateUI();
+        });
+        
+        // Store log params for tick positioning
+        slider.dataset.logScale = 'true';
+        slider.dataset.logMin = min;
+        slider.dataset.logMax = max;
+        
+        updateSlider();
+    }
+
     function positionSliderTicks() {
         document.querySelectorAll('.slider-container').forEach(container => {
             const slider = container.querySelector('input[type="range"]');
             const ticksContainer = container.querySelector('.slider-ticks');
             if (!slider || !ticksContainer) return;
             
-            const min = parseFloat(slider.min);
-            const max = parseFloat(slider.max);
-            const range = max - min;
+            const isLogScale = slider.dataset.logScale === 'true';
             const ticks = ticksContainer.querySelectorAll('.tick');
             const tickCount = ticks.length;
             
+            let getPercentage;
+            if (isLogScale) {
+                const logMin = Math.log(parseFloat(slider.dataset.logMin));
+                const logMax = Math.log(parseFloat(slider.dataset.logMax));
+                const logRange = logMax - logMin;
+                getPercentage = (value) => ((Math.log(value) - logMin) / logRange) * 100;
+            } else {
+                const min = parseFloat(slider.min);
+                const max = parseFloat(slider.max);
+                const range = max - min;
+                getPercentage = (value) => ((value - min) / range) * 100;
+            }
+            
             ticks.forEach((tick, index) => {
                 const value = parseFloat(tick.dataset.value);
-                const percentage = ((value - min) / range) * 100;
+                const percentage = getPercentage(value);
                 tick.style.left = percentage + '%';
                 tick.style.position = 'absolute';
                 
@@ -425,11 +482,11 @@
         // Satellite cost slider (min $1/W for extreme future scenarios)
         setupSlider('sat-cost-slider', 'sat-cost-fill', 'sat-cost-value', 1, 40, 'satelliteCostPerW', v => `$${v}/W`);
         
-        // Specific power slider (W/kg from Starlink analysis)
-        setupSlider('specific-power-slider', 'specific-power-fill', 'specific-power-value', 3, 75, 'specificPowerWPerKg', v => `${v.toFixed(1)} W/kg`);
+        // Specific power slider (W/kg) - LOG SCALE for better resolution at lower values
+        setupLogSlider('specific-power-slider', 'specific-power-fill', 'specific-power-value', 3, 500, 'specificPowerWPerKg', v => `${Math.round(v)} W/kg`);
         
-        // Satellite size slider (kW nameplate) - up to 130kW for V3.2
-        setupSlider('sat-size-slider', 'sat-size-fill', 'sat-size-value', 5, 130, 'satellitePowerKW', v => `${v} kW`);
+        // Satellite size slider (kW nameplate) - LOG SCALE for better resolution at lower values
+        setupLogSlider('sat-size-slider', 'sat-size-fill', 'sat-size-value', 5, 500, 'satellitePowerKW', v => `${Math.round(v)} kW`);
         
         // Sun fraction slider
         setupSlider('sun-fraction-slider', 'sun-fraction-fill', 'sun-fraction-value', 0.55, 1.0, 'sunFraction', v => `${Math.round(v * 100)}%`);

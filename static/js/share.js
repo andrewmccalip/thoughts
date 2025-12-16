@@ -136,14 +136,35 @@ const UrlShare = (function() {
     function syncSlidersToState() {
         const state = CostModel.getState();
         
-        // Map of slider IDs to state keys
+        // Log scale sliders need value-to-position conversion
+        const logSliders = {
+            'specific-power-slider': { stateKey: 'specificPowerWPerKg', min: 3, max: 500 },
+            'sat-size-slider': { stateKey: 'satellitePowerKW', min: 5, max: 500 }
+        };
+        
+        // Convert value to log slider position (0-100)
+        function valueToLogPosition(value, min, max) {
+            const logMin = Math.log(min);
+            const logMax = Math.log(max);
+            return ((Math.log(value) - logMin) / (logMax - logMin)) * 100;
+        }
+        
+        // Handle log scale sliders
+        for (const [sliderId, config] of Object.entries(logSliders)) {
+            const slider = document.getElementById(sliderId);
+            if (slider && state[config.stateKey] !== undefined) {
+                const position = valueToLogPosition(state[config.stateKey], config.min, config.max);
+                slider.value = position;
+                slider.dispatchEvent(new Event('input'));
+            }
+        }
+        
+        // Map of regular slider IDs to state keys
         const sliderMap = {
             'capacity-slider': 'targetGW',
             'years-slider': 'years',
             'launch-cost-slider': 'launchCostPerKg',
             'sat-cost-slider': 'satelliteCostPerW',
-            'specific-power-slider': 'specificPowerWPerKg',
-            'sat-size-slider': 'satellitePowerKW',
             'sun-fraction-slider': 'sunFraction',
             'degradation-slider': 'cellDegradation',
             'gpu-failure-slider': 'gpuFailureRate',
