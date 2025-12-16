@@ -2431,3 +2431,85 @@ input[type="range"]::-moz-range-thumb {
     }
 }
 
+/* ==========================================
+   SHARE BUTTON
+   ========================================== */
+
+.share-button {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 1000;
+    
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    
+    padding: 8px 14px;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.share-button:hover {
+    background: var(--paper);
+    border-color: var(--orbital-accent);
+    color: var(--orbital);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.share-button:active {
+    transform: scale(0.97);
+}
+
+.share-button.copied {
+    background: var(--orbital);
+    border-color: var(--orbital);
+    color: white;
+}
+
+.share-button.copied svg {
+    stroke: white;
+}
+
+.share-button svg {
+    stroke: var(--ink-light);
+    transition: stroke 0.15s;
+}
+
+.share-button:hover svg {
+    stroke: var(--orbital);
+}
+
+.share-text {
+    min-width: 45px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .share-button {
+        top: auto;
+        bottom: 65px;
+        right: 12px;
+        padding: 8px 12px;
+    }
+    
+    .share-text {
+        display: none;
+    }
+    
+    .share-button svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
