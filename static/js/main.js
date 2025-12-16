@@ -419,11 +419,11 @@
         // Years slider
         setupSlider('years-slider', 'years-fill', 'years-value', 3, 10, 'years', v => `${v} years`);
         
-        // Launch cost slider (min $20/kg theoretical limit)
-        setupSlider('launch-cost-slider', 'launch-cost-fill', 'launch-cost-value', 20, 2940, 'launchCostPerKg', v => `$${v.toLocaleString()}/kg`);
+        // Launch cost slider (min $1/kg for extreme future scenarios)
+        setupSlider('launch-cost-slider', 'launch-cost-fill', 'launch-cost-value', 1, 2940, 'launchCostPerKg', v => `$${v.toLocaleString()}/kg`);
         
-        // Satellite cost slider (from Starlink BOM analysis)
-        setupSlider('sat-cost-slider', 'sat-cost-fill', 'sat-cost-value', 5, 40, 'satelliteCostPerW', v => `$${v}/W`);
+        // Satellite cost slider (min $1/W for extreme future scenarios)
+        setupSlider('sat-cost-slider', 'sat-cost-fill', 'sat-cost-value', 1, 40, 'satelliteCostPerW', v => `$${v}/W`);
         
         // Specific power slider (W/kg from Starlink analysis)
         setupSlider('specific-power-slider', 'specific-power-fill', 'specific-power-value', 3, 75, 'specificPowerWPerKg', v => `${v.toFixed(1)} W/kg`);

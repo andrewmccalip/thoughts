@@ -2495,12 +2495,26 @@ input[type="range"]::-moz-range-thumb {
     text-align: center;
 }
 
-@media (max-width: 600px) {
+/* Mobile share slot in sticky bar */
+.mobile-share-slot {
+    display: none;
+}
+
+@media (max-width: 1500px) {
+    .mobile-share-slot {
+        display: flex;
+        align-items: center;
+        padding-left: 0.75rem;
+        border-left: 1px solid var(--rule-light);
+        margin-left: 0.5rem;
+    }
+    
     .share-button {
-        top: auto;
-        bottom: 65px;
-        right: 12px;
-        padding: 8px 12px;
+        position: static;
+        padding: 10px 14px;
+        box-shadow: none;
+        border: 1px solid var(--rule-light);
+        background: transparent;
     }
     
     .share-text {
@@ -2508,8 +2522,13 @@ input[type="range"]::-moz-range-thumb {
     }
     
     .share-button svg {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
+    }
+    
+    .share-button:hover {
+        box-shadow: none;
+        background: rgba(0,0,0,0.03);
     }
 }
 

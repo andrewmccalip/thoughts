@@ -235,7 +235,24 @@ const UrlShare = (function() {
             }
         });
 
+        // Position button based on viewport
+        function positionButton() {
+            const mobileSlot = document.getElementById('mobile-share-slot');
+            const isMobile = window.innerWidth <= 1500;
+            
+            if (isMobile && mobileSlot && btn.parentElement !== mobileSlot) {
+                mobileSlot.appendChild(btn);
+            } else if (!isMobile && btn.parentElement !== document.body) {
+                document.body.appendChild(btn);
+            }
+        }
+
+        // Initial placement
         document.body.appendChild(btn);
+        positionButton();
+
+        // Reposition on resize
+        window.addEventListener('resize', positionButton);
     }
 
     /**
