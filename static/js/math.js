@@ -81,6 +81,7 @@ const CostModel = (function() {
         cellDegradation: 2.5,         // % per year silicon cell degradation
         gpuFailureRate: 9,            // % per year GPU failure rate in space (Meta: 9%)
         nreCost: 1000,                // NRE cost in millions ($1B default)
+        satelliteLifespan: 6,         // Satellite lifespan in years (for continuous replacement amortization)
         
         // Terrestrial parameters - On-Site Gas Generation (xAI/Hyperscale style)
         // Source: Techno-Economic Analysis Report, EIA, Sargent & Lundy
@@ -108,7 +109,8 @@ const CostModel = (function() {
         // OPEX - Fuel (from report)
         gasPricePerMMBtu: 4.30,         // EIA 2025 forecast Henry Hub
         heatRateBtuKwh: 6200,           // Frame CCGT heat rate (6,200-6,560 range)
-        capacityFactor: 0.85            // 85% capacity factor default
+        capacityFactor: 0.85,           // 85% capacity factor default
+        dcLifespan: 20                  // Data center infrastructure lifespan in years (for continuous replacement amortization)
     };
     
     // Satellite presets from Starlink techno-economic analysis
@@ -210,11 +212,16 @@ const CostModel = (function() {
         // COSTS
         // ========================================
         
+        // Continuous replacement amortization: spread capex linearly across lifespan
+        // Total cost = capex * (analysis_period / lifespan)
+        // This models continuous replacement (e.g., 6 years analysis with 5 year lifespan = 1.20x cost)
+        const satelliteReplacementRatio = state.years / state.satelliteLifespan;
+
         // Satellite hardware cost: $/W × actual initial watts
-        const hardwareCost = state.satelliteCostPerW * actualInitialPowerW;
+        const hardwareCost = state.satelliteCostPerW * actualInitialPowerW * satelliteReplacementRatio;
         
         // Launch cost: $/kg × total kg
-        const launchCost = state.launchCostPerKg * totalMassKg;
+        const launchCost = state.launchCostPerKg * totalMassKg * satelliteReplacementRatio;
         
         // Base cost before overhead/maintenance/comms
         const baseCost = hardwareCost + launchCost;
@@ -274,7 +281,9 @@ const CostModel = (function() {
         return {
             totalMassKg,
             hardwareCost,
+            hardwareCapex,  // Original capex before amortization
             launchCost,
+            launchCapex,   // Original capex before amortization
             opsCost,
             gpuReplacementCost,
             nreCost,
@@ -311,18 +320,22 @@ const CostModel = (function() {
         // $/kW × PUE / 1000 = $/W of IT load
         const powerGenCostPerW = state.gasTurbineCapexPerKW * state.pue / 1000;
         const powerGenCost = powerGenCostPerW * derived.TARGET_POWER_W;
+
+        // 2-5. Data Center Infrastructure: Amortized over dcLifespan
+        // Continuous replacement: total cost = capex * (analysis_period / lifespan)
+        const dcAmortizationRatio = state.years / state.dcLifespan;
         
         // 2. Electrical Distribution (38%): Switchgear, Transformers, UPS, Gensets
-        const electricalCost = state.electricalCostPerW * derived.TARGET_POWER_W;
+        const electricalCost = state.electricalCostPerW * derived.TARGET_POWER_W * dcAmortizationRatio;
         
         // 3. Mechanical/Cooling (22%): DLC, Chillers, CDUs, Piping
-        const mechanicalCost = state.mechanicalCostPerW * derived.TARGET_POWER_W;
+        const mechanicalCost = state.mechanicalCostPerW * derived.TARGET_POWER_W * dcAmortizationRatio;
         
         // 4. Civil & Shell (18%): Land, Building Shell, Site Prep
-        const civilCost = state.civilCostPerW * derived.TARGET_POWER_W;
+        const civilCost = state.civilCostPerW * derived.TARGET_POWER_W * dcAmortizationRatio;
         
         // 5. Networking/Fit-out (13%): Fiber Plant, Racks, Security, BMS
-        const networkCost = state.networkCostPerW * derived.TARGET_POWER_W;
+        const networkCost = state.networkCostPerW * derived.TARGET_POWER_W * dcAmortizationRatio;
         
         // Total infrastructure capex
         const infraCapex = powerGenCost + electricalCost + mechanicalCost + civilCost + networkCost;
@@ -377,9 +390,13 @@ const CostModel = (function() {
             powerGenCost,
             powerGenCostPerW,
             electricalCost,
+            electricalCapex,  // Original capex before amortization
             mechanicalCost,
+            mechanicalCapex, // Original capex before amortization
             civilCost,
+            civilCapex,      // Original capex before amortization
             networkCost,
+            networkCapex,    // Original capex before amortization
             infraCapex,
             facilityCapexPerW,
             
@@ -413,8 +430,12 @@ const CostModel = (function() {
         
         // Terrestrial costs (5 buckets from report)
         const powerGenCostPerW = state.gasTurbineCapexPerKW * state.pue / 1000;
-        const infraCost = (powerGenCostPerW + state.electricalCostPerW + state.mechanicalCostPerW + 
-                          state.civilCostPerW + state.networkCostPerW) * derived.TARGET_POWER_W;
+        const dcAmortizationRatio = state.years / state.dcLifespan;
+        const infraCost = (powerGenCostPerW + 
+                          state.electricalCostPerW + 
+                          state.mechanicalCostPerW + 
+                          state.civilCostPerW + 
+                          state.networkCostPerW) * derived.TARGET_POWER_W * dcAmortizationRatio;
         const fuelCostPerMWh = state.heatRateBtuKwh * state.gasPricePerMMBtu / 1000;
         const fuelCost = fuelCostPerMWh * generationMWh;
         const terrestrialCost = infraCost + fuelCost;
@@ -429,10 +450,13 @@ const CostModel = (function() {
         const sunlightAdjustedFactor = avgCapacityFactor * state.sunFraction;
         const requiredInitialPowerW = derived.TARGET_POWER_W / sunlightAdjustedFactor;
         
-        const hardwareCost = state.satelliteCostPerW * requiredInitialPowerW;
+        const satelliteReplacementMultiplier = state.years / state.satelliteLifespan;
+        const hardwareCost = state.satelliteCostPerW * requiredInitialPowerW * satelliteReplacementRatio;
         const mass = requiredInitialPowerW / state.specificPowerWPerKg;
+        const launchCost = state.launchCostPerKg * mass * satelliteReplacementRatio;
+        const orbitalCost = hardwareCost + launchCost;
         
-        return (terrestrialCost - hardwareCost) / mass;
+        return (terrestrialCost - orbitalCost) / mass;
     }
 
     // ==========================================
