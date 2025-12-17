@@ -500,6 +500,9 @@
         // NRE cost slider
         setupSlider('nre-slider', 'nre-fill', 'nre-value', 0, 10000, 'nreCost', v => v >= 1000 ? `$${(v/1000).toFixed(1)}B` : `$${v}M`);
         
+        // Satellite lifespan slider
+        setupSlider('sat-lifespan-slider', 'sat-lifespan-fill', 'sat-lifespan-value', 3, 12, 'satelliteLifespan', v => `${v} years`);
+        
         // Terrestrial sliders
         // Gas turbine capex slider ($/W, converted to $/kW for state)
         const gasTurbineSlider = document.getElementById('gas-turbine-slider');
@@ -530,6 +533,9 @@
         
         // PUE slider
         setupSlider('pue-slider', 'pue-fill', 'pue-value', 1.1, 1.5, 'pue', v => v.toFixed(2));
+        
+        // Data center lifespan slider
+        setupSlider('dc-lifespan-slider', 'dc-lifespan-fill', 'dc-lifespan-value', 10, 30, 'dcLifespan', v => `${v} years`);
 
         // Thermal sliders - Bifacial Model
         setupSlider('solar-absorptivity-slider', 'solar-absorptivity-fill', 'solar-absorptivity-value', 0.80, 0.98, 'solarAbsorptivity', v => v.toFixed(2));
