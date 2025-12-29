@@ -1054,6 +1054,11 @@ input[type="range"]::-moz-range-thumb {
     color: var(--ngcc);
 }
 
+.eng-stat-value.eng-warning {
+    color: #c53030 !important;
+    font-weight: 600;
+}
+
 /* Sliders inside engineering output cards (e.g., thermal inputs) */
 .engineering-output-column .slider-container {
     margin-bottom: 1.25rem;

@@ -302,14 +302,14 @@
                             <span class="slider-value" id="capacity-value">1 GW</span>
                         </div>
                         <div class="slider-track-container">
-                            <input type="range" id="capacity-slider" min="1" max="1000" step="1" value="1">
+                            <input type="range" id="capacity-slider" min="1" max="100" step="1" value="1">
                             <div class="slider-track"></div>
                             <div class="slider-fill" id="capacity-fill"></div>
                         </div>
                         <div class="slider-ticks">
                             <span class="tick" data-value="1">1 GW</span>
-                            <span class="tick" data-value="500">500 GW</span>
-                            <span class="tick" data-value="1000">1000 GW</span>
+                            <span class="tick" data-value="50">50 GW</span>
+                            <span class="tick" data-value="100">100 GW</span>
                         </div>
                     </div>
                     <div class="slider-container">
@@ -684,6 +684,51 @@
                 </div>
             </div>
 
+            <!-- Propellant & Logistics -->
+            <div class="engineering-outputs-grid" style="margin-top: 1.5rem;">
+                <div class="engineering-output-column orbital" style="width: 100%; max-width: none;">
+                    <div class="engineering-column-header">
+                        <div class="column-indicator orbital-indicator"></div>
+                        <h3>Propellant & Logistics <span style="font-weight: normal; font-size: 0.9em; opacity: 0.7;">(Starship + Super Heavy)</span></h3>
+                    </div>
+                    
+                    <div class="engineering-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0 2rem;">
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Total Propellant Mass</span>
+                            <span class="eng-stat-value" id="eng-propellant-mass">6,750 t</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">LOX Mass (78.3%)</span>
+                            <span class="eng-stat-value" id="eng-lox-mass">5,283 t</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">LOX Energy (Production)</span>
+                            <span class="eng-stat-value" id="eng-energy-per-launch">2.8 GWh/launch</span>
+                        </div>
+                         <div class="eng-stat-row">
+                            <span class="eng-stat-label">Total Launch Energy</span>
+                            <span class="eng-stat-value" id="eng-total-launch-energy">105 GWh</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label" title="Energy per launch vs Texas Daily Generation (493 TWh/yr)">Texas Grid Impact</span>
+                            <span class="eng-stat-value" id="eng-pct-texas-grid">0.2% of Daily</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label" title="Avg daily LOX vs Total Texas LOX generation (~14,500 t/day)">% Texas LOX Capacity</span>
+                            <span class="eng-stat-value" id="eng-pct-texas-lox">1.8%</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label" title="Avg daily LOX vs 10% surplus capacity (~1,450 t/day)">% Surplus (10%)</span>
+                            <span class="eng-stat-value" id="eng-pct-surplus-capacity">18%</span>
+                        </div>
+                        <div class="eng-stat-row">
+                            <span class="eng-stat-label">Tanker Trucks / Launch</span>
+                            <span class="eng-stat-value" id="eng-tanker-trucks">345</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Thermal Analysis -->
         </section>
 

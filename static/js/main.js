@@ -262,6 +262,28 @@
         updateText('eng-orbital-solar-margin', `+${orbital.solarMarginPct.toFixed(1)}%`);
         updateText('eng-orbital-energy', CostModel.formatEnergy(orbital.energyMWh));
         
+        // Update engineering outputs - Propellant & Logistics
+        updateText('eng-propellant-mass', `${orbital.propellantTotalTons.toLocaleString()} t`);
+        updateText('eng-lox-mass', `${Math.round(orbital.loxTons).toLocaleString()} t`);
+        updateText('eng-energy-per-launch', `${orbital.energyPerLaunchGWh.toFixed(1)} GWh/launch`);
+        updateText('eng-total-launch-energy', `${Math.round(orbital.totalLaunchEnergyGWh).toLocaleString()} GWh`);
+        updateText('eng-pct-texas-grid', `${orbital.pctTexasGridImpact.toFixed(3)}% of Daily`);
+        updateText('eng-pct-texas-lox', `${orbital.pctTotalTexasLox.toFixed(2)}%`);
+        
+        // Surplus capacity with warning if exceeds 100%
+        const surplusEl = document.getElementById('eng-pct-surplus-capacity');
+        if (surplusEl) {
+            if (orbital.pctSurplusCapacity > 100) {
+                surplusEl.textContent = `⚠️ ${orbital.pctSurplusCapacity.toFixed(1)}%`;
+                surplusEl.classList.add('eng-warning');
+            } else {
+                surplusEl.textContent = `${orbital.pctSurplusCapacity.toFixed(1)}%`;
+                surplusEl.classList.remove('eng-warning');
+            }
+        }
+        
+        updateText('eng-tanker-trucks', `${orbital.totalTankerTrucks}`);
+        
         // Update engineering outputs - Terrestrial (CCGT)
         updateText('eng-ngcc-turbines', `${terrestrial.turbineCount} units`);
         updateText('eng-ngcc-generation', `${terrestrial.totalGenerationMW.toLocaleString()} MW`);
@@ -471,7 +493,7 @@
     
     function init() {
         // Target capacity slider (GW)
-        setupSlider('capacity-slider', 'capacity-fill', 'capacity-value', 1, 1000, 'targetGW', v => `${v} GW`);
+        setupSlider('capacity-slider', 'capacity-fill', 'capacity-value', 1, 100, 'targetGW', v => `${v} GW`);
         
         // Years slider
         setupSlider('years-slider', 'years-fill', 'years-value', 3, 10, 'years', v => `${v} years`);

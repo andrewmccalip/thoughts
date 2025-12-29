@@ -25,8 +25,19 @@ const CostModel = (function() {
 
         // Launch vehicle
         STARSHIP_PAYLOAD_KG: 100000,           // Starship LEO payload capacity
-        STARSHIP_LOX_GAL_PER_LAUNCH: 787000,   // ~3,400 metric tons LOX
-        STARSHIP_METHANE_GAL_PER_LAUNCH: 755000, // ~1,200 metric tons CH4
+        
+        // Propellant & Logistics (2025 LC-39A Draft EIS)
+        STARSHIP_PROP_MASS_SHIP: 2650000,      // kg
+        STARSHIP_PROP_MASS_BOOSTER: 4100000,   // kg
+        PROPELLANT_LOX_FRACTION: 0.7826,       // ~78.3% LOX
+        ENERGY_LOX_MWH_PER_TON: 0.4,           // Separation energy
+        ENERGY_CH4_MWH_PER_TON: 0.8,           // Liquefaction energy (LNG)
+        TANKER_CAPACITY_LOX: 20,               // Metric tons
+        TANKER_CAPACITY_CH4: 18,               // Metric tons (density limited)
+        
+        // Regional Capacity (Texas)
+        TEXAS_ANNUAL_GRID_ENERGY_GWH: 492800,  // ERCOT 2023 (492.8 TWh)
+        TEXAS_LOX_SURPLUS_FRAC: 0.10,          // Est. surplus fraction (10%)
 
         // NatGas plant
         NGCC_ACRES: 30,                        // Plant footprint
@@ -255,8 +266,50 @@ const CostModel = (function() {
         const arrayAreaKm2 = arrayAreaM2 / 1e6;
         
         const starshipLaunches = Math.ceil(totalMassKg / constants.STARSHIP_PAYLOAD_KG);
-        const loxGallons = starshipLaunches * constants.STARSHIP_LOX_GAL_PER_LAUNCH;
-        const methaneGallons = starshipLaunches * constants.STARSHIP_METHANE_GAL_PER_LAUNCH;
+        
+        // Propellant & Logistics Calculations
+        const propellantTotalKg = constants.STARSHIP_PROP_MASS_SHIP + constants.STARSHIP_PROP_MASS_BOOSTER;
+        const propellantTotalTons = propellantTotalKg / 1000;
+        
+        const loxTons = propellantTotalTons * constants.PROPELLANT_LOX_FRACTION;
+        const ch4Tons = propellantTotalTons * (1 - constants.PROPELLANT_LOX_FRACTION);
+        
+        // Energy for propellant production (GWh)
+        const energyLoxMWh = loxTons * constants.ENERGY_LOX_MWH_PER_TON;
+        const energyCh4MWh = ch4Tons * constants.ENERGY_CH4_MWH_PER_TON;
+        const energyPerLaunchGWh = (energyLoxMWh + energyCh4MWh) / 1000;
+        
+        // Total project energy for launches
+        const totalLaunchEnergyGWh = energyPerLaunchGWh * starshipLaunches;
+        
+        // Texas Grid Impact (Sustained Average Load)
+        // Average daily energy consumption of the campaign vs Daily Grid Generation
+        const totalDays = state.years * 365;
+        const avgDailyLaunchEnergyGWh = totalLaunchEnergyGWh / totalDays;
+        const dailyGridEnergyGWh = constants.TEXAS_ANNUAL_GRID_ENERGY_GWH / 365;
+        const pctTexasGridImpact = (avgDailyLaunchEnergyGWh / dailyGridEnergyGWh) * 100;
+        
+        // Texas LOX Capacity Impact (Sustained Average Consumption)
+        const estTexasDailyLoxTons = 14500;  // Est. total Texas daily LOX capacity
+        const totalLoxTons = loxTons * starshipLaunches;
+        const avgDailyLoxTons = totalLoxTons / totalDays;
+        
+        // % of Total Texas LOX capacity
+        const pctTotalTexasLox = (avgDailyLoxTons / estTexasDailyLoxTons) * 100;
+        
+        // % of Surplus capacity (assumed 10% of total)
+        const surplusCapacity = estTexasDailyLoxTons * constants.TEXAS_LOX_SURPLUS_FRAC;
+        const pctSurplusCapacity = (avgDailyLoxTons / surplusCapacity) * 100;
+        
+        // Tanker trucks
+        const loxTrucks = Math.ceil(loxTons / constants.TANKER_CAPACITY_LOX);
+        const ch4Trucks = Math.ceil(ch4Tons / constants.TANKER_CAPACITY_CH4);
+        const totalTankerTrucks = loxTrucks + ch4Trucks;
+        
+        // Total propellant in gallons (for all launches)
+        // LOX: 231.5 gal/metric ton, CH4: 625.4 gal/metric ton
+        const loxGallons = loxTons * 231.5 * starshipLaunches;
+        const methaneGallons = ch4Tons * 625.4 * starshipLaunches;
         
         // Degradation margin: how much extra capacity we're launching
         const degradationMargin = (actualInitialPowerW / derived.TARGET_POWER_W - 1) * 100;
@@ -287,8 +340,19 @@ const CostModel = (function() {
             arrayAreaKm2,
             singleSatArrayM2,
             starshipLaunches,
+            
+            // Propellant & Logistics outputs
+            propellantTotalTons,
+            loxTons,
             loxGallons,
             methaneGallons,
+            energyPerLaunchGWh,
+            totalLaunchEnergyGWh,
+            pctTexasGridImpact,
+            pctTotalTexasLox,
+            pctSurplusCapacity,
+            totalTankerTrucks,
+            
             avgCapacityFactor,
             degradationMargin,
             solarMarginPct,

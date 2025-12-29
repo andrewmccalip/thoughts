@@ -391,3 +391,7 @@ K → °C:             - 273.15
 
 *This document serves as the authoritative reference for all mathematical formulas in the space datacenter economic model. All formulas have been verified through first-principles analysis and cross-platform validation.*
 
+
+
+
+

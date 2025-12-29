@@ -22,6 +22,7 @@ Instead of hand-waving about "the sun being huge" or "space being big," this too
 - **Interactive Sliders**: Adjust launch costs, satellite hardware costs, specific power, gas prices, PUE, and dozens more parameters
 - **Real-Time Calculations**: See cost breakdowns, LCOE, and engineering outputs update instantly
 - **Thermal Analysis**: Full bifacial panel thermal model with equilibrium temperature calculations
+- **Propellant & Logistics**: LOX/CH4 production energy, Texas grid impact, tanker truck estimates
 - **Mobile Responsive**: Works on desktop and mobile with adaptive layouts
 - **First-Principles Physics**: Solar flux, Stefan-Boltzmann radiation, cell degradation, view factors
 - **Transparent Math**: Formulas are implemented directly in `static/js/math.js`
@@ -36,6 +37,13 @@ Instead of hand-waving about "the sun being huge" or "space being big," this too
 - Launch costs from theoretical floor ($20/kg) to Falcon 9 ($2,940/kg)
 - Cell degradation, GPU failure rates, NRE costs
 - Thermal equilibrium calculations for bifacial panels
+
+### Propellant & Logistics (2025 LC-39A Draft EIS)
+- Starship/Super Heavy propellant: 6,750 metric tons per launch (78.3% LOX)
+- Energy requirements: ~0.4 MWh/ton LOX, ~0.8 MWh/ton CH4
+- Texas LOX capacity impact: % of total (~14,500 t/day) and 10% surplus
+- Warning indicators when demand exceeds surplus capacity
+- Tanker truck estimates per launch
 
 ### Terrestrial (On-Site CCGT)
 - H-Class combined cycle gas turbines
