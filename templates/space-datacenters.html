@@ -376,6 +376,23 @@
 
                     <div class="slider-container">
                         <div class="slider-header">
+                            <span class="slider-label">Satellite Lifespan</span>
+                            <span class="slider-value" id="sat-lifespan-value">6 years</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="sat-lifespan-slider" min="3" max="12" step="1" value="6">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill orbital-fill" id="sat-lifespan-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="3">3 years</span>
+                            <span class="tick" data-value="6">6 years</span>
+                            <span class="tick" data-value="12">12 years</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
                             <a href="https://chatgpt.com/share/69391474-4b24-8005-bb93-ebd4340c65d8" target="_blank" class="slider-label slider-label-link">Specific Power<sup class="ref-sup">3</sup></a>
                             <span class="slider-value" id="specific-power-value">36.5 W/kg</span>
                         </div>
@@ -510,6 +527,23 @@
                             <div class="dc-breakdown-item"><span class="dc-cat">Fit-Out</span><span class="dc-pct">8%</span><span class="dc-val" id="dc-fitout">$1.00/W</span></div>
                             <div class="dc-breakdown-item"><span class="dc-cat">Site/Civil</span><span class="dc-pct">5%</span><span class="dc-val" id="dc-site">$0.62/W</span></div>
                             <div class="dc-breakdown-item"><span class="dc-cat">Gen. Cond./Fees</span><span class="dc-pct">5%</span><span class="dc-val" id="dc-fees">$0.62/W</span></div>
+                        </div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Data Center Lifespan</span>
+                            <span class="slider-value" id="dc-lifespan-value">20 years</span>
+                        </div>
+                        <div class="slider-track-container">
+                            <input type="range" id="dc-lifespan-slider" min="10" max="30" step="1" value="20">
+                            <div class="slider-track"></div>
+                            <div class="slider-fill terrestrial-fill" id="dc-lifespan-fill"></div>
+                        </div>
+                        <div class="slider-ticks">
+                            <span class="tick" data-value="10">10 years</span>
+                            <span class="tick" data-value="20">20 years</span>
+                            <span class="tick" data-value="30">30 years</span>
                         </div>
                     </div>
 
