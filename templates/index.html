@@ -160,6 +160,7 @@
             background: rgba(59, 130, 246, 0.15);
         }
         
+        .office-section,
         .essays-section {
             margin-bottom: 3rem;
         }
@@ -245,6 +246,25 @@
             background: #eab308;
             box-shadow: 0 0 10px #eab308;
         }
+
+        .essay-indicator.office {
+            position: relative;
+            background: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+        }
+
+        .essay-indicator.office::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: office-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes office-ping {
+            75%, 100% { transform: scale(2.6); opacity: 0; }
+        }
         
         .essay-title {
             font-family: 'Newsreader', Georgia, serif;
@@ -271,7 +291,12 @@
             border-radius: 3px;
             margin-left: auto;
         }
-        
+
+        .essay-tag.open {
+            color: #4ade80;
+            background: rgba(34, 197, 94, 0.12);
+        }
+
         .lk99-card {
             cursor: default;
         }
@@ -301,6 +326,24 @@
         .essay-sublink:hover {
             background: #a855f722;
             border-color: #a855f7;
+        }
+
+        .office-cta {
+            font-size: 0.8rem;
+            color: #4ade80;
+            padding: 0.25rem 0.6rem;
+            border: 1px solid #22c55e4d;
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+
+        .office-card:hover {
+            border-color: #22c55e;
+        }
+
+        .office-card:hover .office-cta {
+            background: #22c55e24;
+            border-color: #22c55e;
         }
         
         footer {
@@ -332,6 +375,12 @@
                 zoom: 0.7;
             }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            .essay-indicator.office::after {
+                animation: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -349,7 +398,26 @@
                 <p class="quote-text">"McCalip preferred not to dwell, and instead chose to focus on what he had set out to do: <span class="highlight">making the thing</span>" <span class="quote-source"><a href="https://www.wired.com/story/inside-the-diy-race-to-replicate-lk-99/" target="_blank">wired</a></span></p>
             </div>
         </header>
-        
+
+        <section class="office-section">
+            <p class="section-label">Office Hours</p>
+
+            <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1IZt_EGJPRrtmtwiFyymh2c4_TJcTr7Cr7WA9slvtYUivBndSMrf380ijDVetZE4MQjanoAM8d" target="_blank" class="essay-card office-card">
+                <div class="essay-header">
+                    <div class="essay-indicator office"></div>
+                    <span class="essay-title">Book a time with me</span>
+                    <span class="essay-tag open">Open</span>
+                </div>
+                <p class="essay-description">
+                    I like talking to random people and going down rabbit holes. Not for pitches
+                    or shilling&nbsp;— if you have something interesting to say, let's jam on it.
+                </p>
+                <div class="essay-links">
+                    <span class="office-cta">Pick a time ↗</span>
+                </div>
+            </a>
+        </section>
+
         <section class="essays-section">
             <p class="section-label">Essays & Analyses</p>
             
